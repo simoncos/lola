@@ -15,37 +15,37 @@ def ChampionKill():
     
     ml = core.matchlistapi.get_match_list(summoner=summoner, seasons=seasons, ranked_queues=ranked_queues)
     
-    print 'Summoner', summoner_name, 'in', seasons, ranked_queues, ':'
-    print 'Total Matches Number:', len(ml)
+    print ('Summoner', summoner_name, 'in', seasons, ranked_queues, ':')
+    print ('Total Matches Number:', len(ml))
     
     for m in ml[:1]:
-        print '\nMatch', m.id #m is MatchReference
+        print ('\nMatch', m.id) #m is MatchReference
         match = core.matchapi.get_match(m)
         participants = match.participants
         for p in participants:
-            print p.summoner_id, p.id, p.champion
+            print (p.summoner_id, p.id, p.champion)
         frames = match.timeline.frames
         for f in frames[:7]:
             events = f.events
-            print '\n\n', f
-            print 'total events number:', len(events)
+            print ('\n\n', f)
+            print ('total events number:', len(events))
             for e in events[:]:
                 if e.type == type.core.common.EventType.kill:
-                    print '\nkiller:', e.killer, 'victim:', e.victim
-                    print 'assist:'
+                    print ('\nkiller:', e.killer, 'victim:', e.victim)
+                    print ('assist:')
                     if e.assists == []:
-                        print 'No Assists'
+                        print ('No Assists')
                     else:
                         for a in e.assists:
-                            print a
+                            print (a)
                    
                 #print '\nJson Data:', e.data 
 
 def ChampionList():
     champions = riotapi.get_champions()
-    print 'Total Champion Number:', len(champions)
+    print ('Total Champion Number:', len(champions))
     for c in champions:
-        print c.id, c.name
+        print (c.id, c.name)
 
 def ChampionList_test():
     i = 1
@@ -55,8 +55,8 @@ def ChampionList_test():
         try:
             champion_name = riotapi.get_champion_by_id(i).name
             h += 1
-            print '{}\t{}\t{}'.format(i, champion_name, h)
+            print ('{}\t{}\t{}'.format(i, champion_name, h))
         except:
-            print '{}\t{}\t{}'.format(i, None, None)
+            print ('{}\t{}\t{}'.format(i, None, None))
 
 #pd.DataFram1e(data=[[1,2],[3,4]])

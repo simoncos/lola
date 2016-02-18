@@ -20,7 +20,7 @@ def demo_kill_event(summoner_id='22005573'):#name = 'caaaaaaaaaaaaake'
     summoner = core.summonerapi.get_summoner_by_id(summoner_id)    
     match_list = core.matchlistapi.get_match_list(summoner=summoner, seasons=seasons, ranked_queues=ranked_queues)
     
-    print('Summoner {0} in {1} {2}: '.format(summoner_name, seasons, ranked_queues))
+    print('Summoner {0} in {1} {2}: '.format(summoner_id, seasons, ranked_queues))
     print('Total Matches Number: {0}'.format(len(match_list)))
 
     match_id_list = []
@@ -32,6 +32,7 @@ def demo_kill_event(summoner_id='22005573'):#name = 'caaaaaaaaaaaaake'
         except Exception as e:
             print ('\nError: {0}', e)
             continue
+        # if exist match_id in MatchTeam (means duplicate), break)        
         match_id_list.append(m.id)#match_id
         participants = match.participants            
         for p in participants[:]:
