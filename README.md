@@ -1,2 +1,3 @@
 # LOLA
-LOL Analatics
+
+LOL data analytics
