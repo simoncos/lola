@@ -1,3 +1,0 @@
-# LOLA
-
-LOL data analytics

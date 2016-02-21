@@ -11,7 +11,8 @@ from cassiopeia import core
 from cassiopeia import type
 import sqlite3
 import pandas as pd
-        
+import math
+
 def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON2016', ranked_queues='RANKED_SOLO_5x5'):
 
     #seed intialization
@@ -22,107 +23,130 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
         conn = sqlite3.connect('lola.db')
         conn.execute("INSERT INTO Summoner VALUES('{}','{}',{})".format(seed_summoner.id, seed_summoner.name, 0)) #watch out "" | ''
         conn.commit()
-        queue_summoner_ids = pd.read_sql("SELECT * FROM Summoner WHERE is_crawled=0", conn)
         conn.close()
     except Exception as e:
         print(e)
+        pass
  
-    #queue interations
+    #summoner queue interations
     iteration = 0
+    conn = sqlite3.connect('lola.db')
+    queue_summoner_ids = pd.read_sql("SELECT summoner_id FROM Summoner WHERE is_crawled=0", conn)
     while not queue_summoner_ids.empty:
         conn = sqlite3.connect('lola.db')
-        iteration += 1
-        print (iteration)
-        for summoner_id in queue_summoner_ids[:]: 
-            try:
-                summoner = core.summonerapi.get_summoner_by_id(summoner_id)
-                match_list = core.matchlistapi.get_match_list(summoner=summoner, seasons=seasons, ranked_queues=ranked_queues)
-                print('Summoner {0} in {1} {2}: '.format(summoner.name, seasons, ranked_queues))
-                print('Total Matches Number: {0}'.format(len(match_list)))
+        iteration += 1 #this is for now only a relative number because of crawling restrarts 
+        print ('iteration:', iteration)
+        for summoner_id in list(queue_summoner_ids['summoner_id'])[:]: #pd.dataframe to list of summoner_id
+            summoner = core.summonerapi.get_summoner_by_id(summoner_id)
+            match_reference_list = core.matchlistapi.get_match_list(summoner=summoner, seasons=seasons, ranked_queues=ranked_queues)
+            print('Summoner {} ({}) in {}, {}: '.format(summoner.name, summoner.id, ranked_queues, seasons))
+            print('Total Match Number: {}'.format(len(match_reference_list)))
 
-                for  mf in match_list[:]:
-                    if is_match_duplicate(mf) == False:                     
-                        try:
-                            match = core.matchapi.get_match(mf) #match reference -> match
-                            match_to_sqlite(match)
-                            match_details_to_sqlite(match)
-                        except Exception as e:
-                            print (e)
-                            continue
-            except Exception as e:
-                print('summoner id {}: {}'.format(summoner_id, e))
-                continue
+            for  mf in match_reference_list[:]:
+                if is_match_duplicate(mf, conn) == False: #is match duplicate                    
+                    try:
+                        match = core.matchapi.get_match(mf) #match reference -> match
+                    except Exception as e:
+                        raise(e)
+                        #todo: recover
+                    match_to_sqlite(match, summoner, conn)
+                    #match is crawled
+                    conn.execute("UPDATE Match SET is_crawled = 1 WHERE match_id='{}'".format(mf.id))
+            #summoner is crawled
+            conn.execute("UPDATE Summoner SET is_crawled = 1 WHERE summoner_id='{}'".format(summoner_id))
         queue_summoner_ids = pd.read_sql("SELECT summoner_id FROM Summoner WHERE is_crawled=0", conn) #update queue
+        conn.commit()
         conn.close()
 
-def is_match_duplicate(match_reference):
+def is_match_duplicate(match_reference, conn):
     try:
         is_empty = pd.read_sql("SELECT * FROM Match WHERE match_id = '{}'".format(match_reference.id), conn).empty
     except Exception as e:
-        print(e)
+        conn.close()
+        raise(e)
+        
     return not is_empty
 
-def match_to_sqlite(match):
+def match_to_sqlite(match, summoner, conn):
+    #match basic
     match_id = match.id
     version = match.version
     duration = math.ceil((match.duration).total_seconds() / 60) #minute
-    is_crawled = 1
+    data = str(match.data) #test
     try:
-        conn.execute("INSERT INTO Match VALUES('{}','{}',{},{})".format(match_id, version, duration, is_crawled))
+        #conn.execute("INSERT INTO Match VALUES('{}','{}',{},{},{})".format(match_id, version, duration, data, 0))
+        conn.execute("INSERT INTO Match VALUES(?,?,?,?,?)", (match_id, version, duration, data, 0))
     except Exception as e:
-        print(e)
+        conn.close()
+        raise(e)
 
-def match_details_to_sqlite(match):
-    team_to_sqlite(match.red_team, match)
-    team_to_sqlite(match.blue_team, match)
+    #match details
+    team_to_sqlite(match.red_team, match, conn)
+    team_to_sqlite(match.blue_team, match, conn)
     for p in match.participants[:]:
-        summoner_to_sqlite(p)
-        participant_to_sqlite(p, match)
-        participant_timeline_to_sqlite(p, match)
+        summoner_to_sqlite(p, summoner, conn)
+        participant_to_sqlite(p, match, conn)
+        participant_timeline_to_sqlite(p, match, conn)
     for f in match.timeline.frames[:]:
-        frame_kill_event_to_sqlite(f, match)
-    #todo
+        frame_kill_event_to_sqlite(f, match, conn)
 
-def team_to_sqlite(match):
-    team_bans = team.bans #todo: Cass - text
-    team_win = team.win #todo: True - 1
+def team_to_sqlite(team, match, conn):
+    match_id = match.id
+    team_side = str(team.side)[5:]
     team_dragon_kills = team.dragon_kills
     team_baron_kills = team.baron_kills
-    team_side = team.side #todo: Cass - text
+    team_win = int(team.win) #binary to int
+    team_bans = team.bans
     try:
-        conn.execute("".format())
+        conn.execute("INSERT INTO Team VALUES(?,?,?,?,?)", (match_id, team_side, team_dragon_kills, team_baron_kills, team_win))
+        for b in team_bans:
+            ban = str(b)[4:-1] #Cass to text
+            conn.execute("INSERT INTO TeamBan VALUES(?,?,?)", (match_id, team_side, ban))
     except Exception as e:
-        print(e)
-    #todo
+        conn.close()
+        raise(e)
 
-def summoner_to_sqlite(participant):
-    summoner_id = participant.summoner_id
-    summoner_name = participant.summoner_name
-    is_crawled = 0
-    try:
-        conn.execute("INSERT INTO Summoner VALUES('{}','{}',{})".format(summoner_id, summoner_name, is_crawled)) #summoner_id UNIQUE in database
-    except Exception as e:
-        print(e)
-
-def participant_to_sqlite(participant, match):
+def summoner_to_sqlite(participant, summoner, conn):
     # handle duplicate in database
 
-    #match initial
-    paticipant_id = participant.id
     summoner_id = participant.summoner_id
+    if summoner_id != summoner.id:
+        summoner_name = participant.summoner_name
+        is_crawled = 0
+        try:
+            conn.execute("INSERT INTO Summoner VALUES(?,?,?)", (summoner_id, summoner_name, is_crawled)) #summoner_id UNIQUE in database
+        except Exception as e:
+            print(e, summoner_name)
+
+def participant_to_sqlite(participant, match, conn):
+
+    #match initial
+    summoner_id = participant.summoner_id
+    match_id = match.id
+    side = str(participant.side)[5:]
+    participant_id = participant.id
     champion = participant.champion.name
-    previous_season_tier = participant.previous_season_tier # cass - text
+    #print (match_id, participant_id)
+    #print (participant.previous_season_tier)
+    previous_season_tier = participant.previous_season_tier.value # cass - text #bug fix when editting Cass.type\core\common.py | see: https://github.com/meraki-analytics/cassiopeia/issues/55
     #masteries = participant.masteries #discarded
     #runes = participant.runes #discarded
-    summoner_spell_d = participant.summoner_spell_d # cass - text
-    summoner_spell_f = participant.summoner_spell_f # cass - text   
+    summoner_spell_d = str(participant.summoner_spell_d) # cass - text
+    summoner_spell_f = str(participant.summoner_spell_f) # cass - text   
 
     #match stats
+    participant_stats = participant.stats
     kda = participant_stats.kda
     kills = participant_stats.assists
-    assists = participant_stats.assists
     deaths = participant_stats.deaths
+    assists = participant_stats.assists
     champion_level = participant_stats.assists
+    turret_kills = participant_stats.turret_kills
+    cs = participant_stats.cs #minion + monster kills
+    killing_sprees = participant_stats.killing_sprees
+    largest_critical_strike = participant_stats.largest_critical_strike
+    largest_killing_spree = participant_stats.largest_killing_spree
+    largest_multi_kill = participant_stats.largest_multi_kill
     gold_earned = participant_stats.gold_earned
     gold_spent = participant_stats.gold_spent
     magic_damage_dealt = participant_stats.magic_damage_dealt
@@ -138,49 +162,124 @@ def participant_to_sqlite(participant, match):
     damage_dealt_to_champions = participant_stats.damage_dealt_to_champions
     damage_taken = participant_stats.damage_taken
     healing_done = participant_stats.healing_done
-    crowd_control_dealt = participant_stats.crowd_control_dealt #???
+    units_healed = participant_stats.units_healed
+    crowd_control_dealt = participant_stats.crowd_control_dealt
+    vision_wards_bought = participant_stats.vision_wards_bought
     ward_kills = participant_stats.ward_kills
     wards_placed = participant_stats.wards_placed
-    turret_kills = participant_stats.turret_kills
-    participant_win = participant.stats.win # False - 0
+    participant_win = int(participant_stats.win)
 
-    # todo
     try:
-        conn.execute("".format())
-    except Exception as e:
-        print(e)    
+        # conn.execute("INSERT INTO Participant VALUES('{}','{}','{}','{}','{}','{}','{}','{}',{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})" \
+        #     .format(summoner_id, match_id, participant_id, side, champion, previous_season_tier, summoner_spell_d, summoner_spell_f, \
+        #     kda, kills, deaths, assists, champion_level, turret_kills, cs, killing_sprees, largest_critical_strike, largest_killing_spree, largest_multi_kill, \
+        #     gold_earned, gold_spent, magic_damage_dealt, magic_damage_dealt_to_champions, magic_damage_taken, physical_damage_dealt, physical_damage_dealt_to_champions, physical_damage_taken, \
+        #     true_damage_dealt, true_damage_dealt_to_champions, true_damage_taken, damage_dealt, damage_dealt_to_champions, damage_taken, healing_done, units_healed, \
+        #     crowd_control_dealt, vision_wards_bought, ward_kills, wards_placed, participant_win) )
+        conn.execute("INSERT INTO Participant VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
+            (summoner_id, match_id, participant_id, side, champion, previous_season_tier, summoner_spell_d, summoner_spell_f, \
+            kda, kills, deaths, assists, champion_level, turret_kills, cs, killing_sprees, largest_critical_strike, largest_killing_spree, largest_multi_kill, \
+            gold_earned, gold_spent, magic_damage_dealt, magic_damage_dealt_to_champions, magic_damage_taken, physical_damage_dealt, physical_damage_dealt_to_champions, physical_damage_taken, \
+            true_damage_dealt, true_damage_dealt_to_champions, true_damage_taken, damage_dealt, damage_dealt_to_champions, damage_taken, healing_done, units_healed, \
+            crowd_control_dealt, vision_wards_bought, ward_kills, wards_placed, participant_win) )
+    except sqlite3.Error as e:
+        conn.close()
+        raise(e)    
 
-def participant_timeline_to_sqlite(participant, match):
+def participant_timeline_to_sqlite(participant, match, conn):
     # handle duplicate in database
 
-    #todo: deltas - delta
+    summoner_id = participant.summoner_id
+    match_id = match.id
+    side = str(participant.side)[5:]
+    participant_id = participant.id
 
-    #todo:
+    participant_timeline = participant.timeline
+    role = participant_timeline.role.value #type/core/common.py
+    lane = participant_timeline.lane.value #type/core/common.py
+    creeps_per_min_deltas = participant_timeline.creeps_per_min_deltas
+    cs_diff_per_min_deltas = participant_timeline.cs_diff_per_min_deltas
+    gold_per_min_deltas = participant_timeline.gold_per_min_deltas
+    xp_per_min_deltas = participant_timeline.xp_per_min_deltas
+    xp_diff_per_min_deltas = participant_timeline.xp_diff_per_min_deltas
+    damage_taken_per_min_deltas = participant_timeline.damage_taken_per_min_deltas
+    damage_taken_diff_per_min_deltas = participant_timeline.damage_taken_diff_per_min_deltas
 
-    for d in delta:
-        delta_ = d
-        try:
-            conn.execute("".format())
-        except Exception as e:
-            print(e)
-
-def frame_kill_event_to_sqlite(frame, match):
-    #TBD: frame_number? timestamp?
-    #todo: delta
-    events = frame.events
-    for e in events[:]:
-        if e.type == type.core.common.EventType.kill and e.killer and e.victim:
-            killer = e.killer.champion
-            victim = e.victim.champion
-            assists = ''
-            for a in e.assists: #TBD: Table Assist
-                assists = 
-            kill_event_list.append([e.killer.champion, e.victim.champion])                
-    #todo
     try:
-        conn.execute("".format())
+        zero_to_ten = (creeps_per_min_deltas.zero_to_ten if creeps_per_min_deltas else None, 
+                        cs_diff_per_min_deltas.zero_to_ten if cs_diff_per_min_deltas else None, 
+                        gold_per_min_deltas.zero_to_ten if gold_per_min_deltas else None, 
+                        xp_per_min_deltas.zero_to_ten if xp_per_min_deltas else None, 
+                        xp_diff_per_min_deltas.zero_to_ten if xp_diff_per_min_deltas else None, 
+                        damage_taken_per_min_deltas.zero_to_ten if damage_taken_per_min_deltas else None, 
+                        damage_taken_diff_per_min_deltas.zero_to_ten if damage_taken_diff_per_min_deltas else None
+                        )
+        ten_to_twenty = (creeps_per_min_deltas.ten_to_twenty if creeps_per_min_deltas else None, 
+                            cs_diff_per_min_deltas.ten_to_twenty if cs_diff_per_min_deltas else None, 
+                            gold_per_min_deltas.ten_to_twenty if gold_per_min_deltas else None, 
+                            xp_per_min_deltas.ten_to_twenty if xp_per_min_deltas else None, 
+                            xp_diff_per_min_deltas.ten_to_twenty if xp_diff_per_min_deltas else None, 
+                            damage_taken_per_min_deltas.ten_to_twenty if damage_taken_per_min_deltas else None, 
+                            damage_taken_diff_per_min_deltas.ten_to_twenty if damage_taken_diff_per_min_deltas else None
+                        )
+        twenty_to_thirty = (creeps_per_min_deltas.twenty_to_thirty if creeps_per_min_deltas else None, 
+                            cs_diff_per_min_deltas.twenty_to_thirty if cs_diff_per_min_deltas else None, 
+                            gold_per_min_deltas.twenty_to_thirty if gold_per_min_deltas else None, 
+                            xp_per_min_deltas.twenty_to_thirty if xp_per_min_deltas else None, 
+                            xp_diff_per_min_deltas.twenty_to_thirty if xp_diff_per_min_deltas else None, 
+                            damage_taken_per_min_deltas.twenty_to_thirty if damage_taken_per_min_deltas else None, 
+                            damage_taken_diff_per_min_deltas.twenty_to_thirty if damage_taken_diff_per_min_deltas else None
+                            )
+        thirty_to_end = (creeps_per_min_deltas.thirty_to_end if creeps_per_min_deltas else None, 
+                            cs_diff_per_min_deltas.thirty_to_end if cs_diff_per_min_deltas else None, 
+                            gold_per_min_deltas.thirty_to_end if gold_per_min_deltas else None, 
+                            xp_per_min_deltas.thirty_to_end if xp_per_min_deltas else None, 
+                            xp_diff_per_min_deltas.thirty_to_end if xp_diff_per_min_deltas else None, 
+                            damage_taken_per_min_deltas.thirty_to_end if damage_taken_per_min_deltas else None, 
+                            damage_taken_diff_per_min_deltas.thirty_to_end if damage_taken_diff_per_min_deltas else None
+                        )
     except Exception as e:
-        print(e)
+            conn.close()
+            raise(e)
+            
+    data_deltas = {'zero_to_ten': zero_to_ten, 'ten_to_twenty': ten_to_twenty, 'twenty_to_thirty': twenty_to_thirty, 'thirty_to_end': thirty_to_end}
+    try:
+        for delta in data_deltas:
+            creeps_per_min_delta = data_deltas[delta][0]
+            cs_diff_per_min_delta = data_deltas[delta][1]
+            gold_per_min_delta = data_deltas[delta][2]
+            xp_per_min_delta = data_deltas[delta][3]
+            xp_diff_per_min_delta = data_deltas[delta][4]
+            damage_taken_per_min_delta = data_deltas[delta][5]
+            damage_taken_diff_per_min_delta = data_deltas[delta][6]
+            conn.execute("INSERT INTO ParticipantTimeline VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
+                            (summoner_id, match_id, delta, side, participant_id, role, lane, \
+                                    creeps_per_min_delta, cs_diff_per_min_delta, gold_per_min_delta, xp_per_min_delta, xp_diff_per_min_delta, damage_taken_per_min_delta, damage_taken_diff_per_min_delta) )
+    except Exception as e:
+            conn.close()
+            raise(e)
+def frame_kill_event_to_sqlite(frame, match, conn):
+    match_id = match.id
+    minute = frame.timestamp.seconds // 60
+    events = frame.events
+    try:
+        for event in events[:]:
+            if event.type == type.core.common.EventType.kill and event.killer and event.victim: # there exists victim without killer
+                happen = event.timestamp.seconds
+                killer = event.killer.champion.name
+                victim = event.victim.champion.name
+                assists = event.assists
+                if len(assists) == 0:
+                    conn.execute("INSERT INTO FrameKillEvent VALUES(?,?,?,?,?,?)", (match_id, happen, victim, minute, killer, None))
+                else:
+                    for a in event.assists:
+                        assist = a.champion.name
+                        conn.execute("INSERT INTO FrameKillEvent VALUES(?,?,?,?,?,?)", (match_id, happen, victim, minute, killer, assist))
+
+    except Exception as e:
+        conn.close()
+        raise(e)
+        
 def main():
     begin_crawling(api_key='04c9abf6-0c85-406c-8520-3d86684e9cb1', seed_summoner_id='22005573')
 
