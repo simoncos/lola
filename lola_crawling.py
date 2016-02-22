@@ -22,12 +22,12 @@ def auto_retry(api_call_method):
             return api_call_method(*args, **kwargs)
         except APIError as error:
             # Try Again Once
-            if error.error_code in [500]:
+            if error.error_code in [500, 503]:
                 try:
                     print("Got a 500, trying again...")
                     return api_call_method(*args, **kwargs)
                 except APIError as another_error:
-                    if another_error.error_code in [500, 400, 404]:
+                    if another_error.error_code in [500, 503, 400, 404]:
                         pass
                     else:
                         # Fatal also? by simoncos
@@ -45,9 +45,10 @@ def auto_retry(api_call_method):
 
         
 def main():
-    riotapi.get_summoner_by_id = auto_retry(riotapi.get_summoner_by_id)
-    riotapi.get_match_list = auto_retry(riotapi.get_match_list)
-    riotapi.get_match = auto_retry(riotapi.get_match)
+    riotapi.set_rate_limits((10, 10), (500, 600)) #rate limit
+    riotapi.get_summoner_by_id = auto_retry(riotapi.get_summoner_by_id) #handling server errors
+    riotapi.get_match_list = auto_retry(riotapi.get_match_list) #handling server errors
+    riotapi.get_match = auto_retry(riotapi.get_match) #handling server errors
     begin_crawling(api_key='04c9abf6-0c85-406c-8520-3d86684e9cb1', seed_summoner_id='22005573')
 
 def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON2016', ranked_queues='RANKED_SOLO_5x5'):
