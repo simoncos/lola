@@ -92,8 +92,8 @@
 		`match_id`	text NOT NULL UNIQUE, /*key*/
 		`version` text NOT NULL,	
 		`duration` integer NOT NULL,
-		-- 'season' text NOT NULL,
-		`data` text NOT NULL,
+		-- `season` text NOT NULL,
+		`data` text,
 		`is_crawled`	integer NOT NULL
 		-- PRIMARY KEY(id)
 	);

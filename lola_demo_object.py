@@ -31,14 +31,14 @@ riotapi.set_api_key("04c9abf6-0c85-406c-8520-3d86684e9cb1")
 summoner_id='22005573'
 seasons = 'PRESEASON2016'
 ranked_queues = 'RANKED_SOLO_5x5'
-summoner = core.summonerapi.get_summoner_by_id(summoner_id)    
+summoner = riotapi.get_summoner_by_id(summoner_id)    
 
 #match
-match_list = core.matchlistapi.get_match_list(summoner=summoner, seasons=seasons, ranked_queues=ranked_queues)
+match_list = riotapi.get_match_list(summoner=summoner, seasons=seasons, ranked_queues=ranked_queues)
 match_reference = match_list[0]
-match = core.matchapi.get_match(match_reference)
+match = riotapi.get_match(match_reference)
 match_reference_1 = match_list[1]
-match_1 = core.matchapi.get_match(match_reference_1)
+match_1 = riotapi.get_match(match_reference_1)
 version = match.version
 duration = math.ceil((match.duration).total_seconds() / 60) #minute
 data = match.data

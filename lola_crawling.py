@@ -6,57 +6,107 @@ Created on Sat Jan 30 13:55:24 2016
 """
 
 #import random
+#from cassiopeia import core
+
 from cassiopeia import riotapi
-from cassiopeia import core
 from cassiopeia import type
+from cassiopeia.type.api.exception import APIError
 import sqlite3
 import pandas as pd
 import math
+
+def auto_retry(api_call_method):
+    """ A decorator to automatically retry 500s (Service Unavailable) and skip 400s (Bad Request) or 404 (Not Found). """
+    def call_wrapper(*args, **kwargs):
+        try:
+            return api_call_method(*args, **kwargs)
+        except APIError as error:
+            # Try Again Once
+            if error.error_code in [500]:
+                try:
+                    print("Got a 500, trying again...")
+                    return api_call_method(*args, **kwargs)
+                except APIError as another_error:
+                    if another_error.error_code in [500, 400, 404]:
+                        pass
+                    else:
+                        # Fatal also? by simoncos
+                        raise another_error
+
+            # Skip
+            elif error.error_code in [400, 404]:
+                print("Got a 400 or 404")
+                pass
+
+            # Fatal
+            else:
+                raise error
+    return call_wrapper
+
+        
+def main():
+    riotapi.get_summoner_by_id = auto_retry(riotapi.get_summoner_by_id)
+    riotapi.get_match_list = auto_retry(riotapi.get_match_list)
+    riotapi.get_match = auto_retry(riotapi.get_match)
+    begin_crawling(api_key='04c9abf6-0c85-406c-8520-3d86684e9cb1', seed_summoner_id='22005573')
 
 def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON2016', ranked_queues='RANKED_SOLO_5x5'):
 
     #seed intialization
     try:
+        print('Seed initializing...')
         riotapi.set_api_key(api_key)
         riotapi.set_region(region)
-        seed_summoner = core.summonerapi.get_summoner_by_id(seed_summoner_id)    
+        seed_summoner = riotapi.get_summoner_by_id(seed_summoner_id)    
         conn = sqlite3.connect('lola.db')
         conn.execute("INSERT INTO Summoner VALUES('{}','{}',{})".format(seed_summoner.id, seed_summoner.name, 0)) #watch out "" | ''
         conn.commit()
         conn.close()
+        print('\nInitialization completed.')
     except Exception as e:
-        print(e)
+        print('\nInitialization failed possibly because the seed is already in database:', e)
         pass
  
     #summoner queue interations
+    total_match_cralwed = 0
+    total_summoner_crawled = 0
     iteration = 0
     conn = sqlite3.connect('lola.db')
     queue_summoner_ids = pd.read_sql("SELECT summoner_id FROM Summoner WHERE is_crawled=0", conn)
     while not queue_summoner_ids.empty:
-        conn = sqlite3.connect('lola.db')
         iteration += 1 #this is for now only a relative number because of crawling restrarts 
-        print ('iteration:', iteration)
+        print ('\nBig queue iteration', iteration, '...')
         for summoner_id in list(queue_summoner_ids['summoner_id'])[:]: #pd.dataframe to list of summoner_id
-            summoner = core.summonerapi.get_summoner_by_id(summoner_id)
-            match_reference_list = core.matchlistapi.get_match_list(summoner=summoner, seasons=seasons, ranked_queues=ranked_queues)
-            print('Summoner {} ({}) in {}, {}: '.format(summoner.name, summoner.id, ranked_queues, seasons))
+            conn = sqlite3.connect('lola.db')
+            summoner = riotapi.get_summoner_by_id(summoner_id)
+            match_reference_list = riotapi.get_match_list(summoner=summoner, seasons=seasons, ranked_queues=ranked_queues)
+            print('\nSummoner {} ({}) in {}, {}: '.format(summoner.name, summoner.id, ranked_queues, seasons))
             print('Total Match Number: {}'.format(len(match_reference_list)))
 
+            match_no = 0
             for  mf in match_reference_list[:]:
                 if is_match_duplicate(mf, conn) == False: #is match duplicate                    
                     try:
-                        match = core.matchapi.get_match(mf) #match reference -> match
+                        match = riotapi.get_match(mf) #match reference -> match
                     except Exception as e:
                         raise(e)
                         #todo: recover
                     match_to_sqlite(match, summoner, conn)
                     #match is crawled
                     conn.execute("UPDATE Match SET is_crawled = 1 WHERE match_id='{}'".format(mf.id))
+                    match_no += 1
+                    print (summoner.id, ': match', match_no, 'finished.')
+            
             #summoner is crawled
             conn.execute("UPDATE Summoner SET is_crawled = 1 WHERE summoner_id='{}'".format(summoner_id))
+            conn.commit() #commit after every summer finished
+            conn.close()
+            total_summoner_crawled += 1            
+            total_match_cralwed += match_no
+            print('total finished match:', total_match_cralwed, 'total finished summoner:', total_summoner_crawled)
+        
+        #read new queue for next iteration
         queue_summoner_ids = pd.read_sql("SELECT summoner_id FROM Summoner WHERE is_crawled=0", conn) #update queue
-        conn.commit()
-        conn.close()
 
 def is_match_duplicate(match_reference, conn):
     try:
@@ -72,10 +122,10 @@ def match_to_sqlite(match, summoner, conn):
     match_id = match.id
     version = match.version
     duration = math.ceil((match.duration).total_seconds() / 60) #minute
-    data = str(match.data) #test
+    #data = str(match.data) # discard
     try:
         #conn.execute("INSERT INTO Match VALUES('{}','{}',{},{},{})".format(match_id, version, duration, data, 0))
-        conn.execute("INSERT INTO Match VALUES(?,?,?,?,?)", (match_id, version, duration, data, 0))
+        conn.execute("INSERT INTO Match VALUES(?,?,?,?,?)", (match_id, version, duration, None, 0))
     except Exception as e:
         conn.close()
         raise(e)
@@ -115,8 +165,9 @@ def summoner_to_sqlite(participant, summoner, conn):
         is_crawled = 0
         try:
             conn.execute("INSERT INTO Summoner VALUES(?,?,?)", (summoner_id, summoner_name, is_crawled)) #summoner_id UNIQUE in database
-        except Exception as e:
-            print(e, summoner_name)
+        except Exception:
+            #print(e, summoner_name)
+            pass #todo
 
 def participant_to_sqlite(participant, match, conn):
 
@@ -279,9 +330,6 @@ def frame_kill_event_to_sqlite(frame, match, conn):
     except Exception as e:
         conn.close()
         raise(e)
-        
-def main():
-    begin_crawling(api_key='04c9abf6-0c85-406c-8520-3d86684e9cb1', seed_summoner_id='22005573')
 
 if __name__ == "__main__":
     main()
