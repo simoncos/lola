@@ -63,9 +63,9 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
         conn.execute("INSERT INTO Summoner VALUES('{}','{}',{})".format(seed_summoner.id, seed_summoner.name, 0)) #watch out "" | ''
         conn.commit()
         conn.close()
-        print('\nInitialization completed.')
+        print('Initialization completed.')
     except Exception as e:
-        print('\nInitialization failed possibly because the seed is already in database:', e)
+        print('Initialization failed possibly because the seed is already in database:', e)
         pass
  
     #summoner queue interations
@@ -96,7 +96,8 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
                     #match is crawled
                     conn.execute("UPDATE Match SET is_crawled = 1 WHERE match_id='{}'".format(mf.id))
                     match_no += 1
-                    print (summoner.id, ': match', match_no, 'finished.')
+                    if match_no % 10 == 0:                
+                        print (summoner.id, ': match', match_no, 'in', len(match_reference_list), 'finished.')
             
             #summoner is crawled
             conn.execute("UPDATE Summoner SET is_crawled = 1 WHERE summoner_id='{}'".format(summoner_id))
