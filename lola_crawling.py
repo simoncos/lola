@@ -14,6 +14,7 @@ from cassiopeia.type.api.exception import APIError
 import sqlite3
 import pandas as pd
 import math
+import time 
 
 def auto_retry(api_call_method):
     """ A decorator to automatically retry 500s (Service Unavailable) and skip 400s (Bad Request) or 404 (Not Found). """
@@ -25,12 +26,13 @@ def auto_retry(api_call_method):
             if error.error_code in [500, 503]:
                 try:
                     print("Got a 500, trying again...")
+                    time.sleep(5) #simoncos
                     return api_call_method(*args, **kwargs)
                 except APIError as another_error:
                     if another_error.error_code in [500, 503, 400, 404]:
                         pass
                     else:
-                        # Fatal also? by simoncos
+                        # Fatal also? simoncos
                         raise another_error
 
             # Skip
@@ -75,7 +77,7 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
     conn = sqlite3.connect('lola.db')
     queue_summoner_ids = pd.read_sql("SELECT summoner_id FROM Summoner WHERE is_crawled=0", conn)
     while not queue_summoner_ids.empty:
-        iteration += 1 #this is for now only a relative number because of crawling restrarts 
+        iteration += 1 #only a relative number because of crawling restrarts 
         print ('\nBig queue iteration', iteration, '...')
         for summoner_id in list(queue_summoner_ids['summoner_id'])[:]: #pd.dataframe to list of summoner_id
             conn = sqlite3.connect('lola.db')
@@ -91,7 +93,12 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
                         match = riotapi.get_match(mf) #match reference -> match
                     except Exception as e:
                         raise(e)
-                        #todo: recover
+                    #print(match, mf.id)
+                    
+                    #may be None even if mf is not None, see https://github.com/meraki-analytics/cassiopeia/issues/57 
+                    #can not use != because of Match.__eq__ use Match.id 
+                    if match is None: 
+                        continue
                     match_to_sqlite(match, summoner, conn)
                     #match is crawled
                     conn.execute("UPDATE Match SET is_crawled = 1 WHERE match_id='{}'".format(mf.id))
@@ -105,7 +112,7 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
             conn.close()
             total_summoner_crawled += 1            
             total_match_cralwed += match_no
-            print('total finished match:', total_match_cralwed, 'total finished summoner:', total_summoner_crawled)
+            print('total finished match:', total_match_cralwed, ', total finished summoner:', total_summoner_crawled)
         
         #read new queue for next iteration
         queue_summoner_ids = pd.read_sql("SELECT summoner_id FROM Summoner WHERE is_crawled=0", conn) #update queue
