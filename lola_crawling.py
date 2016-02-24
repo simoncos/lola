@@ -25,7 +25,7 @@ def auto_retry(api_call_method):
             # Try Again Once
             if error.error_code in [500, 503]:
                 try:
-                    print("Got a 500 or 503, trying again...")
+                    print("Got a 500 or 503, trying again after 5 seconds...")
                     time.sleep(5) # - simoncos
                     return api_call_method(*args, **kwargs)
                 except APIError as another_error:
@@ -51,6 +51,7 @@ def main():
     riotapi.get_summoner_by_id = auto_retry(riotapi.get_summoner_by_id) # handling server errors
     riotapi.get_match_list = auto_retry(riotapi.get_match_list)
     riotapi.get_match = auto_retry(riotapi.get_match)
+    print('\nCrawling process starts...')
     begin_crawling(api_key='04c9abf6-0c85-406c-8520-3d86684e9cb1', seed_summoner_id='22005573')
 
 def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON2016', ranked_queues='RANKED_SOLO_5x5'):
@@ -59,7 +60,7 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
     '''
     #seed intialization
     try:
-        print('Seed initializing...')
+        print('\nSeed initializing...')
         riotapi.set_api_key(api_key)
         riotapi.set_region(region)
         seed_summoner = riotapi.get_summoner_by_id(seed_summoner_id)    
@@ -73,14 +74,17 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
         pass
  
     # summoner queue interations
+    total_summoner_processed = 0           
+    total_match_processed = 0
     total_match_cralwed = 0
-    total_summoner_crawled = 0
+    total_match_duplicate = 0
+    total_match_none = 0
     iteration = 0
     conn = sqlite3.connect('lola.db')
     queue_summoner_ids = pd.read_sql("SELECT summoner_id FROM Summoner WHERE is_crawled=0", conn)
     while not queue_summoner_ids.empty:
         iteration += 1 # only a relative number because of crawling restrarts 
-        print ('\nBig queue iteration', iteration, '...')
+        print ('\nBig queue iteration', iteration, 'in the process...')
         for summoner_id in list(queue_summoner_ids['summoner_id'])[:]: # pd.dataframe to list of summoner_id
             conn = sqlite3.connect('lola.db')
             summoner = riotapi.get_summoner_by_id(summoner_id)
@@ -88,7 +92,10 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
             print('\nSummoner {} ({}) in {}, {}: '.format(summoner.name, summoner.id, ranked_queues, seasons))
             print('Total Match Number: {}'.format(len(match_reference_list)))
 
-            match_no = 0
+            match_no = 0 # crawled + duplicate + none
+            crawled_match_no = 0
+            duplicate_match_no = 0
+            none_match_no = 0
             for  mf in match_reference_list[:]:
                 if is_match_duplicate(mf, conn) == False:                    
                     try:
@@ -100,23 +107,31 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
                     # may be None even if mf is not None, see https://github.com/meraki-analytics/cassiopeia/issues/57 
                     # can not use != because of Match.__eq__ use Match.id 
                     if match is None: 
+                        none_match_no += 1
                         continue # jump to the next interation
-
                     match_to_sqlite(match, summoner, conn)
                     # match is crawled
                     conn.execute("UPDATE Match SET is_crawled = 1 WHERE match_id='{}'".format(mf.id))
-                    match_no += 1
-                    if match_no % 10 == 0:                
-                        print (summoner.id, ': match', match_no, 'in', len(match_reference_list), 'finished.')
-            
+                    crawled_match_no += 1
+                else :
+                    duplicate_match_no += 1
+                match_no += 1
+                if match_no % 10 == 0:                
+                    print (summoner.id, ': match', match_no, 'in', len(match_reference_list), 'processed.')
             # summoner is crawled
             conn.execute("UPDATE Summoner SET is_crawled = 1 WHERE summoner_id='{}'".format(summoner_id))
             conn.commit() # commit after every summoner finished
             conn.close()
-            total_summoner_crawled += 1            
-            total_match_cralwed += match_no
-            print('total finished match:', total_match_cralwed, ', total finished summoner:', total_summoner_crawled)
-        
+            # sums of different kinds of matches
+            total_summoner_processed += 1            
+            total_match_processed += match_no
+            total_match_cralwed += crawled_match_no
+            total_match_duplicate += duplicate_match_no
+            total_match_none += none_match_no
+            print('total processed match:', total_match_processed, '\ntotal crawled match', total_match_cralwed, \
+            	  '\ntotal duplicate match:', total_match_duplicate, '\ntotal processed summoner:', total_summoner_processed, \
+            	  '\ntotal none match:', total_match_none)
+
         # read new queue for next iteration
         queue_summoner_ids = pd.read_sql("SELECT summoner_id FROM Summoner WHERE is_crawled=0", conn) #update queue
 
