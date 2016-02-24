@@ -25,20 +25,20 @@ def auto_retry(api_call_method):
             # Try Again Once
             if error.error_code in [500, 503]:
                 try:
-                    print("Got a 500, trying again...")
-                    time.sleep(5) #simoncos
+                    print("Got a 500 or 503, trying again...")
+                    time.sleep(5) # - simoncos
                     return api_call_method(*args, **kwargs)
                 except APIError as another_error:
                     if another_error.error_code in [500, 503, 400, 404]:
                         pass
                     else:
-                        # Fatal also? simoncos
+                        # Fatal also? - simoncos
                         raise another_error
 
             # Skip
             elif error.error_code in [400, 404]:
                 print("Got a 400 or 404")
-                pass
+                pass # may make match None!
 
             # Fatal
             else:
@@ -47,10 +47,10 @@ def auto_retry(api_call_method):
 
         
 def main():
-    riotapi.set_rate_limits((10, 10), (500, 600)) #rate limit
-    riotapi.get_summoner_by_id = auto_retry(riotapi.get_summoner_by_id) #handling server errors
-    riotapi.get_match_list = auto_retry(riotapi.get_match_list) #handling server errors
-    riotapi.get_match = auto_retry(riotapi.get_match) #handling server errors
+    riotapi.set_rate_limits((10, 10), (500, 600))
+    riotapi.get_summoner_by_id = auto_retry(riotapi.get_summoner_by_id) # handling server errors
+    riotapi.get_match_list = auto_retry(riotapi.get_match_list)
+    riotapi.get_match = auto_retry(riotapi.get_match)
     begin_crawling(api_key='04c9abf6-0c85-406c-8520-3d86684e9cb1', seed_summoner_id='22005573')
 
 def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON2016', ranked_queues='RANKED_SOLO_5x5'):
@@ -70,16 +70,16 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
         print('Initialization failed possibly because the seed is already in database:', e)
         pass
  
-    #summoner queue interations
+    # summoner queue interations
     total_match_cralwed = 0
     total_summoner_crawled = 0
     iteration = 0
     conn = sqlite3.connect('lola.db')
     queue_summoner_ids = pd.read_sql("SELECT summoner_id FROM Summoner WHERE is_crawled=0", conn)
     while not queue_summoner_ids.empty:
-        iteration += 1 #only a relative number because of crawling restrarts 
+        iteration += 1 # only a relative number because of crawling restrarts 
         print ('\nBig queue iteration', iteration, '...')
-        for summoner_id in list(queue_summoner_ids['summoner_id'])[:]: #pd.dataframe to list of summoner_id
+        for summoner_id in list(queue_summoner_ids['summoner_id'])[:]: # pd.dataframe to list of summoner_id
             conn = sqlite3.connect('lola.db')
             summoner = riotapi.get_summoner_by_id(summoner_id)
             match_reference_list = riotapi.get_match_list(summoner=summoner, seasons=seasons, ranked_queues=ranked_queues)
@@ -88,33 +88,34 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
 
             match_no = 0
             for  mf in match_reference_list[:]:
-                if is_match_duplicate(mf, conn) == False: #is match duplicate                    
+                if is_match_duplicate(mf, conn) == False:                    
                     try:
-                        match = riotapi.get_match(mf) #match reference -> match
+                        match = riotapi.get_match(mf) # match reference -> match
                     except Exception as e:
                         raise(e)
                     #print(match, mf.id)
                     
-                    #may be None even if mf is not None, see https://github.com/meraki-analytics/cassiopeia/issues/57 
-                    #can not use != because of Match.__eq__ use Match.id 
+                    # may be None even if mf is not None, see https://github.com/meraki-analytics/cassiopeia/issues/57 
+                    # can not use != because of Match.__eq__ use Match.id 
                     if match is None: 
-                        continue
+                        continue # jump to the next interation
+
                     match_to_sqlite(match, summoner, conn)
-                    #match is crawled
+                    # match is crawled
                     conn.execute("UPDATE Match SET is_crawled = 1 WHERE match_id='{}'".format(mf.id))
                     match_no += 1
                     if match_no % 10 == 0:                
                         print (summoner.id, ': match', match_no, 'in', len(match_reference_list), 'finished.')
             
-            #summoner is crawled
+            # summoner is crawled
             conn.execute("UPDATE Summoner SET is_crawled = 1 WHERE summoner_id='{}'".format(summoner_id))
-            conn.commit() #commit after every summer finished
+            conn.commit() # commit after every summoner finished
             conn.close()
             total_summoner_crawled += 1            
             total_match_cralwed += match_no
             print('total finished match:', total_match_cralwed, ', total finished summoner:', total_summoner_crawled)
         
-        #read new queue for next iteration
+        # read new queue for next iteration
         queue_summoner_ids = pd.read_sql("SELECT summoner_id FROM Summoner WHERE is_crawled=0", conn) #update queue
 
 def is_match_duplicate(match_reference, conn):
@@ -133,13 +134,12 @@ def match_to_sqlite(match, summoner, conn):
     duration = math.ceil((match.duration).total_seconds() / 60) #minute
     #data = str(match.data) # discard
     try:
-        #conn.execute("INSERT INTO Match VALUES('{}','{}',{},{},{})".format(match_id, version, duration, data, 0))
         conn.execute("INSERT INTO Match VALUES(?,?,?,?,?)", (match_id, version, duration, None, 0))
     except Exception as e:
         conn.close()
         raise(e)
 
-    #match details
+    # match details
     team_to_sqlite(match.red_team, match, conn)
     team_to_sqlite(match.blue_team, match, conn)
     for p in match.participants[:]:
@@ -154,7 +154,7 @@ def team_to_sqlite(team, match, conn):
     team_side = str(team.side)[5:]
     team_dragon_kills = team.dragon_kills
     team_baron_kills = team.baron_kills
-    team_win = int(team.win) #binary to int
+    team_win = int(team.win) # binary to int
     team_bans = team.bans
     try:
         conn.execute("INSERT INTO Team VALUES(?,?,?,?,?)", (match_id, team_side, team_dragon_kills, team_baron_kills, team_win))
@@ -176,7 +176,7 @@ def summoner_to_sqlite(participant, summoner, conn):
             conn.execute("INSERT INTO Summoner VALUES(?,?,?)", (summoner_id, summoner_name, is_crawled)) #summoner_id UNIQUE in database
         except Exception:
             #print(e, summoner_name)
-            pass #todo
+            pass
 
 def participant_to_sqlite(participant, match, conn):
 
@@ -194,7 +194,7 @@ def participant_to_sqlite(participant, match, conn):
     summoner_spell_d = str(participant.summoner_spell_d) # cass - text
     summoner_spell_f = str(participant.summoner_spell_f) # cass - text   
 
-    #match stats
+    # match stats
     participant_stats = participant.stats
     kda = participant_stats.kda
     kills = participant_stats.assists
@@ -202,7 +202,7 @@ def participant_to_sqlite(participant, match, conn):
     assists = participant_stats.assists
     champion_level = participant_stats.assists
     turret_kills = participant_stats.turret_kills
-    cs = participant_stats.cs #minion + monster kills
+    cs = participant_stats.cs # minion + monster kills
     killing_sprees = participant_stats.killing_sprees
     largest_critical_strike = participant_stats.largest_critical_strike
     largest_killing_spree = participant_stats.largest_killing_spree
@@ -215,7 +215,7 @@ def participant_to_sqlite(participant, match, conn):
     physical_damage_dealt = participant_stats.physical_damage_dealt
     physical_damage_dealt_to_champions = participant_stats.physical_damage_dealt_to_champions
     physical_damage_taken = participant_stats.physical_damage_taken
-    true_damage_dealt = participant_stats.true_damage_dealt #physical_damage_dealt + magic_damage_dealt + true_damage_dealt == damage_dealt
+    true_damage_dealt = participant_stats.true_damage_dealt # physical_damage_dealt + magic_damage_dealt + true_damage_dealt
     true_damage_dealt_to_champions = participant_stats.true_damage_dealt_to_champions
     true_damage_taken = participant_stats.true_damage_taken
     damage_dealt = participant_stats.damage_dealt
