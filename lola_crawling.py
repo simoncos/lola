@@ -332,7 +332,7 @@ def participant_timeline_to_sqlite(participant, match, conn):
             raise(e)
 def frame_kill_event_to_sqlite(frame, match, conn):
     '''
-    Match.Frame.Event information (only kill events between participants)
+    Match.Timeline.Frame.Event information (only kill events between participants)
     '''
     match_id = match.id
     minute = frame.timestamp.seconds // 60
