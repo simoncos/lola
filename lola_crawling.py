@@ -54,7 +54,9 @@ def main():
     begin_crawling(api_key='04c9abf6-0c85-406c-8520-3d86684e9cb1', seed_summoner_id='22005573')
 
 def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON2016', ranked_queues='RANKED_SOLO_5x5'):
-
+    '''
+    Breadth first crawling interations, Summoner -> Match -> Summoner...
+    '''
     #seed intialization
     try:
         print('Seed initializing...')
@@ -93,8 +95,8 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
                         match = riotapi.get_match(mf) # match reference -> match
                     except Exception as e:
                         raise(e)
-                    #print(match, mf.id)
-                    
+
+                    #print(match, mf.id)                   
                     # may be None even if mf is not None, see https://github.com/meraki-analytics/cassiopeia/issues/57 
                     # can not use != because of Match.__eq__ use Match.id 
                     if match is None: 
@@ -119,6 +121,9 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
         queue_summoner_ids = pd.read_sql("SELECT summoner_id FROM Summoner WHERE is_crawled=0", conn) #update queue
 
 def is_match_duplicate(match_reference, conn):
+    '''
+    Check if a given match has a record in database
+    '''
     try:
         is_empty = pd.read_sql("SELECT * FROM Match WHERE match_id = '{}'".format(match_reference.id), conn).empty
     except Exception as e:
@@ -128,6 +133,10 @@ def is_match_duplicate(match_reference, conn):
     return not is_empty
 
 def match_to_sqlite(match, summoner, conn):
+    '''
+    Store Match basic information to database;
+    Arrange extraction and storation of match detail information
+    '''
     #match basic
     match_id = match.id
     version = match.version
@@ -150,6 +159,9 @@ def match_to_sqlite(match, summoner, conn):
         frame_kill_event_to_sqlite(f, match, conn)
 
 def team_to_sqlite(team, match, conn):
+    '''
+    Match.Team Information 
+    '''
     match_id = match.id
     team_side = str(team.side)[5:]
     team_dragon_kills = team.dragon_kills
@@ -166,6 +178,9 @@ def team_to_sqlite(team, match, conn):
         raise(e)
 
 def summoner_to_sqlite(participant, summoner, conn):
+    '''
+    Store Summoner basic information to database.
+    '''
     # handle duplicate in database
 
     summoner_id = participant.summoner_id
@@ -179,7 +194,9 @@ def summoner_to_sqlite(participant, summoner, conn):
             pass
 
 def participant_to_sqlite(participant, match, conn):
-
+    '''
+    Match.Participant Information
+    '''
     #match initial
     summoner_id = participant.summoner_id
     match_id = match.id
@@ -230,12 +247,6 @@ def participant_to_sqlite(participant, match, conn):
     participant_win = int(participant_stats.win)
 
     try:
-        # conn.execute("INSERT INTO Participant VALUES('{}','{}','{}','{}','{}','{}','{}','{}',{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})" \
-        #     .format(summoner_id, match_id, participant_id, side, champion, previous_season_tier, summoner_spell_d, summoner_spell_f, \
-        #     kda, kills, deaths, assists, champion_level, turret_kills, cs, killing_sprees, largest_critical_strike, largest_killing_spree, largest_multi_kill, \
-        #     gold_earned, gold_spent, magic_damage_dealt, magic_damage_dealt_to_champions, magic_damage_taken, physical_damage_dealt, physical_damage_dealt_to_champions, physical_damage_taken, \
-        #     true_damage_dealt, true_damage_dealt_to_champions, true_damage_taken, damage_dealt, damage_dealt_to_champions, damage_taken, healing_done, units_healed, \
-        #     crowd_control_dealt, vision_wards_bought, ward_kills, wards_placed, participant_win) )
         conn.execute("INSERT INTO Participant VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
             (summoner_id, match_id, participant_id, side, champion, previous_season_tier, summoner_spell_d, summoner_spell_f, \
             kda, kills, deaths, assists, champion_level, turret_kills, cs, killing_sprees, largest_critical_strike, largest_killing_spree, largest_multi_kill, \
@@ -247,8 +258,9 @@ def participant_to_sqlite(participant, match, conn):
         raise(e)    
 
 def participant_timeline_to_sqlite(participant, match, conn):
-    # handle duplicate in database
-
+    '''
+    Match.Participant.Timeline information
+    '''
     summoner_id = participant.summoner_id
     match_id = match.id
     side = str(participant.side)[5:]
@@ -319,6 +331,9 @@ def participant_timeline_to_sqlite(participant, match, conn):
             conn.close()
             raise(e)
 def frame_kill_event_to_sqlite(frame, match, conn):
+    '''
+    Match.Frame.Event information (only kill events between participants)
+    '''
     match_id = match.id
     minute = frame.timestamp.seconds // 60
     events = frame.events
