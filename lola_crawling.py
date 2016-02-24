@@ -52,7 +52,8 @@ def main():
     riotapi.get_match_list = auto_retry(riotapi.get_match_list)
     riotapi.get_match = auto_retry(riotapi.get_match)
     print('\nCrawling process starts...')
-    begin_crawling(api_key='04c9abf6-0c85-406c-8520-3d86684e9cb1', seed_summoner_id='22005573')
+	# set your api key amd seed summoner here
+    begin_crawling(api_key='', seed_summoner_id='')
 
 def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON2016', ranked_queues='RANKED_SOLO_5x5'):
     '''
