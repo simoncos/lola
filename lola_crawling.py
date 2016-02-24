@@ -118,7 +118,7 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
                     duplicate_match_no += 1
                 match_no += 1
                 if match_no % 10 == 0:                
-                    print ('Summoner, 'summoner.id, ': match', match_no, 'in', len(match_reference_list), 'processed.')
+                    print (match_no, 'matches in', len(match_reference_list), 'processed.')
             # summoner is crawled
             conn.execute("UPDATE Summoner SET is_crawled = 1 WHERE summoner_id='{}'".format(summoner_id))
             conn.commit() # commit after every summoner finished
