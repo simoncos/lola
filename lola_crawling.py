@@ -60,7 +60,7 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
     '''
     #seed intialization
     try:
-        print('\nSeed initializing...')
+        print('Seed initializing...')
         riotapi.set_api_key(api_key)
         riotapi.set_region(region)
         seed_summoner = riotapi.get_summoner_by_id(seed_summoner_id)    
@@ -68,9 +68,9 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
         conn.execute("INSERT INTO Summoner VALUES('{}','{}',{})".format(seed_summoner.id, seed_summoner.name, 0)) #watch out "" | ''
         conn.commit()
         conn.close()
-        print('Initialization completed.')
+        print('\nInitialization completed.')
     except Exception as e:
-        print('Initialization failed possibly because the seed is already in database:', e)
+        print('\nInitialization failed possibly because the seed is already in database:', e)
         pass
  
     # summoner queue interations
@@ -117,7 +117,7 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
                     duplicate_match_no += 1
                 match_no += 1
                 if match_no % 10 == 0:                
-                    print (summoner.id, ': match', match_no, 'in', len(match_reference_list), 'processed.')
+                    print ('Summoner, 'summoner.id, ': match', match_no, 'in', len(match_reference_list), 'processed.')
             # summoner is crawled
             conn.execute("UPDATE Summoner SET is_crawled = 1 WHERE summoner_id='{}'".format(summoner_id))
             conn.commit() # commit after every summoner finished
@@ -128,8 +128,8 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
             total_match_cralwed += crawled_match_no
             total_match_duplicate += duplicate_match_no
             total_match_none += none_match_no
-            print('total processed match:', total_match_processed, '\ntotal crawled match', total_match_cralwed, \
-            	  '\ntotal duplicate match:', total_match_duplicate, '\ntotal processed summoner:', total_summoner_processed, \
+            print('total processed summoner:', total_summoner_processed,'\ntotal processed match:', total_match_processed, \
+            	  '\ntotal crawled match', total_match_cralwed, '\ntotal duplicate match:', total_match_duplicate,  \
             	  '\ntotal none match:', total_match_none)
 
         # read new queue for next iteration
