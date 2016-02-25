@@ -221,7 +221,7 @@ def participant_to_sqlite(participant, match, conn):
     champion = participant.champion.name
     #print (match_id, participant_id)
     #print (participant.previous_season_tier)
-    previous_season_tier = participant.previous_season_tier.value # cass - text #bug fix when editting Cass.type\core\common.py | see: https://github.com/meraki-analytics/cassiopeia/issues/55
+    previous_season_tier = participant.previous_season_tier.value # bug fixed in Cass.type\core\common.py, see: https://github.com/meraki-analytics/cassiopeia/issues/55
     #masteries = participant.masteries #discarded
     #runes = participant.runes #discarded
     summoner_spell_d = str(participant.summoner_spell_d) # cass - text
