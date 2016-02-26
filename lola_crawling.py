@@ -83,6 +83,7 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
     iteration = 0
     conn = sqlite3.connect('lola.db')
     queue_summoner_ids = pd.read_sql("SELECT summoner_id FROM Summoner WHERE is_crawled=0", conn)
+    print('Summoner Queue Length:', len(queue_summoner_ids))
     while not queue_summoner_ids.empty:
         iteration += 1 # only a relative number because of crawling restrarts 
         print ('\nBig queue iteration', iteration, 'in the process...')
@@ -91,7 +92,7 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
             summoner = riotapi.get_summoner_by_id(summoner_id)
             match_reference_list = riotapi.get_match_list(summoner=summoner, seasons=seasons, ranked_queues=ranked_queues)
             print('\nSummoner {} ({}) in {}, {}: '.format(summoner.name, summoner.id, ranked_queues, seasons))
-            print('Total Match Number: {}'.format(len(match_reference_list)))
+            print('Total Match Number of the summoner: {}'.format(len(match_reference_list)))
 
             match_no = 0 # crawled + duplicate + none
             crawled_match_no = 0
