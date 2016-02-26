@@ -10,7 +10,7 @@ This part has been well tested with `Python 3.5`, though in some environments (e
 
 # Dataset
 
-For now we have obtained data of over 32,000 Ranked-SOLO-5x5 matches with details and over 15,000 summoners (LOL gamers) in the North American region, Pre-Season 2016. And we plan to swallow much more.
+For now we have obtained data of over 40,000 `Ranked-SOLO-5x5` matches with details and over 18,000 summoners (LOL gamers) in the North American region, Pre-Season 2016. And we plan to swallow much more.
 
 # Analysis
 
