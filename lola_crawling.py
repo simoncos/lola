@@ -138,7 +138,14 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
             	  '\ntotal none match:', total_match_none)
 
         # read new queue for next iteration
-        queue_summoner_ids = pd.read_sql("SELECT summoner_id FROM Summoner WHERE is_crawled=0", conn) #update queue
+        try:
+            conn = sqlite3.connect('lola.db')
+            queue_summoner_ids = pd.read_sql("SELECT summoner_id FROM Summoner WHERE is_crawled=0", conn) #update queue
+        except Exception as e:
+            conn.close()
+            raise(e)
+        finally:
+            conn.closed()
 
 def is_match_duplicate(match_reference, conn):
     '''
