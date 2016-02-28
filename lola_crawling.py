@@ -142,7 +142,6 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
             conn = sqlite3.connect('lola.db')
             queue_summoner_ids = pd.read_sql("SELECT summoner_id FROM Summoner WHERE is_crawled=0", conn) #update queue
         except Exception as e:
-            conn.close()
             raise(e)
         finally:
             conn.close()
