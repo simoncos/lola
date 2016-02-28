@@ -145,7 +145,7 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
             conn.close()
             raise(e)
         finally:
-            conn.closed()
+            conn.close()
 
 def is_match_duplicate(match_reference, conn):
     '''
