@@ -82,12 +82,17 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
     total_match_duplicate = 0
     total_match_none = 0
     iteration = 0
-    conn = sqlite3.connect('lola.db')
-    queue_summoner_ids = pd.read_sql("SELECT summoner_id FROM Summoner WHERE is_crawled=0", conn)
+    try:
+        conn = sqlite3.connect('lola.db')
+        queue_summoner_ids = pd.read_sql("SELECT summoner_id FROM Summoner WHERE is_crawled=0", conn)
+    except Exception as e:
+        raise(e)
+    finally:
+        conn.close()
     while not queue_summoner_ids.empty:
-        print('Summoner Queue Length:', len(queue_summoner_ids))
+        print('\nSummoner Queue Length:', len(queue_summoner_ids))
         iteration += 1 # only a relative number because of crawling restrarts 
-        print ('\nBig queue iteration', iteration, 'in the process...')
+        print ('Iteration', iteration, 'in the process...')
         queue_summoner_ids_list = list(queue_summoner_ids['summoner_id'])
         random.shuffle(queue_summoner_ids_list)
         for summoner_id in queue_summoner_ids_list[:]: # pd.dataframe to list of list(queue_summoner_ids['summoner_id'])
