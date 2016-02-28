@@ -88,7 +88,9 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
         print('Summoner Queue Length:', len(queue_summoner_ids))
         iteration += 1 # only a relative number because of crawling restrarts 
         print ('\nBig queue iteration', iteration, 'in the process...')
-        for summoner_id in random.shuffle(list(queue_summoner_ids['summoner_id']))[:]: # pd.dataframe to list of summoner_id
+        queue_summoner_ids_list = list(queue_summoner_ids['summoner_id'])
+        random.shuffle(queue_summoner_ids_list)
+        for summoner_id in queue_summoner_ids_list[:]: # pd.dataframe to list of list(queue_summoner_ids['summoner_id'])
             conn = sqlite3.connect('lola.db')
             summoner = riotapi.get_summoner_by_id(summoner_id)
             match_reference_list = riotapi.get_match_list(summoner=summoner, seasons=seasons, ranked_queues=ranked_queues)
