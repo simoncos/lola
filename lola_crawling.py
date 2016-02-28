@@ -15,6 +15,7 @@ import sqlite3
 import pandas as pd
 import math
 import time 
+import random
 
 def auto_retry(api_call_method):
     """ A decorator to automatically retry 500s (Service Unavailable) and skip 400s (Bad Request) or 404 (Not Found). """
@@ -83,11 +84,11 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
     iteration = 0
     conn = sqlite3.connect('lola.db')
     queue_summoner_ids = pd.read_sql("SELECT summoner_id FROM Summoner WHERE is_crawled=0", conn)
-    print('Summoner Queue Length:', len(queue_summoner_ids))
     while not queue_summoner_ids.empty:
+        print('Summoner Queue Length:', len(queue_summoner_ids))
         iteration += 1 # only a relative number because of crawling restrarts 
         print ('\nBig queue iteration', iteration, 'in the process...')
-        for summoner_id in list(queue_summoner_ids['summoner_id'])[:]: # pd.dataframe to list of summoner_id
+        for summoner_id in random.shuffle(list(queue_summoner_ids['summoner_id']))[:]: # pd.dataframe to list of summoner_id
             conn = sqlite3.connect('lola.db')
             summoner = riotapi.get_summoner_by_id(summoner_id)
             match_reference_list = riotapi.get_match_list(summoner=summoner, seasons=seasons, ranked_queues=ranked_queues)
@@ -130,7 +131,7 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
             total_match_cralwed += crawled_match_no
             total_match_duplicate += duplicate_match_no
             total_match_none += none_match_no
-            print('total processed summoner:', total_summoner_processed,'\ntotal processed match:', total_match_processed, \
+            print('\ntotal processed summoner:', total_summoner_processed,'\ntotal processed match:', total_match_processed, \
             	  '\ntotal crawled match', total_match_cralwed, '\ntotal duplicate match:', total_match_duplicate,  \
             	  '\ntotal none match:', total_match_none)
 
@@ -231,10 +232,10 @@ def participant_to_sqlite(participant, match, conn):
     # match stats
     participant_stats = participant.stats
     kda = participant_stats.kda
-    kills = participant_stats.assists
+    kills = participant_stats.kills
     deaths = participant_stats.deaths
     assists = participant_stats.assists
-    champion_level = participant_stats.assists
+    champion_level = participant_stats.champion_level
     turret_kills = participant_stats.turret_kills
     cs = participant_stats.cs # minion + monster kills
     killing_sprees = participant_stats.killing_sprees
