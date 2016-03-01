@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Jan 30 13:55:24 2016
 
-@author: Che
 """
 
 #import random
@@ -53,7 +51,7 @@ def main():
     riotapi.get_match_list = auto_retry(riotapi.get_match_list)
     riotapi.get_match = auto_retry(riotapi.get_match)
     print('\nCrawling process starts...')
-	# set your api key amd seed summoner here
+    # set your api key amd seed summoner here
     begin_crawling(api_key='', seed_summoner_id='')
 
 def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON2016', ranked_queues='RANKED_SOLO_5x5'):
@@ -112,8 +110,6 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
                         match = riotapi.get_match(mf) # match reference -> match
                     except Exception as e:
                         raise(e)
-
-                    #print(match, mf.id)                   
                     # may be None even if mf is not None, see https://github.com/meraki-analytics/cassiopeia/issues/57 
                     # can not use != because of Match.__eq__ use Match.id 
                     if match is None: 
@@ -186,12 +182,13 @@ def match_to_sqlite(match, summoner, conn):
         summoner_to_sqlite(p, summoner, conn)
         participant_to_sqlite(p, match, conn)
         participant_timeline_to_sqlite(p, match, conn)
-    for f in match.timeline.frames[:]:
-        frame_kill_event_to_sqlite(f, match, conn)
+    if match.timeline.frames is not None:
+        for f in match.timeline.frames[:]:
+            frame_kill_event_to_sqlite(f, match, conn)
 
 def team_to_sqlite(team, match, conn):
     '''
-    Match.Team Information 
+    Extract Match.Team Information to database
     '''
     match_id = match.id
     team_side = str(team.side)[5:]
@@ -210,7 +207,7 @@ def team_to_sqlite(team, match, conn):
 
 def summoner_to_sqlite(participant, summoner, conn):
     '''
-    Store Summoner basic information to database.
+    Extract Summoner basic information to database.
     '''
     # handle duplicate in database
 
@@ -226,7 +223,7 @@ def summoner_to_sqlite(participant, summoner, conn):
 
 def participant_to_sqlite(participant, match, conn):
     '''
-    Match.Participant Information
+    Extract Match.Participant Information to database
     '''
     #match initial
     summoner_id = participant.summoner_id
@@ -290,7 +287,7 @@ def participant_to_sqlite(participant, match, conn):
 
 def participant_timeline_to_sqlite(participant, match, conn):
     '''
-    Match.Participant.Timeline information
+    Extract Match.Participant.Timeline information to database
     '''
     summoner_id = participant.summoner_id
     match_id = match.id
@@ -363,7 +360,7 @@ def participant_timeline_to_sqlite(participant, match, conn):
             raise(e)
 def frame_kill_event_to_sqlite(frame, match, conn):
     '''
-    Match.Timeline.Frame.Event information (only kill events between participants)
+    Extract Match.Timeline.Frame.Event information to database (only kill events between participants)
     '''
     match_id = match.id
     minute = frame.timestamp.seconds // 60

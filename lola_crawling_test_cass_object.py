@@ -3,6 +3,8 @@
 Created on Sun Feb  7 18:08:20 2016
 
 @author: lzsim
+
+For your convenience to get familiar with Cassiopeia's objects.
 """
 
 from cassiopeia import riotapi
@@ -26,7 +28,7 @@ import math
 '''
 
 riotapi.set_region("NA")
-riotapi.set_api_key("04c9abf6-0c85-406c-8520-3d86684e9cb1")
+riotapi.set_api_key("") # set your key here
 
 summoner_id='22005573'
 seasons = 'PRESEASON2016'
