@@ -306,58 +306,33 @@ def participant_timeline_to_sqlite(participant, match, conn):
     damage_taken_diff_per_min_deltas = participant_timeline.damage_taken_diff_per_min_deltas
 
     try:
-        zero_to_ten = (creeps_per_min_deltas.zero_to_ten if creeps_per_min_deltas else None, 
-                        cs_diff_per_min_deltas.zero_to_ten if cs_diff_per_min_deltas else None, 
-                        gold_per_min_deltas.zero_to_ten if gold_per_min_deltas else None, 
-                        xp_per_min_deltas.zero_to_ten if xp_per_min_deltas else None, 
-                        xp_diff_per_min_deltas.zero_to_ten if xp_diff_per_min_deltas else None, 
-                        damage_taken_per_min_deltas.zero_to_ten if damage_taken_per_min_deltas else None, 
-                        damage_taken_diff_per_min_deltas.zero_to_ten if damage_taken_diff_per_min_deltas else None
-                        )
-        ten_to_twenty = (creeps_per_min_deltas.ten_to_twenty if creeps_per_min_deltas else None, 
-                            cs_diff_per_min_deltas.ten_to_twenty if cs_diff_per_min_deltas else None, 
-                            gold_per_min_deltas.ten_to_twenty if gold_per_min_deltas else None, 
-                            xp_per_min_deltas.ten_to_twenty if xp_per_min_deltas else None, 
-                            xp_diff_per_min_deltas.ten_to_twenty if xp_diff_per_min_deltas else None, 
-                            damage_taken_per_min_deltas.ten_to_twenty if damage_taken_per_min_deltas else None, 
-                            damage_taken_diff_per_min_deltas.ten_to_twenty if damage_taken_diff_per_min_deltas else None
-                        )
-        twenty_to_thirty = (creeps_per_min_deltas.twenty_to_thirty if creeps_per_min_deltas else None, 
-                            cs_diff_per_min_deltas.twenty_to_thirty if cs_diff_per_min_deltas else None, 
-                            gold_per_min_deltas.twenty_to_thirty if gold_per_min_deltas else None, 
-                            xp_per_min_deltas.twenty_to_thirty if xp_per_min_deltas else None, 
-                            xp_diff_per_min_deltas.twenty_to_thirty if xp_diff_per_min_deltas else None, 
-                            damage_taken_per_min_deltas.twenty_to_thirty if damage_taken_per_min_deltas else None, 
-                            damage_taken_diff_per_min_deltas.twenty_to_thirty if damage_taken_diff_per_min_deltas else None
-                            )
-        thirty_to_end = (creeps_per_min_deltas.thirty_to_end if creeps_per_min_deltas else None, 
-                            cs_diff_per_min_deltas.thirty_to_end if cs_diff_per_min_deltas else None, 
-                            gold_per_min_deltas.thirty_to_end if gold_per_min_deltas else None, 
-                            xp_per_min_deltas.thirty_to_end if xp_per_min_deltas else None, 
-                            xp_diff_per_min_deltas.thirty_to_end if xp_diff_per_min_deltas else None, 
-                            damage_taken_per_min_deltas.thirty_to_end if damage_taken_per_min_deltas else None, 
-                            damage_taken_diff_per_min_deltas.thirty_to_end if damage_taken_diff_per_min_deltas else None
-                        )
+        deltas_tuple = (creeps_per_min_deltas, cs_diff_per_min_deltas, gold_per_min_deltas, xp_per_min_deltas, xp_diff_per_min_deltas, damage_taken_per_min_deltas, damage_taken_diff_per_min_deltas)
+        zero_to_ten = [deltas.zero_to_ten if deltas else None for deltas in deltas_tuple]
+        ten_to_twenty = [deltas.ten_to_twenty if deltas else None for deltas in deltas_tuple]
+        twenty_to_thirty = [deltas.twenty_to_thirty if deltas else None for deltas in deltas_tuple]
+        thirty_to_end = [deltas.thirty_to_end if deltas else None for deltas in deltas_tuple]
+
     except Exception as e:
             conn.close()
             raise(e)
             
     data_deltas = {'zero_to_ten': zero_to_ten, 'ten_to_twenty': ten_to_twenty, 'twenty_to_thirty': twenty_to_thirty, 'thirty_to_end': thirty_to_end}
     try:
-        for delta in data_deltas:
-            creeps_per_min_delta = data_deltas[delta][0]
-            cs_diff_per_min_delta = data_deltas[delta][1]
-            gold_per_min_delta = data_deltas[delta][2]
-            xp_per_min_delta = data_deltas[delta][3]
-            xp_diff_per_min_delta = data_deltas[delta][4]
-            damage_taken_per_min_delta = data_deltas[delta][5]
-            damage_taken_diff_per_min_delta = data_deltas[delta][6]
+        for delta, values in data_deltas.items():
+            creeps_per_min_delta = values[0]
+            cs_diff_per_min_delta = values[1]
+            gold_per_min_delta = values[2]
+            xp_per_min_delta = values[3]
+            xp_diff_per_min_delta = values[4]
+            damage_taken_per_min_delta = values[5]
+            damage_taken_diff_per_min_delta = values[6]
             conn.execute("INSERT INTO ParticipantTimeline VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
                             (summoner_id, match_id, delta, side, participant_id, role, lane, \
                                     creeps_per_min_delta, cs_diff_per_min_delta, gold_per_min_delta, xp_per_min_delta, xp_diff_per_min_delta, damage_taken_per_min_delta, damage_taken_diff_per_min_delta) )
     except Exception as e:
             conn.close()
             raise(e)
+
 def frame_kill_event_to_sqlite(frame, match, conn):
     '''
     Extract Match.Timeline.Frame.Event information to database (only kill events between participants)
