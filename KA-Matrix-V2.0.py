@@ -2,24 +2,25 @@ import pandas as pd
 import sqlite3
 import time 
 
-addr_Database = 'C:/Users/Administrator/lola.db'
-addr_Ori_Matrix = 'C:/Users/Administrator/Desktop/KA_matrix/K-Matrix.csv'
-addr_KillMatrix_output = 'C:/Users/Administrator/Desktop/KA_matrix/K-Matrix-test.csv'
-addr_AssistMatrix_output = 'C:/Users/Administrator/Desktop/KA_matrix/A-Matrix-test.csv'
+addr_Database = 'lola_analysis_test.db'
+addr_Ori_Matrix = 'K-Matrix.csv'
+#addr_KillMatrix_output = 'C:/Users/Administrator/Desktop/KA_matrix/K-Matrix-test.csv'
+#addr_AssistMatrix_output = 'C:/Users/Administrator/Desktop/KA_matrix/A-Matrix-test.csv'
 
 df = pd.read_csv(addr_Ori_Matrix, sep=',', header=0, index_col=0)
 df = df.fillna(0)
 
 def main(): # can only generate one Matrix once a time
-	start_time = time.time()
-	extract_Kill_infor()
-	end_time = time.time()
-	matrix_to_csv(df, addr_KillMatrix_output)
 	#start_time = time.time()
-	#extract_Assist_infor()
+	#extract_Kill_infor()
 	#end_time = time.time()
-	#matrix_to_csv(df, addr_AssistMatrix_output)
-	print 'Generate Assist Matrix costs: %.2fs' %(end_time-start_time)
+	#matrix_to_csv(df, addr_KillMatrix_output)
+	start_time = time.time()
+	extract_Assist_infor()
+	end_time = time.time()
+	print(df)
+#	matrix_to_csv(df, addr_AssistMatrix_output)
+	print ('Generate Assist Matrix costs: %.2fs' %(end_time-start_time))
 
 def extract_Kill_infor():
 	temp_happen = []
@@ -38,12 +39,12 @@ def extract_Kill_infor():
 				temp_killer = row[3]
 				temp_victim = row[2]
 				df.ix[temp_killer, temp_victim] += 1
-				i += 1
-		#if i>=12:
+			i += 1
+		#if i>=11:
 		#	break
 	
-#df.ix['Karma','Lee Sin'] should be 2
-#df.ix['Ahri','Karma'] should be 1
+#df.ix['Riven','Azir'] should be 2
+#df.ix['Riven','Lee Sin'] should be 1
 	conn.close()
 
 def extract_Assist_infor():
