@@ -3,7 +3,11 @@
 LoLa data crawling based on Cassiopeia.
 """
 import pandas as pd
-import scipy
+from scipy.sparse import linalg
+
+def main():
+	champion_kill_rank()
+	champion_assist_rank
 
 def champion_kill_rank(champion_kill_dataframe):
 	
@@ -12,7 +16,7 @@ def champion_kill_rank(champion_kill_dataframe):
 	print("Champion Kill Rank by eigenvector centralities without normalization:")
 	eigenkills = pd.DataFrame()
 	eigenkills['champion'] = pd.Series(champion_kill_dataframe.index)
-	eigenkills['kill_evector'] = pd.Series(abs(scipy.sparse.linalg.eigs(champion_kill_matrix, k=1)[1])) # eigenvector with largest eigenvalue (k=1); scipy >= 0.17.0
+	eigenkills['kill_evector'] = pd.Series(abs(linalg.eigs(champion_kill_matrix, k=1)[1])) # eigenvector with largest eigenvalue (k=1); scipy >= 0.17.0
 	print(eigenkills.sort('kill_evector', ascending=False))
 
 	print("Champion Kill Rank by counts:")
@@ -21,3 +25,6 @@ def champion_kill_rank(champion_kill_dataframe):
 
 def champion_assist_rank(champion_assist_matrix):
 	pass
+
+if __name__ == '__main__':
+	main()
