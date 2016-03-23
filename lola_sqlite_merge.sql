@@ -30,8 +30,46 @@ DETACH DATABASE 'silver';
 DETACH DATABASE 'merged';
 
 
-/* check duplicate match
+/* 
+check duplicate matches: |A ∩ B ∩ C| + |(A ∩ B) ∪ (A ∩ C) ∪ (B ∩ C)|
+
+proof:
+
+|A∪B∪C| = (|A|+|B|+|C|) - |A∩B| - |B∩C| - |C∩A| + |A∩B∩C|
+				 = (|A|+|B|+|C|) - |(A ∩ B) ∪ (A ∩ C) ∪ (B ∩ C)| - |A∩B∩C|
+(|A∩B| + |B∩C| + |C∩A| - 2|A∩B∩C| = |(A ∩ B) ∪ (A ∩ C) ∪ (B ∩ C)|)
+*/
+
+/*
+
+A ∩ B ∩ C
+
+JOIN method:
 select c.match_id, c.version from ('challenger'.Match c
 							join 'diamond'.Match d on c.match_id=d.match_id
 							join 'silver'.Match s on c.match_id=s.match_id);
+
+INTERSECTION method:
+select match_id, version from (
+			select * from 'challenger'.Match 
+		intersect 
+			select * from 'diamond'.Match 
+		intersect 
+			select * from 'silver'.Match);
 */
+
+
+/*
+
+(A ∩ B) ∪ (A ∩ C) ∪ (B ∩ C)
+
+select match_id from (
+			select * from (select * from 'challenger'.Match intersect select * from 'diamond'.Match)
+		union 
+			select * from (select * from 'challenger'.Match intersect select * from 'silver'.Match)
+		union
+			select * from (select * from 'diamond'.Match intersect select * from 'silver'.Match)
+);
+
+*/
+
