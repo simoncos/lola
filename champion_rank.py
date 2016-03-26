@@ -16,119 +16,94 @@ def print_full(df):
     print(df)
     pd.reset_option('display.max_rows')
 
+# for testing
 def main():
-	champion_kill_rank()
-	champion_assist_rank()
+	champion_matrix_rank()
 
-def champion_kill_rank(champion_kill_dataframe):
+def champion_pick_rank():
+	pass
+
+def champion_win_rank():
+	pass
+
+def champion_ban_rank():
+	pass
+
+def champion_matrix_rank(champion_matrix_df, criteron, norm=False):
+	'''
+	champion_matrix_df: pd.DataFrame, kill/death/assist counts between champions, 
+						(a,b)=i means a kills / killed by / assists b for i times 
+	criteron: 'count', 'eigen', 'eigen_ratio', 'eigen_diff', 'pagerank', 'hits' 
+	norm: True, False
+	'''
+	champion_matrix = champion_matrix_df.as_matrix()
 	
-	champion_kill_matrix = champion_kill_dataframe.as_matrix()
-	row_sum = champion_kill_matrix.sum(axis=1)
-	champion_kill_matrix_norm = champion_kill_matrix / row_sum[:, numpy.newaxis] # broadcast
+	if norm == True:
+		row_sum = champion_matrix.sum(axis=1)
+		champion_matrix = champion_matrix / row_sum[:, numpy.newaxis] # pandas broadcast
 
 	# Count
-
-	print("Champion Kill Rank by counts:")
-	countkills = pd.DataFrame()
-	countkills['champion'] = pd.Series(champion_kill_dataframe.index)
-	countkills['kill_count'] = champion_kill_matrix.sum(axis=1)
-	print_full(countkills.sort_values(by='kill_count', ascending=False))
-
-	print("Champion Death Rank by counts:")
-	countkills = pd.DataFrame()
-	countkills['champion'] = pd.Series(champion_kill_dataframe.index)
-	countkills['death_count'] = champion_kill_matrix.sum(axis=0)
-	print_full(countkills.sort_values(by='death_count', ascending=False))
+	if criteron == 'count':
+		print("Champion Rank by counts:")
+		rank_df = pd.DataFrame()
+		rank_df['champion'] = pd.Series(champion_matrix_df.index)
+		rank_df['count'] = champion_matrix.sum(axis=1)
+		print_full(rank_df.sort_values(by='count', ascending=False))
 
 	# ED
+	elif criteron == 'eigen':
+		print("Champion Rank by eigenvector centrality")
+		rank_df = pd.DataFrame()
+		rank_df['champion'] = pd.Series(champion_matrix_df.index)
+		# eigenvector with largest eigenvalue (k=1), sometimes all negative, sometimes all positive, absolute values unchanged
+		rank_df['eigen'] = pd.DataFrame(abs(linalg.eigs(champion_matrix, k=1)[1]))
+		print_full(rank_df.sort_values(by='eigen', ascending=False))
 
-	print("Champion Kill Rank by eigenvector centralities without normalization:")
-	eigenkills = pd.DataFrame()
-	eigenkills['champion'] = pd.Series(champion_kill_dataframe.index)
-	# eigenvector with largest eigenvalue (k=1), sometimes all negative, sometimes all positive, absolute values unchanged
-	eigenkills['kill_escore'] = pd.DataFrame(abs(linalg.eigs(champion_kill_matrix, k=1)[1]))
-	print_full(eigenkills.sort_values(by='kill_escore', ascending=False))
+	# ED Ratio, eigen(M)/eigen(M.T)
+	elif criteron == 'eigen_ratio':
+		print("Champion Rank by eigenvector centrality ratio")
+		rank_df = pd.DataFrame()
+		rank_df['champion'] = pd.Series(champion_matrix_df.index)
+		rank_df['eigen'] = pd.DataFrame(abs(linalg.eigs(champion_matrix, k=1)[1]))
+		rank_df['eigen_t'] = pd.DataFrame(abs(linalg.eigs(champion_matrix.transpose(), k=1)[1]))
+		rank_df['eigen_ratio'] = rank_df['eigen'] / rank_df['eigen_t']
+		print_full(rank_df.sort_values(by='eigen_ratio', ascending=False))	
 
-	print("Champion Kill Rank by eigenvector centralities normalized by kill counts:")
-	eigenkills_norm = pd.DataFrame()
-	eigenkills_norm['champion'] = pd.Series(champion_kill_dataframe.index)
-	eigenkills_norm['kill_escore_norm'] = pd.DataFrame(abs(linalg.eigs(champion_kill_matrix_norm, k=1)[1])) # eigenvector with largest eigenvalue (k=1); scipy >= 0.17.0
-	print_full(eigenkills_norm.sort_values(by='kill_escore_norm', ascending=False))
-
-	print("Champion Death Rank by eigenvector centralities without normalization:")
-	eigendeaths = pd.DataFrame()
-	eigendeaths['champion'] = pd.Series(champion_kill_dataframe.index)
-	eigendeaths['death_escore'] = pd.DataFrame(abs(linalg.eigs(champion_kill_matrix.transpose(), k=1)[1]))
-	print_full(eigendeaths.sort_values(by='death_escore', ascending=False))
-
-	print("Champion Rank Kill/Death by eigenvector centralities")
-	eigenranks = pd.DataFrame()
-	eigenranks['champion'] = pd.Series(champion_kill_dataframe.index)
-	eigenranks['kill_escore'] = pd.DataFrame(abs(linalg.eigs(champion_kill_matrix, k=1)[1]))
-	eigenranks['death_escore'] = pd.DataFrame(abs(linalg.eigs(champion_kill_matrix.transpose(), k=1)[1]))
-	eigenranks['eranks'] = eigenranks['kill_escore'] / eigenranks['death_escore']
-	print_full(eigenranks.sort_values(by='eranks', ascending=False))	
-
-	print("Champion Rank Kill-Death by eigenvector centralities")
-	eigenranks = pd.DataFrame()
-	eigenranks['champion'] = pd.Series(champion_kill_dataframe.index)
-	eigenranks['kill_escore'] = pd.DataFrame(abs(linalg.eigs(champion_kill_matrix, k=1)[1]))
-	eigenranks['death_escore'] = pd.DataFrame(abs(linalg.eigs(champion_kill_matrix.transpose(), k=1)[1]))
-	eigenranks['eranks'] = eigenranks['kill_escore'] - eigenranks['death_escore']
-	print_full(eigenranks.sort_values(by='eranks', ascending=False))	
+	# ED Diff, eigen(M)-eigen(M.T)
+	elif criteron == 'eigen_minus':
+		print("Champion Rank by eigenvector centrality difference")
+		rank_df = pd.DataFrame()
+		rank_df['champion'] = pd.Series(champion_matrix_df.index)
+		rank_df['eigen'] = pd.DataFrame(abs(linalg.eigs(champion_matrix, k=1)[1]))
+		rank_df['eigen_t'] = pd.DataFrame(abs(linalg.eigs(champion_matrix.transpose(), k=1)[1]))
+		rank_df['eigen_diff'] = rank_df['eigen'] - rank_df['eigen_t']
+		print_full(rank_df.sort_values(by='eigen_diff', ascending=False))	
 
 	# PageRank: similar result with eigenvector centrality
-
-	G = nx.to_networkx_graph(champion_kill_matrix)
-	G_transpose = nx.to_networkx_graph(champion_kill_matrix.transpose())
-
-	pr = nx.pagerank(G)
-	prkills = pd.DataFrame()
-	prkills['champion'] = pd.Series(champion_kill_dataframe.index)
-	prkills['kill_prscore'] = pd.DataFrame(data=list(pr.values()), index=list(pr.keys()))
-	print_full(prkills.sort_values(by='kill_prscore', ascending=False))	
-
-	pr_t = nx.pagerank(G_transpose)
-	prdeaths = pd.DataFrame()
-	prdeaths['champion'] = pd.Series(champion_kill_dataframe.index)
-	prdeaths['death_prscore'] = pd.DataFrame(data=list(pr_t.values()), index=list(pr_t.keys()))
-	print_full(prdeaths.sort_values(by='death_prscore', ascending=False))	
+	elif criteron == 'pagerank':
+		print("Champion Rank by PageRank")
+		G = nx.to_networkx_graph(champion_matrix)
+		pr = nx.pagerank(G)
+		rank_df = pd.DataFrame()
+		rank_df['champion'] = pd.Series(champion_matrix_df.index)
+		rank_df['pagerank'] = pd.DataFrame(data=list(pr.values()), index=list(pr.keys()))
+		print_full(rank_df.sort_values(by='pagerank', ascending=False))	
 
 	# HITS: hub=auth
+	elif criteron == 'hits':
+		print("Champion Rank by HITS")
+		hub, auth = nx.hits(G)
+		hub_rank_df = pd.DataFrame()
+		hub_rank_df['champion'] = pd.Series(champion_matrix_df.index)
+		hub_rank_df['hub'] = pd.DataFrame(data=list(hub.values()), index=list(hub.keys()))
+		print_full(hub_rank_df.sort_values(by='hub', ascending=False))	
+		auth_rank_df = pd.DataFrame()
+		auth_rank_df['champion'] = pd.Series(champion_matrix_df.index)
+		auth_rank_df['auth'] = pd.DataFrame(data=list(auth.values()), index=list(auth.keys()))
+		print_full(auth_rank_df.sort_values(by='auth', ascending=False))	
 
-	hub, auth = nx.hits(G)
-	hitskills = pd.DataFrame()
-	hitskills['champion'] = pd.Series(champion_kill_dataframe.index)
-	hitskills['kill_hitsscore'] = pd.DataFrame(data=list(hub.values()), index=list(hub.keys()))
-	print_full(hitskills.sort_values(by='kill_hitsscore', ascending=False))	
-	hitsdeaths = pd.DataFrame()
-	hitsdeaths['champion'] = pd.Series(champion_kill_dataframe.index)
-	hitsdeaths['death_hitsscore'] = pd.DataFrame(data=list(auth.values()), index=list(auth.keys()))
-	print_full(hitsdeaths.sort_values(by='death_hitsscore', ascending=False))	
-
-def champion_assist_rank(champion_assist_dataframe):
-
-	champion_assist_matrix = champion_assist_dataframe.as_matrix()
-	row_sum = champion_assist_matrix.sum(axis=1)
-	champion_assist_matrix_norm = champion_assist_matrix / row_sum[:, numpy.newaxis] # broadcast
-
-	print("Champion assist Rank by counts:")
-	countassists = pd.DataFrame()
-	countassists['champion'] = pd.Series(champion_assist_dataframe.index)
-	countassists['assist_count'] = champion_assist_matrix.sum(axis=1)
-	print_full(countassists.sort_values(by='assist_count', ascending=False))
-
-	print("Champion assist Rank by eigenvector centralities without normalization:")
-	eigenassists = pd.DataFrame()
-	eigenassists['champion'] = pd.Series(champion_assist_dataframe.index)
-	eigenassists['assist_escore'] = pd.DataFrame(abs(linalg.eigs(champion_assist_matrix, k=1)[1]))
-	print_full(eigenassists.sort_values(by='assist_escore', ascending=False))
-
-	print("Champion assist Rank by eigenvector centralities normalized by assist counts:")
-	eigenassists_norm = pd.DataFrame()
-	eigenassists_norm['champion'] = pd.Series(champion_assist_dataframe.index)
-	eigenassists_norm['assist_escore_norm'] = pd.DataFrame(abs(linalg.eigs(champion_assist_matrix_norm, k=1)[1])) # eigenvector with largest eigenvalue (k=1); scipy >= 0.17.0
-	print_full(eigenassists_norm.sort_values(by='assist_escore_norm', ascending=False))
+	else:
+		raise ValueError('Invalid criteron provided.')
 
 if __name__ == '__main__':
 	main()
