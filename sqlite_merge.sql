@@ -3,25 +3,25 @@ ATTACH DATABASE 'lola_diamond.db' AS 'diamond';
 ATTACH DATABASE 'lola_silver.db' AS 'silver';
 ATTACH DATABASE 'lola_merged.db' AS 'merged';
 
-INSERT OR IGNORE INTO 'merged'.Team SELECT * FROM (SELECT * FROM 'challenger'.Team 
+INSERT OR REPLACE INTO 'merged'.Team SELECT * FROM (SELECT * FROM 'challenger'.Team 
 																						UNION SELECT * FROM 'diamond'.Team 
 																						UNION SELECT * FROM 'silver'.Team);
-INSERT OR IGNORE INTO 'merged'.TeamBan SELECT * FROM (SELECT * FROM 'challenger'.TeamBan 
+INSERT OR REPLACE INTO 'merged'.TeamBan SELECT * FROM (SELECT * FROM 'challenger'.TeamBan 
 																						UNION SELECT * FROM 'diamond'.TeamBan 
 																						UNION SELECT * FROM 'silver'.TeamBan);
-INSERT OR IGNORE INTO 'merged'.Summoner SELECT * FROM (SELECT * FROM 'challenger'.Summoner 
+INSERT OR REPLACE INTO 'merged'.Summoner SELECT * FROM (SELECT * FROM 'challenger'.Summoner 
 																						UNION SELECT * FROM 'diamond'.Summoner 
 																						UNION SELECT * FROM 'silver'.Summoner);
-INSERT OR IGNORE INTO 'merged'.Participant SELECT * FROM (SELECT * FROM 'challenger'.Participant 
+INSERT OR REPLACE INTO 'merged'.Participant SELECT * FROM (SELECT * FROM 'challenger'.Participant 
 																						UNION SELECT * FROM 'diamond'.Participant 
 																						UNION SELECT * FROM 'silver'.Participant);
-INSERT OR IGNORE INTO 'merged'.ParticipantTimeline SELECT * FROM (SELECT * FROM 'challenger'.ParticipantTimeline 
+INSERT OR REPLACE INTO 'merged'.ParticipantTimeline SELECT * FROM (SELECT * FROM 'challenger'.ParticipantTimeline 
 																						UNION SELECT * FROM 'diamond'.ParticipantTimeline 
 																						UNION SELECT * FROM 'silver'.ParticipantTimeline);
-INSERT OR IGNORE INTO 'merged'.Match SELECT * FROM (SELECT * FROM 'challenger'.Match 
+INSERT OR REPLACE INTO 'merged'.Match SELECT * FROM (SELECT * FROM 'challenger'.Match 
 																						UNION SELECT * FROM 'diamond'.Match 
 																						UNION SELECT * FROM 'silver'.Match);
-INSERT OR IGNORE INTO 'merged'.FrameKillEvent SELECT * FROM (SELECT * FROM 'challenger'.FrameKillEvent 
+INSERT OR REPLACE INTO 'merged'.FrameKillEvent SELECT * FROM (SELECT * FROM 'challenger'.FrameKillEvent 
 																						UNION SELECT * FROM 'diamond'.FrameKillEvent 
 																						UNION SELECT * FROM 'silver'.FrameKillEvent);
 DETACH DATABASE 'challenger';

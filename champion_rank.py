@@ -8,14 +8,17 @@ import scipy.linalg
 import numpy 
 import networkx as nx
 
-def print_full(x):
-    pd.set_option('display.max_rows', len(x))
-    print(x)
+def print_full(df): 
+	'''
+	print all rows of pd.DataFrame
+	'''
+    pd.set_option('display.max_rows', len(df))
+    print(df)
     pd.reset_option('display.max_rows')
 
 def main():
 	champion_kill_rank()
-	champion_assist_rank
+	champion_assist_rank()
 
 def champion_kill_rank(champion_kill_dataframe):
 	
@@ -64,6 +67,14 @@ def champion_kill_rank(champion_kill_dataframe):
 	eigenranks['kill_escore'] = pd.DataFrame(abs(linalg.eigs(champion_kill_matrix, k=1)[1]))
 	eigenranks['death_escore'] = pd.DataFrame(abs(linalg.eigs(champion_kill_matrix.transpose(), k=1)[1]))
 	eigenranks['eranks'] = eigenranks['kill_escore'] / eigenranks['death_escore']
+	print_full(eigenranks.sort_values(by='eranks', ascending=False))	
+
+	print("Champion Rank Kill-Death by eigenvector centralities")
+	eigenranks = pd.DataFrame()
+	eigenranks['champion'] = pd.Series(champion_kill_dataframe.index)
+	eigenranks['kill_escore'] = pd.DataFrame(abs(linalg.eigs(champion_kill_matrix, k=1)[1]))
+	eigenranks['death_escore'] = pd.DataFrame(abs(linalg.eigs(champion_kill_matrix.transpose(), k=1)[1]))
+	eigenranks['eranks'] = eigenranks['kill_escore'] - eigenranks['death_escore']
 	print_full(eigenranks.sort_values(by='eranks', ascending=False))	
 
 	# PageRank: similar result with eigenvector centrality
