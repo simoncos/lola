@@ -12,13 +12,13 @@ def print_full(df):
 	'''
 	print all rows of pd.DataFrame
 	'''
-    pd.set_option('display.max_rows', len(df))
-    print(df)
-    pd.reset_option('display.max_rows')
+	pd.set_option('display.max_rows', len(df))
+	print(df)
+	pd.reset_option('display.max_rows')
 
 # for testing
 def main():
-	champion_matrix_rank()
+	#champion_matrix_rank()
 
 def champion_pick_rank():
 	pass
@@ -56,8 +56,10 @@ def champion_matrix_rank(champion_matrix_df, criteron, norm=False):
 		rank_df = pd.DataFrame()
 		rank_df['champion'] = pd.Series(champion_matrix_df.index)
 		# eigenvector with largest eigenvalue (k=1), sometimes all negative, sometimes all positive, absolute values unchanged
-		rank_df['eigen'] = pd.DataFrame(abs(linalg.eigs(champion_matrix, k=1)[1]))
-		print_full(rank_df.sort_values(by='eigen', ascending=False))
+		rank_df['eigen_1'] = pd.DataFrame(abs(linalg.eigs(champion_matrix, k=1)[1]))
+		print_full(rank_df.sort_values(by='eigen_1', ascending=False))
+		rank_df['eigen_2'] = pd.DataFrame(abs(linalg.eigs(champion_matrix, k=2)[1][:,1]))		
+		print_full(rank_df.sort_values(by='eigen_2', ascending=False))
 
 	# ED Ratio, eigen(M)/eigen(M.T)
 	elif criteron == 'eigen_ratio':
