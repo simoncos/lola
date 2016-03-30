@@ -8,17 +8,23 @@ The data crawling part is based on [Riot API](https://developer.riotgames.com/ap
 
 This part has been well tested with `Python 3.5`, though in some environments (e.g. `Windows CMD`) a `decode`/`encode` error may occur in `print` functions; you can just comment out all `print` codes without any influcence on crawling itself. `Python 2.X` may also run well with a few edits. In addition, since both `Riot API` and `Cassiopeia` are not quite stable for now, we may also update constantly to keep compatible.
 
-For now we have obtained data of over 42,000 `Ranked-SOLO-5x5` matches with details and over 19,000 summoners (LoL gamers) in the North American region, Pre-Season 2016. And we plan to swallow much more.
+For now we have obtained data of over 220,000 `Ranked-SOLO-5x5` matches with details in the North American region, Pre-Season 2016. And we plan to swallow more in the future.
 
 # Analysis
+
+## Objectives
 
 We intend to do analyses such as:
 
 - Champion Ability Rank
 - Champion Clustering
 - Champion Recommendation
-- Wining Analysis 
+- Winning Analysis
 - Match Prediction
 - Cheating Detection
+
+## Pre-Processing
+
+## Mining
 
 If you are interested in this project, feel free to participate in.

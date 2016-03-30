@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-
+LoLa data crawling based on Cassiopeia.
 """
-
-#import random
-#from cassiopeia import core
 
 from cassiopeia import riotapi
 from cassiopeia import type
@@ -16,30 +13,29 @@ import time
 import random
 
 def auto_retry(api_call_method):
-    """ A decorator to automatically retry 500s (Service Unavailable) and skip 400s (Bad Request) or 404 (Not Found). """
+    """ A decorator to automatically retry 500/503s (Service Unavailable) and skip 400s (Bad Request) or 404 (Not Found). """
     def call_wrapper(*args, **kwargs):
         try:
             return api_call_method(*args, **kwargs)
         except APIError as error:
-            # Try Again Once
+            # try again once
             if error.error_code in [500, 503]:
                 try:
                     print("Got a 500 or 503, trying again after 5 seconds...")
-                    time.sleep(5) # - simoncos
+                    time.sleep(5)
                     return api_call_method(*args, **kwargs)
                 except APIError as another_error:
                     if another_error.error_code in [500, 503, 400, 404]:
                         pass
                     else:
-                        # Fatal also? - simoncos
                         raise another_error
 
-            # Skip
+            # skip
             elif error.error_code in [400, 404]:
                 print("Got a 400 or 404")
-                pass # may make match None!
+                pass # may make match None in auto_retry(riotapi.get_match)!
 
-            # Fatal
+            # fatal
             else:
                 raise error
     return call_wrapper
@@ -65,7 +61,7 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
         riotapi.set_region(region)
         seed_summoner = riotapi.get_summoner_by_id(seed_summoner_id)    
         conn = sqlite3.connect('lola.db')
-        conn.execute("INSERT INTO Summoner VALUES('{}','{}',{})".format(seed_summoner.id, seed_summoner.name, 0)) #watch out "" | ''
+        conn.execute("INSERT INTO Summoner VALUES('{}','{}',{})".format(seed_summoner.id, seed_summoner.name, 0)) #watch out "" / ''
         conn.commit()
         conn.close()
         print('\nInitialization completed.')
@@ -124,7 +120,7 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
                 match_no += 1
                 if match_no % 10 == 0:                
                     print (match_no, 'matches in', len(match_reference_list), 'processed.')
-            # summoner is crawled
+            # summoner has been crawled
             conn.execute("UPDATE Summoner SET is_crawled = 1 WHERE summoner_id='{}'".format(summoner_id))
             conn.commit() # commit after every summoner finished
             conn.close()
@@ -168,9 +164,9 @@ def match_to_sqlite(match, summoner, conn):
     match_id = match.id
     version = match.version
     duration = math.ceil((match.duration).total_seconds() / 60) #minute
-    #data = str(match.data) # discard
+    #data = str(match.data) # discarded
     try:
-        conn.execute("INSERT INTO Match VALUES(?,?,?,?,?)", (match_id, version, duration, None, 0))
+        conn.execute("INSERT INTO Match VALUES(?,?,?,?,?,?)", (match_id, version, duration, None, 0, 0))
     except Exception as e:
         conn.close()
         raise(e)
@@ -199,7 +195,7 @@ def team_to_sqlite(team, match, conn):
     try:
         conn.execute("INSERT INTO Team VALUES(?,?,?,?,?)", (match_id, team_side, team_dragon_kills, team_baron_kills, team_win))
         for b in team_bans:
-            ban = str(b)[4:-1] #Cass to text
+            ban = str(b)[4:-1] # Cass to text
             conn.execute("INSERT INTO TeamBan VALUES(?,?,?)", (match_id, team_side, ban))
     except Exception as e:
         conn.close()
@@ -207,16 +203,15 @@ def team_to_sqlite(team, match, conn):
 
 def summoner_to_sqlite(participant, summoner, conn):
     '''
-    Extract Summoner basic information to database.
+    Extract Summoner basic information to database. (duplicate handled in database)
     '''
-    # handle duplicate in database
-
     summoner_id = participant.summoner_id
     if summoner_id != summoner.id:
         summoner_name = participant.summoner_name
         is_crawled = 0
         try:
-            conn.execute("INSERT INTO Summoner VALUES(?,?,?)", (summoner_id, summoner_name, is_crawled)) #summoner_id UNIQUE in database
+            #summoner_id is UNIQUE in database
+            conn.execute("INSERT INTO Summoner VALUES(?,?,?)", (summoner_id, summoner_name, is_crawled))
         except Exception:
             #print(e, summoner_name)
             pass
@@ -231,13 +226,11 @@ def participant_to_sqlite(participant, match, conn):
     side = str(participant.side)[5:]
     participant_id = participant.id
     champion = participant.champion.name
-    #print (match_id, participant_id)
-    #print (participant.previous_season_tier)
-    previous_season_tier = participant.previous_season_tier.value # bug fixed in Cass.type\core\common.py, see: https://github.com/meraki-analytics/cassiopeia/issues/55
-    #masteries = participant.masteries #discarded
-    #runes = participant.runes #discarded
-    summoner_spell_d = str(participant.summoner_spell_d) # cass - text
-    summoner_spell_f = str(participant.summoner_spell_f) # cass - text   
+    previous_season_tier = participant.previous_season_tier.value # bug fixed in Cass, see: https://github.com/meraki-analytics/cassiopeia/issues/55
+    #masteries = participant.masteries # discarded
+    #runes = participant.runes # discarded
+    summoner_spell_d = str(participant.summoner_spell_d) # Cass to text
+    summoner_spell_f = str(participant.summoner_spell_f) # Cass to text   
 
     # match stats
     participant_stats = participant.stats
@@ -247,7 +240,7 @@ def participant_to_sqlite(participant, match, conn):
     assists = participant_stats.assists
     champion_level = participant_stats.champion_level
     turret_kills = participant_stats.turret_kills
-    cs = participant_stats.cs # minion + monster kills
+    cs = participant_stats.cs # farming
     killing_sprees = participant_stats.killing_sprees
     largest_critical_strike = participant_stats.largest_critical_strike
     largest_killing_spree = participant_stats.largest_killing_spree
@@ -277,10 +270,10 @@ def participant_to_sqlite(participant, match, conn):
     try:
         conn.execute("INSERT INTO Participant VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
             (summoner_id, match_id, participant_id, side, champion, previous_season_tier, summoner_spell_d, summoner_spell_f, \
-            kda, kills, deaths, assists, champion_level, turret_kills, cs, killing_sprees, largest_critical_strike, largest_killing_spree, largest_multi_kill, \
-            gold_earned, gold_spent, magic_damage_dealt, magic_damage_dealt_to_champions, magic_damage_taken, physical_damage_dealt, physical_damage_dealt_to_champions, physical_damage_taken, \
-            true_damage_dealt, true_damage_dealt_to_champions, true_damage_taken, damage_dealt, damage_dealt_to_champions, damage_taken, healing_done, units_healed, \
-            crowd_control_dealt, vision_wards_bought, ward_kills, wards_placed, participant_win) )
+             kda, kills, deaths, assists, champion_level, turret_kills, cs, killing_sprees, largest_critical_strike, largest_killing_spree, largest_multi_kill, \
+             gold_earned, gold_spent, magic_damage_dealt, magic_damage_dealt_to_champions, magic_damage_taken, physical_damage_dealt, physical_damage_dealt_to_champions, physical_damage_taken, \
+             true_damage_dealt, true_damage_dealt_to_champions, true_damage_taken, damage_dealt, damage_dealt_to_champions, damage_taken, healing_done, units_healed, \
+             crowd_control_dealt, vision_wards_bought, ward_kills, wards_placed, participant_win) )
     except sqlite3.Error as e:
         conn.close()
         raise(e)    
@@ -295,8 +288,8 @@ def participant_timeline_to_sqlite(participant, match, conn):
     participant_id = participant.id
 
     participant_timeline = participant.timeline
-    role = participant_timeline.role.value #type/core/common.py
-    lane = participant_timeline.lane.value #type/core/common.py
+    role = participant_timeline.role.value
+    lane = participant_timeline.lane.value
     creeps_per_min_deltas = participant_timeline.creeps_per_min_deltas
     cs_diff_per_min_deltas = participant_timeline.cs_diff_per_min_deltas
     gold_per_min_deltas = participant_timeline.gold_per_min_deltas
@@ -306,7 +299,8 @@ def participant_timeline_to_sqlite(participant, match, conn):
     damage_taken_diff_per_min_deltas = participant_timeline.damage_taken_diff_per_min_deltas
 
     try:
-        deltas_tuple = (creeps_per_min_deltas, cs_diff_per_min_deltas, gold_per_min_deltas, xp_per_min_deltas, xp_diff_per_min_deltas, damage_taken_per_min_deltas, damage_taken_diff_per_min_deltas)
+        deltas_tuple = (creeps_per_min_deltas, cs_diff_per_min_deltas, gold_per_min_deltas, xp_per_min_deltas, 
+                        xp_diff_per_min_deltas, damage_taken_per_min_deltas, damage_taken_diff_per_min_deltas)
         zero_to_ten = [deltas.zero_to_ten if deltas else None for deltas in deltas_tuple]
         ten_to_twenty = [deltas.ten_to_twenty if deltas else None for deltas in deltas_tuple]
         twenty_to_thirty = [deltas.twenty_to_thirty if deltas else None for deltas in deltas_tuple]
@@ -328,7 +322,8 @@ def participant_timeline_to_sqlite(participant, match, conn):
             damage_taken_diff_per_min_delta = values[6]
             conn.execute("INSERT INTO ParticipantTimeline VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
                             (summoner_id, match_id, delta, side, participant_id, role, lane, \
-                                    creeps_per_min_delta, cs_diff_per_min_delta, gold_per_min_delta, xp_per_min_delta, xp_diff_per_min_delta, damage_taken_per_min_delta, damage_taken_diff_per_min_delta) )
+                             creeps_per_min_delta, cs_diff_per_min_delta, gold_per_min_delta, xp_per_min_delta, \
+                             xp_diff_per_min_delta, damage_taken_per_min_delta, damage_taken_diff_per_min_delta) )
     except Exception as e:
             conn.close()
             raise(e)
