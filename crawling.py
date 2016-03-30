@@ -166,7 +166,7 @@ def match_to_sqlite(match, summoner, conn):
     duration = math.ceil((match.duration).total_seconds() / 60) #minute
     #data = str(match.data) # discarded
     try:
-        conn.execute("INSERT INTO Match VALUES(?,?,?,?,?)", (match_id, version, duration, None, 0))
+        conn.execute("INSERT INTO Match VALUES(?,?,?,?,?,?)", (match_id, version, duration, None, 0, 0))
     except Exception as e:
         conn.close()
         raise(e)

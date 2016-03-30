@@ -3,6 +3,9 @@ ATTACH DATABASE 'lola_diamond.db' AS 'diamond';
 ATTACH DATABASE 'lola_silver.db' AS 'silver';
 ATTACH DATABASE 'lola_merged.db' AS 'merged';
 
+-- REPLACE INTO: there maybe different values like Participant.kda 
+-- returned by requests in different time, so we should replace old records
+
 INSERT OR REPLACE INTO 'merged'.Team SELECT * FROM (SELECT * FROM 'challenger'.Team 
 																						UNION SELECT * FROM 'diamond'.Team 
 																						UNION SELECT * FROM 'silver'.Team);
