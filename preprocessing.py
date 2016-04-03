@@ -1,5 +1,6 @@
 import sqlite3
 import time
+from statics import champions
 
 '''
 Update MatchChampion:
@@ -11,37 +12,67 @@ def match_champion_to_sqlite():
 	conn = sqlite3.connect('lola.db')
 	cursor = conn.cursor()
 
+	print 'Updating participants of matches to MatchChampion...'
+
 	# Select uncounted match_ids
 	cursor.execute('SELECT match_id FROM Match')
 	result = cursor.fetchall()
 
 	st = time.time()
 	for item in result:
-	# Select champions of each match
+	# Select participants of each match
 		match_id = int(item[0].encode('utf-8'))
 		cursor.execute('SELECT champion FROM Participant WHERE match_id = ? ORDER BY participant_id', (match_id,))
-		champions = cursor.fetchall()
-	# Insert champions into MatchChampion
-		cursor.execute('INSERT INTO MatchChampion VALUES(?,?,?,?,?,?,?,?,?,?,?)', (match_id, champions[0][0].encode('utf-8'),
-			champions[1][0].encode('utf-8'),champions[2][0].encode('utf-8'), champions[3][0].encode('utf-8'),
-			champions[4][0].encode('utf-8'),champions[5][0].encode('utf-8'), champions[6][0].encode('utf-8'),
-			champions[7][0].encode('utf-8'),champions[8][0].encode('utf-8'), champions[9][0].encode('utf-8'),))
-		print '%d Inserted.' % match_id
+		participants = cursor.fetchall()
+	# Insert participants into MatchChampion
+		cursor.execute('INSERT INTO MatchChampion VALUES(?,?,?,?,?,?,?,?,?,?,?)', (match_id, participants[0][0].encode('utf-8'),
+			participants[1][0].encode('utf-8'),participants[2][0].encode('utf-8'), participants[3][0].encode('utf-8'),
+			participants[4][0].encode('utf-8'),participants[5][0].encode('utf-8'), participants[6][0].encode('utf-8'),
+			participants[7][0].encode('utf-8'),participants[8][0].encode('utf-8'), participants[9][0].encode('utf-8'), ))
+		#print '%d Inserted.' % match_id
 	# Code for update
 	'''
 		cursor.execute('UPDATE CountedMatch SET participant1=?, participant2=?, participant3=?,\
 			participant4=?, participant5=?, participant6=?, participant7=?, participant8=?,participant9=?,\
-			participant10=? WHERE match_id = ?', (champions[0][0].encode('utf-8'), champions[1][0].encode('utf-8'),
-			champions[2][0].encode('utf-8'), champions[3][0].encode('utf-8'), champions[4][0].encode('utf-8'),
-			champions[5][0].encode('utf-8'), champions[6][0].encode('utf-8'), champions[7][0].encode('utf-8'),
-			champions[8][0].encode('utf-8'), champions[9][0].encode('utf-8'), item[0],))
+			participant10=? WHERE match_id = ?', (participants[0][0].encode('utf-8'), participants[1][0].encode('utf-8'),
+			participants[2][0].encode('utf-8'), participants[3][0].encode('utf-8'), participants[4][0].encode('utf-8'),
+			participants[5][0].encode('utf-8'), participants[6][0].encode('utf-8'), participants[7][0].encode('utf-8'),
+			participants[8][0].encode('utf-8'), participants[9][0].encode('utf-8'), item[0],))
 	'''
 
-	print 'Elapsed time: %.2fs' % (time.time()-st)
+	print 'Done.\nElapsed time: %.2fs.\n' % (time.time()-st)
+
+	cursor.close()
+	conn.commit()
+	conn.close()
+
+'''
+Update ChampionMatchStats:
+1. SELECT sum(kills), sum(deaths), ... FROM Participant WHERE champion = ...
+2. INSERT INTO ChampionMatchStats VALUES(kills, deaths, ..)
+'''
+def champion_match_stats_to_sqlite():
+	conn = sqlite3.connect('lola.db')
+	cursor = conn.cursor()
+
+	print 'Updating champion stats of matches to ChampionMatchStats...'
+	# Select kda, damages, wards... of every champions
+	st = time.time()
+	for champion in champions:
+		cursor.execute('SELECT sum(kills), sum(deaths), sum(assists), sum(gold_earned), sum(magic_damage_dealt_to_champions),\
+			sum(physical_damage_dealt_to_champions), sum(true_damage_dealt_to_champions), sum(damage_taken),\
+			sum(crowd_control_dealt), sum(ward_kills), sum(wards_placed) FROM Participant WHERE champion = ?', (champion, ))
+		result = cursor.fetchone()
+		# Insert part of champion stats, excluding picks/bans/wins and stats of team
+		cursor.execute('INSERT INTO ChampionMatchStats VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', (champion,
+			0, 0, 0, result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8], result[9],
+			result[10], 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ))
+		#print champion, '\n', result
+	print 'Done.\nElapsed time: %.2fs\n' % (time.time() - st)
 
 	cursor.close()
 	conn.commit()
 	conn.close()
 
 if __name__=='__main__':
-	match_champion_to_sqlite()
+	champion_match_stats_to_sqlite()
