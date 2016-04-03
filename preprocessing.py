@@ -32,7 +32,7 @@ def match_champion_to_sqlite():
 		#print '%d Inserted.' % match_id
 	# Code for update
 	'''
-		cursor.execute('UPDATE CountedMatch SET participant1=?, participant2=?, participant3=?,\
+		cursor.execute('UPDATE MatchChampion SET participant1=?, participant2=?, participant3=?,\
 			participant4=?, participant5=?, participant6=?, participant7=?, participant8=?,participant9=?,\
 			participant10=? WHERE match_id = ?', (participants[0][0].encode('utf-8'), participants[1][0].encode('utf-8'),
 			participants[2][0].encode('utf-8'), participants[3][0].encode('utf-8'), participants[4][0].encode('utf-8'),
@@ -47,9 +47,10 @@ def match_champion_to_sqlite():
 	conn.close()
 
 '''
-Update ChampionMatchStats:
+Update ChampionMatchStats' kdas and damages:
 1. SELECT sum(kills), sum(deaths), ... FROM Participant WHERE champion = ...
 2. INSERT INTO ChampionMatchStats VALUES(kills, deaths, ..)
+3. UPDATE ChampionMatchStats SET picks = ?, bans = ? WHERE champion = ?
 '''
 def champion_match_stats_to_sqlite():
 	conn = sqlite3.connect('lola.db')
@@ -59,15 +60,26 @@ def champion_match_stats_to_sqlite():
 	# Select kda, damages, wards... of every champions
 	st = time.time()
 	for champion in champions:
-		cursor.execute('SELECT sum(kills), sum(deaths), sum(assists), sum(gold_earned), sum(magic_damage_dealt_to_champions),\
-			sum(physical_damage_dealt_to_champions), sum(true_damage_dealt_to_champions), sum(damage_taken),\
-			sum(crowd_control_dealt), sum(ward_kills), sum(wards_placed) FROM Participant WHERE champion = ?', (champion, ))
-		result = cursor.fetchone()
-		# Insert part of champion stats, excluding picks/bans/wins and stats of team
-		cursor.execute('INSERT INTO ChampionMatchStats VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', (champion,
-			0, 0, 0, result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8], result[9],
-			result[10], 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ))
-		#print champion, '\n', result
+		cursor.execute('SELECT champion FROM ChampionMatchStats WHERE champion = ?', (champion,))
+		exist = cursor.fetchone()
+		if exist is None:
+			print champion
+			cursor.execute('SELECT sum(kills), sum(deaths), sum(assists), sum(gold_earned), sum(magic_damage_dealt_to_champions),\
+				sum(physical_damage_dealt_to_champions), sum(true_damage_dealt_to_champions), sum(damage_taken),\
+				sum(crowd_control_dealt), sum(ward_kills), sum(wards_placed) FROM Participant WHERE champion = ?', (champion, ))
+			result = cursor.fetchone()
+			# Insert part of champion stats, excluding picks/bans/wins and stats of team
+			cursor.execute('INSERT INTO ChampionMatchStats VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', (champion,
+				0, 0, 0, result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8], result[9],
+				result[10], 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ))
+			#print champion, '\n', result
+		# Update picks/bans
+		cursor.execute('SELECT COUNT(champion) FROM Participant WHERE champion = ?',(champion,))
+		picks = cursor.fetchone()[0]
+		cursor.execute('SELECT COUNT(ban) FROM TeamBan WHERE ban = ?',(champion,))
+		bans = cursor.fetchone()[0]
+		cursor.execute('UPDATE ChampionMatchStats SET picks = ?, bans = ? WHERE champion = ?',(picks, bans, champion,))
+
 	print 'Done.\nElapsed time: %.2fs\n' % (time.time() - st)
 
 	cursor.close()
