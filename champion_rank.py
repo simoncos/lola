@@ -3,9 +3,10 @@
 LoLa data crawling based on Cassiopeia.
 """
 import pandas as pd
+import numpy as np
+from scipy import spatial
 from scipy.sparse import linalg
 import scipy.linalg
-import numpy 
 import networkx as nx
 
 def print_full(df): 
@@ -21,15 +22,23 @@ def main():
 	#champion_matrix_rank()
 
 def champion_pick_rank():
-	pass
+    pass
 
 def champion_win_rank():
 	pass
 
 def champion_ban_rank():
-	pass
+	pass 
 
-def champion_matrix_rank(champion_matrix_df, criteron, norm=False):
+def champion_distribution(champion_matrix_df, champion): #TODO
+	vector = champion_matrix_df.ix[champion]
+	values, base = np.histogram(vector, bins=40)
+	plt.plot(values)
+
+def champion_cosine_similarity(champion_matrix_df, champion_1, champion_2): #TODO
+	return 1 - spatial.distance.cosine(champion_matrix_df.ix[champion_1], champion_matrix_df.ix[champion_2])
+
+def champion_matrix_rank(champion_matrix_df, criteron, norm=False): #TODO:df should be changedm1atrix
 	'''
 	champion_matrix_df: pd.DataFrame, kill/death/assist counts between champions, 
 						(a,b)=i means a kills / killed by / assists b for i times 
@@ -58,8 +67,9 @@ def champion_matrix_rank(champion_matrix_df, criteron, norm=False):
 		# eigenvector with largest eigenvalue (k=1), sometimes all negative, sometimes all positive, absolute values unchanged
 		rank_df['eigen_1'] = pd.DataFrame(abs(linalg.eigs(champion_matrix, k=1)[1]))
 		print_full(rank_df.sort_values(by='eigen_1', ascending=False))
-		rank_df['eigen_2'] = pd.DataFrame(abs(linalg.eigs(champion_matrix, k=2)[1][:,1]))		
-		print_full(rank_df.sort_values(by='eigen_2', ascending=False))
+
+		#rank_df['eigen_2'] = pd.DataFrame(abs(linalg.eigs(champion_matrix, k=2)[1][:,1]))		
+		#print_full(rank_df.sort_values(by='eigen_2', ascending=False))
 
 	# ED Ratio, eigen(M)/eigen(M.T)
 	elif criteron == 'eigen_ratio':
@@ -72,7 +82,7 @@ def champion_matrix_rank(champion_matrix_df, criteron, norm=False):
 		print_full(rank_df.sort_values(by='eigen_ratio', ascending=False))	
 
 	# ED Diff, eigen(M)-eigen(M.T)
-	elif criteron == 'eigen_minus':
+	elif criteron == 'eigen_diff':
 		print("Champion Rank by eigenvector centrality difference")
 		rank_df = pd.DataFrame()
 		rank_df['champion'] = pd.Series(champion_matrix_df.index)
