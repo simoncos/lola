@@ -119,3 +119,6 @@ def champion_matrix_rank(champion_matrix_df, criteron, norm=False): #TODO:df sho
 
 if __name__ == '__main__':
 	main()
+
+
+#TODO: pick, ban, win
