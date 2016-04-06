@@ -167,8 +167,8 @@ def win_rate():
 	all_pick_infor['win_rate'] = win_rate_matrix
 	temp_series = pd.DataFrame(all_pick_infor['win_rate']).sort_values(by='win_rate', ascending=True)
 	#top_ten_pick_infor = # add a new column then insert win_rate into it , then draw the image with name and win_rate
-	plt_all = temp_series.plot(kind='barh', title='Win Rate of Top 10', stacked=False).set_xlabel('Proportion').get_figure()
-	#plt_all.savefig('Top10_win_rate.png')
+	plt_all = temp_series.plot(kind='barh', title='Win Rate Rank', stacked=False).set_xlabel('Proportion').get_figure()
+	#plt_all.savefig('win_rate.png')
 '''
 
 if __name__ == '__main__':
