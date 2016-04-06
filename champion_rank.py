@@ -134,9 +134,9 @@ def top_banpick_win():
 		win_rate_matrix.append(float(win)/float(top_ten_pick_infor['picks'][i]))
 	top_ten_pick_infor['win_rate'] = win_rate_matrix
 	temp_series = pd.DataFrame(top_ten_pick_infor['win_rate']).sort_values(by='win_rate', ascending=True) # inverse the order
-	#top_ten_pick_infor = # add a new column then insert win_rate into it , then draw the image with name and win_rate
+	# top_ten_pick_infor = # add a new column then insert win_rate into it , then draw the image with name and win_rate
 	plt_pick = temp_series.plot(kind='barh', title='Win Rate of Pick Top 10 Champion', stacked=False).set_xlabel('Proportion').get_figure()
-	plt_pick.savefig('win_rate_pick_Top_10.png')
+	# plt_pick.savefig('win_rate_pick_Top_10.png')
 	
 	win_rate_matrix = []
 	top_ten_ban_infor = pick_ban_infor.sort_values(by='bans', ascending=False).iloc[0:10]
@@ -150,7 +150,7 @@ def top_banpick_win():
 	temp_series = pd.DataFrame(top_ten_ban_infor['win_rate']).sort_values(by='win_rate', ascending=True) # inverse the order
 	#top_ten_pick_infor = # add a new column then insert win_rate into it , then draw the image with name and win_rate
 	plt_ban = temp_series.plot(kind='barh', title='Win Rate of Ban Top 10 Champion', stacked=False).set_xlabel('Proportion').get_figure()
-	#plt_ban.savefig('win_rate_ban_Top_10.png')
+	# plt_ban.savefig('win_rate_ban_Top_10.png')
 
 
 def win_rate():
@@ -166,9 +166,9 @@ def win_rate():
 	conn.close()
 	all_pick_infor['win_rate'] = win_rate_matrix
 	temp_series = pd.DataFrame(all_pick_infor['win_rate']).sort_values(by='win_rate', ascending=True)
-	#top_ten_pick_infor = # add a new column then insert win_rate into it , then draw the image with name and win_rate
+	# top_ten_pick_infor = # add a new column then insert win_rate into it , then draw the image with name and win_rate
 	plt_all = temp_series.plot(kind='barh', title='Win Rate Rank', stacked=False).set_xlabel('Proportion').get_figure()
-	#plt_all.savefig('win_rate.png')
+	# plt_all.savefig('win_rate.png')
 '''
 
 if __name__ == '__main__':
