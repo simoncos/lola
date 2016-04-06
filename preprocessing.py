@@ -89,7 +89,7 @@ def champion_match_stats_to_sqlite():
 	conn.commit()
 	conn.close()
 
-# TODO: ChampionMatchStats and ChampionRank Initialization (insert or ignore)
+# TODO: ChampionMatchStats and ChampionRank Initialization (insert or update), in case that champion / match data updating from crawling
 
 '''TODO: average tier of match
 def select_version_tier():
