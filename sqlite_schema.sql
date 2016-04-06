@@ -121,7 +121,7 @@ CREATE TABLE `Participant` (
                 -- PRIMARY KEY(id)
 );
 CREATE TABLE `ChampionMatchStats` (
-                `champion`      TEXT NOT NULL, /*key*/
+                `champion`      TEXT NOT NULL UNIQUE, /*key*/
                 `picks` integer NOT NULL DEFAULT 0,
                 `bans`  integer NOT NULL DEFAULT 0,                
                 `wins`  integer NOT NULL DEFAULT 0,                             
@@ -147,13 +147,25 @@ CREATE TABLE `ChampionMatchStats` (
                 `team_crowd_control_dealt`     integer NOT NULL DEFAULT 0,
                 `team_ward_kills`      integer NOT NULL DEFAULT 0,
                 `team_wards_placed`    integer NOT NULL DEFAULT 0,
-                `label` integer DEFAULT 0
+                `label` integer DEFAULT 0,
+                `version` text,
+                `avg_tier` text
 );
 CREATE TABLE `ChampionRank` (
                 `champion`      text NOT NULL UNIQUE, /*key*/
                 `pick_rate`  real NOT NULL DEFAULT 0,                
                 `ban_rate`  real NOT NULL DEFAULT 0,                
-                `win_rate`  real NOT NULL DEFAULT 0   
+                `win_rate`  real NOT NULL DEFAULT 0,
+                `kill_rate` real NOT NULL DEFAULT 0,
+                `assist_rate` real NOT NULL DEFAULT 0,
+                `death_rate` real NOT NULL DEFAULT 0,
+                `eigen` real NOT NULL DEFAULT 0,
+                `eigen_ratio` real NOT NULL DEFAULT 0,
+                `eigen_diff` real NOT NULL DEFAULT 0,
+                `pagerank` real NOT NULL DEFAULT 0,
+                `hits` real NOT NULL DEFAULT 0,
+                `version` text,
+                `avg_tier` text
                 -- kill / death / eigen / pagerank...
 );
 CREATE TABLE `ChampionKillMatrix` (
