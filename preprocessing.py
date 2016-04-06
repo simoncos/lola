@@ -90,4 +90,50 @@ def champion_match_stats_to_sqlite():
 	conn.close()
 
 # TODO: ChampionMatchStats and ChampionRank Initialization (insert or ignore)
-# TODO: average tier
+
+'''TODO: average tier of match
+def select_version_tier():
+	conn = sqlite3.connect(addr_db)
+	cursor = conn.execute("SELECT match_id,version from Match")
+	for row in cursor:
+		all_matchid.append(row[0])
+		all_version.append(row[1])
+		if row[1] not in version:
+			version.append(row[1])
+	
+	cursor = conn.execute("SELECT previous_season_tier from Participant")
+	count = 1
+	temp_avg_tier = []
+	for row in cursor:
+		if row[0] not in tier: # collect all tier
+			tier.append(row[0])
+		if count%10!=0: # collect match tier level
+			temp_avg_tier.append(row[0])
+			count += 1
+		else:
+			avg_tier.append(most_common(temp_avg_tier))
+			count = 1
+			temp_avg_tier = []
+	conn.close
+	for i in range(len(all_matchid)):
+		all_matchid[i] = all_matchid[i].encode("ascII")
+		avg_tier[i] = avg_tier[i].encode("ascII")
+
+def insert_avgtier():
+	conn = sqlite3.connect(addr_db)
+	conn.execute("ALTER TABLE Match ADD COLUMN TIER TEXT") # Add COLUMN in Match(#should be dropped)
+	for i in range(len(avg_tier)): # insert the average match tier
+		conn.execute("UPDATE Match SET TIER=? WHERE match_id=?",(avg_tier[i],all_matchid[i]))
+	conn.commit()
+	print '$-----Table:Match Mission:avg_tier update [Finished].-----$'	
+	conn.execute("ALTER TABLE FrameKillEvent ADD COLUMN avg_tier TEXT") # Add COLUMN in Frame(#should be dropped)
+	conn.execute("ALTER TABLE FrameKillEvent ADD COLUMN version TEXT") # Add COLUMN in Frame(#should be dropped)
+	conn.execute("UPDATE FrameKillEvent SET avg_tier = (SELECT TIER FROM Match WHERE Match.match_id = FrameKillEvent.match_id)")
+	conn.execute("UPDATE FrameKillEvent SET version = (SELECT version FROM Match WHERE Match.match_id = FrameKillEvent.match_id)")
+	print '$-----Table:FrameKillEvent Mission:avg_tier&version update [Finished].-----$'
+	conn.commit()
+	conn.close()
+
+def most_common(L):
+	return max(g(sorted(L)), key=lambda(x, v):(len(list(v)),-L.index(x)))[0]
+'''

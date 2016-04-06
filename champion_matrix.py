@@ -100,4 +100,41 @@ def sqlite_to_kill_matrix(initial_matrix_df):
 	return kill_matrix_df
 
 # TODO: normalized matrix in sqlite_to_assist_matrix / sqlite_to_kill_matrix
-# TODO: matrix by version and average tier
+
+''' TODO:devided matrix by version and avg_tier
+def AM_table():
+	conn = sqlite3.connect(addr_db)
+	"""
+	conn.execute('''CREATE TABLE `AM_Table` (
+	-- `id`	integer NOT NULL,
+					`version`	text ,	
+					`avg_tier`	text ,
+					`killer`	text NOT NULL,
+					`assist`	text NOT NULL,
+					`assists`	integer NOT NULL
+		-- PRIMARY KEY(id)
+				);''')
+	conn.commit()
+	print '$-----Table:AM_table Mission:Table Creation [Finished].-----$'
+	"""
+
+	temp = conn.execute('SELECT DISTINCT(champion) FROM Participant')
+	c = [] # c[]: a list of 128 champions
+	cc = [] # permutation sized 127*127
+	for i in temp.fetchall():
+		c.append(i[0]) 
+	cc = permutations(c,2)
+	
+	for i in range(len(version)):
+		for j in range(len(tier)):
+			#for k in cc:
+			for q in range(len(c)):
+				t = conn.execute("SELECT count(*) FROM FrameKillEvent WHERE version=? AND avg_tier=? AND killer=? AND assist=?",(version[i],tier[j],'Vayne',c[q]))#k[0],k[1]
+				conn.execute("INSERT INTO AM_Table VALUES(?,?,?,?,?)",(version[i],tier[j],'Vayne',c[q],t.fetchall()[0][0]))#k[0],k[1]
+				t = conn.execute("SELECT count(*) FROM FrameKillEvent WHERE version=? AND avg_tier=? AND killer=? AND assist=?",(version[i],tier[j],'Vayne',c[q]))#k[0],k[1]
+				print 'Hero:%s--%s  Num:%d'%('Vayne',c[q],t.fetchall()[0][0]) #k[0],k[1]
+			print '$-----Table:AM_table Mission:Tier-%s [Finished].-----$' %tier[j]
+		print '$-----Table:AM_table Mission:Version-%s [Finished].-----$' %version[i]
+	conn.commit()
+	conn.close()
+'''

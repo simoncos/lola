@@ -117,8 +117,59 @@ def champion_matrix_rank(champion_matrix_df, criteron, norm=False): #TODO:df sho
 	else:
 		raise ValueError('Invalid criteron provided.')
 
+#TODO: pick, ban, win
+
+'''
+TODO: Visualization Part
+
+def top_banpick_win():
+	conn = sqlite3.connect('lola.db')
+	win_rate_matrix = []
+	pick_ban_infor = pd.read_sql("SELECT champion,picks,bans FROM ChampionMatchStats", conn, index_col=['champion'])
+	top_ten_pick_infor = pick_ban_infor.sort_values(by='picks', ascending=False).iloc[0:10]
+	top_ten_pick_champions = top_ten_pick_infor.index
+	for i in top_ten_pick_champions:
+		win = conn.execute("SELECT COUNT(champion) FROM Participant WHERE Participant.participant_win=1 and participant.champion=?",(i,))
+		win = win.fetchone()[0]
+		win_rate_matrix.append(float(win)/float(top_ten_pick_infor['picks'][i]))
+	top_ten_pick_infor['win_rate'] = win_rate_matrix
+	temp_series = pd.DataFrame(top_ten_pick_infor['win_rate']).sort_values(by='win_rate', ascending=True) # inverse the order
+	#top_ten_pick_infor = # add a new column then insert win_rate into it , then draw the image with name and win_rate
+	plt_pick = temp_series.plot(kind='barh', title='Win Rate of Pick Top 10 Champion', stacked=False).set_xlabel('Proportion').get_figure()
+	plt_pick.savefig('win_rate_pick_Top_10.png')
+	
+	win_rate_matrix = []
+	top_ten_ban_infor = pick_ban_infor.sort_values(by='bans', ascending=False).iloc[0:10]
+	top_ten_ban_champions = top_ten_ban_infor.index
+	for i in top_ten_ban_champions:
+		win = conn.execute("SELECT COUNT(champion) FROM Participant WHERE Participant.participant_win=1 and participant.champion=?",(i,))
+		win = win.fetchone()[0]
+		win_rate_matrix.append(float(win)/float(top_ten_ban_infor['picks'][i]))
+	conn.close()
+	top_ten_ban_infor['win_rate'] = win_rate_matrix
+	temp_series = pd.DataFrame(top_ten_ban_infor['win_rate']).sort_values(by='win_rate', ascending=True) # inverse the order
+	#top_ten_pick_infor = # add a new column then insert win_rate into it , then draw the image with name and win_rate
+	plt_ban = temp_series.plot(kind='barh', title='Win Rate of Ban Top 10 Champion', stacked=False).set_xlabel('Proportion').get_figure()
+	#plt_ban.savefig('win_rate_ban_Top_10.png')
+
+
+def win_rate():
+	conn = sqlite3.connect('lola.db')
+	win_rate_matrix = []
+	pick_ban_infor = pd.read_sql("SELECT champion,picks,bans FROM ChampionMatchStats", conn, index_col=['champion'])
+	all_pick_infor = pick_ban_infor.sort_values(by='picks', ascending=False)
+	all_pick_champions = all_pick_infor.index
+	for i in all_pick_champions:
+		win = conn.execute("SELECT COUNT(champion) FROM Participant WHERE Participant.participant_win=1 and participant.champion=?",(i,))
+		win = win.fetchone()[0]
+		win_rate_matrix.append(float(win)/float(all_pick_infor['picks'][i]))
+	conn.close()
+	all_pick_infor['win_rate'] = win_rate_matrix
+	temp_series = pd.DataFrame(all_pick_infor['win_rate']).sort_values(by='win_rate', ascending=True)
+	#top_ten_pick_infor = # add a new column then insert win_rate into it , then draw the image with name and win_rate
+	plt_all = temp_series.plot(kind='barh', title='Win Rate of Top 10', stacked=False).set_xlabel('Proportion').get_figure()
+	#plt_all.savefig('Top10_win_rate.png')
+'''
+
 if __name__ == '__main__':
 	main()
-
-
-#TODO: pick, ban, win
