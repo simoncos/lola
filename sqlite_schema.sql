@@ -150,7 +150,7 @@ CREATE TABLE `ChampionMatchStats` (
                 `label` integer DEFAULT 0
 );
 CREATE TABLE `ChampionRank` (
-                `champion`      text NOT NULL UNIQUE , /*key*/
+                `champion`      text NOT NULL UNIQUE, /*key*/
                 `pick_rate`  real NOT NULL DEFAULT 0,                
                 `ban_rate`  real NOT NULL DEFAULT 0,                
                 `win_rate`  real NOT NULL DEFAULT 0   
