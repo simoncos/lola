@@ -1,19 +1,21 @@
 import sqlite3
+import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.cluster import AgglomerativeClustering
 from scipy import spatial
 import matplotlib.pyplot as plt
 
 #All fields' name
-fields = ['gold_earned', 'magic_damage', 'physical_damage', 'true_damage', 'damage_taken','crowd_control_dealt', 'ward_kills', 'wards_placed']
+fields = ['kills', 'deaths', 'assists', 'gold_earned', 'magic_damage', 'physical_damage', 'true_damage', 'damage_taken',
+	'crowd_control_dealt', 'ward_kills', 'wards_placed']
 fields_total = ['total_gold_earned','total_magic_damage','total_physical_damage', 'total_true_damage', 'total_damage_taken',
 		'total_crowd_control_dealt','total_ward_kills','total_wards_placed']
 fields_percent = ['gold_percent', 'magic_percent','physical_percent', 'true_percent', 'taken_percent', 'control_percent', 'wardK_percent',
 		'wardP_percent']
 
 def count_avg_dict(label):
-	tmp_dict = {'gold_percent': 0, 'magic_percent': 0,'physical_percent': 0, 'true_percent': 0, 'taken_percent': 0, 'control_percent': 0,
-		'wardK_percent': 0, 'wardP_percent': 0,}
+	tmp_dict = {'kills': 0, 'deaths': 0, 'assists': 0, 'gold_earned': 0, 'magic_damage': 0, 'physical_damage': 0, 'true_damage': 0,
+		'damage_taken': 0, 'crowd_control_dealt': 0, 'ward_kills': 0, 'wards_placed': 0}
 	for name in label_dict[label]:
 		for key in tmp_dict.keys():
 			tmp_dict[key] += all_stats[name][key]
@@ -22,45 +24,44 @@ def count_avg_dict(label):
 	return tmp_dict
 
 def count_avg_arr(label):
-	tmp_arr = [0,0,0,0,0,0,0,0]
+	tmp_arr = [0,0,0,0,0,0,0,0,0,0,0]
 	for name in new_label_dict[label]:
-		for i in range(0, len(fields_percent)):
-			tmp_arr[i] += all_stats[name][fields_percent[i]]
+		for i in range(0, len(fields)):
+			tmp_arr[i] += all_stats[name][fields[i]]
 	for i in range(0,len(tmp_arr)):
 		tmp_arr[i] /= len(new_label_dict[label])
 	return tmp_arr
 
-
+#  iterate all champions' name, retrieve every column by fields' name, calculate the average stats per game of each champions
 conn = sqlite3.connect('lola.db')
 cursor = conn.cursor()
-
-#Calculate percent
-cursor.execute('SELECT * FROM TotalChampionStats')
-stats = cursor.fetchall()
+df = pd.read_sql('SELECT * FROM ChampionMatchStats', conn, index_col=['champion'])
 
 all_stats = {}
 all_stats_arr = []
 names = []
 
-for item in stats:
-	name = item[0]
-	names.append(item[0].encode('utf-8'))
-	#kills_percent = 100*item[1]/item[12]
-	#deaths_percent = 100*item[2]/item[13]
-	#assists_percent = 100*item[3]/item[14]
-	gold_percent = 100*item[4]/item[15]
-	magic_percent = 100*item[5]/item[16]
-	physical_percent = 100*item[6]/item[17]
-	true_percent = 100*item[7]/item[18]
-	taken_percent = 100*item[8]/item[19]
-	control_percent = 100*item[9]/item[20]
-	wardK_percent = 100*item[10]/item[21]
-	wardP_percent = 100*item[11]/item[22]
-	tmp_dict = {'gold_percent': gold_percent, 'magic_percent': magic_percent, 'physical_percent': physical_percent, 'true_percent': true_percent,
-		'taken_percent': taken_percent, 'control_percent': control_percent,'wardK_percent': wardK_percent,'wardP_percent': wardP_percent,}
-	tmp_arr = [gold_percent, magic_percent, physical_percent, true_percent, taken_percent, control_percent, wardK_percent, wardP_percent]
-	all_stats[name] = tmp_dict
+for champion in df.index:
+	names.append(champion)
+	kills = df.ix[champion]['kills']/df.ix[champion]['picks']
+	deaths = df.ix[champion]['deaths']/df.ix[champion]['picks']
+	assists = df.ix[champion]['assists']/df.ix[champion]['picks']
+	gold_earned = df.ix[champion]['gold_earned']/df.ix[champion]['picks']
+	magic_damage = df.ix[champion]['magic_damage']/df.ix[champion]['picks']
+	physical_damage = df.ix[champion]['physical_damage']/df.ix[champion]['picks']
+	true_damage = df.ix[champion]['true_damage']/df.ix[champion]['picks']
+	damage_taken = df.ix[champion]['damage_taken']/df.ix[champion]['picks']
+	crowd_control_dealt = df.ix[champion]['crowd_control_dealt']/df.ix[champion]['picks']
+	ward_kills = df.ix[champion]['ward_kills']/df.ix[champion]['picks']
+	wards_placed = df.ix[champion]['wards_placed']/df.ix[champion]['picks']
+	tmp_dict = {'kills': kills, 'assists': assists, 'deaths': deaths, 'gold_earned': gold_earned, 'magic_damage': magic_damage,
+		'physical_damage': physical_damage, 'true_damage': true_damage,'damage_taken': damage_taken, 'crowd_control_dealt': crowd_control_dealt,
+		'ward_kills': ward_kills,'wards_placed': wards_placed}
+	tmp_arr = [kills, assists, deaths, gold_earned, magic_damage, physical_damage, true_damage, damage_taken, crowd_control_dealt, ward_kills,
+		wards_placed]
+	all_stats[champion] = tmp_dict
 	all_stats_arr.append(tmp_arr)
+
 #for (k, v) in all_stats.items():
 #	print k, '\n', v
 
@@ -76,13 +77,13 @@ for i in range(0, num_clusters):
 i = 0
 for label in km.labels_:
 	label_dict[label].append(names[i])
-	print names[i], int(label)	
-	cursor.execute('UPDATE TotalChampionStats SET label=? WHERE champion=?', (int(label), names[i],))
+	#print names[i], int(label)	
+	cursor.execute('UPDATE ChampionMatchStats SET label=? WHERE champion=?', (int(label), names[i],))
 	i += 1
 #Show clustering results and average statistics
-#for i in range(0, len(label_dict)):
-	#print label_dict[i]
-	#print count_avg_dict(i), '\n'
+for i in range(0, len(label_dict)):
+	print label_dict[i]
+	print count_avg_dict(i), '\n'
 centers = km.cluster_centers_.tolist()
 sum_dist = 0
 for label in range(0, num_clusters):
