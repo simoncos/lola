@@ -13,49 +13,60 @@ def time_report():
 	pass
 
 def initial_matrix():
+	'''
+	initial champion-champion matrix, no direction
+	'''
 	conn = sqlite3.connect('lola.db')
 	cursor = conn.execute("SELECT champion FROM ChampionMatchStats")
 	temp = cursor.fetchall()
+	conn.close()
 	temp_list = []
 	for i in range(len(temp)):
 		temp_list.append(temp[i][0])
 	temp_list_T = list(np.array(temp_list).T)
-	initial_matrix_df = pd.DataFrame(columns=temp_list, index=temp_list_T)
-	conn.close()
+	initial_matrix_df = pd.DataFrame(columns=temp_list, index=temp_list_T).fillna(0)
 	return initial_matrix_df
 
 def kill_matrix():
+	'''
+	row: killer, column: victim
+	'''
 	kill_matrix_df = initial_matrix()
 	temp_happen = []
 	conn = sqlite3.connect('lola.db')
-	cursor = conn.execute("SELECT match_id,happen,victim,killer from FrameKillEvent")
+	cursor = conn.execute("SELECT match_id,happen,killer,victim from FrameKillEvent")
 	i = 0
+	# use the order of column (by match and happen) in the FrameKillEvent table
+	# TODO: avoid using database record order, instead use match_id and happen to de-duplicate
 	for row in cursor:
 		temp_happen.append(row[1])
 		if i==0:
-			temp_killer = row[3]
-			temp_victim = row[2]
+			temp_killer = row[2]
+			temp_victim = row[3]
 			kill_matrix_df.ix[temp_killer, temp_victim] += 1
 			i += 1
 		else:
 			if not row[1]==temp_happen[i-1]:
-				temp_killer = row[3]
-				temp_victim = row[2]
-				kill_matrix_df.ix[temp_killer, temp_victim] += 1
+				temp_killer = row[2]
+				temp_victim = row[3]
+				kill_matrix_df.ix[temp_killer, temp_victim] += 1 # row kills column
 			i += 1
 	conn.close()
 	kill_matrix_df.to_csv('kill_matrix.csv')
 	return kill_matrix_df
 
 def assist_matrix():
+	'''
+	row: killer, column: assist
+	'''
 	assist_matrix_df = initial_matrix()
 	conn = sqlite3.connect('lola.db')
 	cursor = conn.execute("SELECT killer,assist from FrameKillEvent") # consider the relationship between a&v or a&k?
 	for row in cursor:
 		if not row[1]==None:
-			temp_assist = row[1]
 			temp_killer = row[0]
-			assist_matrix_df.ix[temp_assist, temp_killer] += 1 # row help column
+			temp_assist = row[1]
+			assist_matrix_df.ix[temp_assist, temp_killer] += 1 # row helps column
 	conn.close()
 	assist_matrix_df.to_csv('assist_matrix.csv')
 	return assist_matrix_df
@@ -66,7 +77,7 @@ def kill_matrix_to_sqlite():
 	temp_champions = list(kill_matrix_df.columns)
 	for i in temp_champions:
 		for j in temp_champions:
-			conn.execute("INSERT INTO ChampionKillMatrix(killer,victim,kills) VALUES(?,?,?)",(i,j,kill_matrix_df[i][j]))
+			conn.execute("INSERT OR REPLACE INTO ChampionKillMatrix(killer,victim,kills) VALUES(?,?,?)",(i,j,int(kill_matrix_df[j][i])))
 		print('$-----Table:ChampionKillMatrix Mission:kill infor-%s [Finished].-----$'%i)
 	conn.commit()
 	conn.close()
@@ -77,7 +88,7 @@ def assist_matrix_to_sqlite(assist_matrix_df):
 	temp_champions = list(assist_matrix_df.columns)
 	for i in temp_champions:
 		for j in temp_champions:
-			conn.execute("INSERT INTO ChampionAssistMatrix(killer,assist,assists) VALUES(?,?,?)",(i,j,assist_matrix_df[j][i]))
+			conn.execute("INSERT OR REPLACE INTO ChampionAssistMatrix(killer,assist,assists) VALUES(?,?,?)",(i,j,int(assist_matrix_df[i][j])))
 		print('$-----Table:ChampionAssistMatrix Mission:assist infor-%s [Finished].-----$'%i)
 	conn.commit()
 	conn.close()
@@ -89,10 +100,8 @@ def sqlite_to_kill_matrix(norm=None):
 	'''
 	kill_matrix_df = initial_matrix()
 	conn = sqlite3.connect('lola.db')
-	#new_matrix_kill = pd.read_csv(addr_ori_matrix, sep=',', header=0, index_col=0).fillna(0)
 	cursor = conn.execute("SELECT killer,victim,kills FROM ChampionKillMatrix")
 	for row in cursor:
-		#new_matrix_kill.ix[row[0]][row[1]] = row[2] # row kill column
 		kill_matrix_df.ix[row[0]][row[1]] = row[2]
 	conn.close()
 	if norm == 'picks':
@@ -106,10 +115,8 @@ def sqlite_to_assist_matrix(norm=None):
 	'''
 	assist_matrix_df = initial_matrix()
 	conn = sqlite3.connect('lola.db')
-	#new_matrix_assist = pd.read_csv(addr_ori_matrix, sep=',', header=0, index_col=0).fillna(0)
 	cursor = conn.execute("SELECT killer,assist,assists FROM ChampionAssistMatrix")
 	for row in cursor:
-		#new_matrix_assist.ix[row[1]][row[0]] = row[2] # row help column
 		assist_matrix_df.ix[row[1]][row[0]] = row[2]
 	conn.close()
 	if norm == 'picks':

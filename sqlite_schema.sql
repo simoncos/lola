@@ -186,7 +186,10 @@ CREATE TABLE `ChampionAssistMatrix` (
                 `avg_tier`      text
                 -- PRIMARY KEY(id)
 );
+
 CREATE INDEX index_Participant_match_id on Participant(match_id);
+CREATE UNIQUE INDEX killer_victim on ChampionKillMatrix(killer, victim);
+CREATE UNIQUE INDEX killer_assist on ChampionAssistMatrix(killer, assist);
 
 -- INSERT INTO new.Participant SELECT * FROM old.Participant ORDER bY match_id ASC, CAST(participant_id AS INTEGER) ASC
 
