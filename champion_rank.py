@@ -6,8 +6,8 @@ import pandas as pd
 import numpy as np
 from scipy import spatial
 from scipy.sparse import linalg
-import scipy.linalg
 import networkx as nx
+import matplotlib.pyplot as plt
 
 def print_full(df): 
 	'''
@@ -17,18 +17,17 @@ def print_full(df):
 	print(df)
 	pd.reset_option('display.max_rows')
 
-# for testing
-def main():
-	#champion_matrix_rank()
+def champion_win_rank():
+	pass
 
 def champion_pick_rank():
     pass
 
-def champion_win_rank():
-	pass
-
 def champion_ban_rank():
 	pass 
+
+def champion_kda_rank():
+	pass
 
 def champion_distribution(champion_matrix_df, champion): #TODO
 	vector = champion_matrix_df.ix[champion]
@@ -38,18 +37,19 @@ def champion_distribution(champion_matrix_df, champion): #TODO
 def champion_cosine_similarity(champion_matrix_df, champion_1, champion_2): #TODO
 	return 1 - spatial.distance.cosine(champion_matrix_df.ix[champion_1], champion_matrix_df.ix[champion_2])
 
-def champion_matrix_rank(champion_matrix_df, criteron, norm=False): #TODO:df should be changedm1atrix
+def champion_matrix_rank(champion_matrix_df, criteron, norm=False):
 	'''
 	champion_matrix_df: pd.DataFrame, kill/death/assist counts between champions, 
 						(a,b)=i means a kills / killed by / assists b for i times 
 	criteron: 'count', 'eigen', 'eigen_ratio', 'eigen_diff', 'pagerank', 'hits' 
 	norm: True, False
+	TODO: eigen_ratio and eigen_diff criteron can only be used in kill matrix, in assist do not make sense (would be forbidden in future)
 	'''
-	champion_matrix = champion_matrix_df.as_matrix()
+	champion_matrix = champion_matrix_df.as_matrix().astype(float) # must be float for linalg.eigs
 	
 	if norm == True:
 		row_sum = champion_matrix.sum(axis=1)
-		champion_matrix = champion_matrix / row_sum[:, numpy.newaxis] # pandas broadcast
+		champion_matrix = champion_matrix / row_sum[:, np.newaxis] # pandas broadcast
 
 	# Count
 	if criteron == 'count':
@@ -91,7 +91,7 @@ def champion_matrix_rank(champion_matrix_df, criteron, norm=False): #TODO:df sho
 		rank_df['eigen_diff'] = rank_df['eigen'] - rank_df['eigen_t']
 		print_full(rank_df.sort_values(by='eigen_diff', ascending=False))	
 
-	# PageRank: similar result with eigenvector centrality
+	# PageRank: similar results with eigenvector centrality
 	elif criteron == 'pagerank':
 		print("Champion Rank by PageRank")
 		G = nx.to_networkx_graph(champion_matrix)
@@ -104,6 +104,7 @@ def champion_matrix_rank(champion_matrix_df, criteron, norm=False): #TODO:df sho
 	# HITS: hub=auth
 	elif criteron == 'hits':
 		print("Champion Rank by HITS")
+		G = nx.to_networkx_graph(champion_matrix)
 		hub, auth = nx.hits(G)
 		hub_rank_df = pd.DataFrame()
 		hub_rank_df['champion'] = pd.Series(champion_matrix_df.index)
@@ -170,6 +171,3 @@ def win_rate():
 	plt_all = temp_series.plot(kind='barh', title='Win Rate Rank', stacked=False).set_xlabel('Proportion').get_figure()
 	# plt_all.savefig('win_rate.png')
 '''
-
-if __name__ == '__main__':
-	main()

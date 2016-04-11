@@ -108,6 +108,10 @@ def sqlite_to_kill_matrix(norm=None):
 		kill_matrix_df = matrix_norm_by_pick(kill_matrix_df)
 	return kill_matrix_df
 
+def sqlite_to_death_matrix(norm=None):
+	death_matrix_df = sqlite_to_kill_matrix(norm).transpose()
+	return death_matrix_df
+
 def sqlite_to_assist_matrix(norm=None):
 	'''
 	read champion assist matrix from database
