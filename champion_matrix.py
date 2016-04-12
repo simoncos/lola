@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""
+LoLa champion relationship matrix.
+"""
 import time
 import pandas as pd
 import numpy as np
@@ -57,7 +60,7 @@ def kill_matrix():
 
 def assist_matrix():
 	'''
-	row: killer, column: assist
+	row: assist, column: killer
 	'''
 	assist_matrix_df = initial_matrix()
 	conn = sqlite3.connect('lola.db')
@@ -95,7 +98,7 @@ def assist_matrix_to_sqlite(assist_matrix_df):
 
 def sqlite_to_kill_matrix(norm=None):
 	'''
-	read champion kill matrix from database
+	read champion kill matrix from database, Kill(i,j) means i kills j
 	norm: None / 'picks'
 	'''
 	kill_matrix_df = initial_matrix()
@@ -109,12 +112,16 @@ def sqlite_to_kill_matrix(norm=None):
 	return kill_matrix_df
 
 def sqlite_to_death_matrix(norm=None):
+	'''
+	read champion death matrix from database, Death(i,j) means i is victim of j
+	norm: None / 'picks'
+	'''
 	death_matrix_df = sqlite_to_kill_matrix(norm).transpose()
 	return death_matrix_df
 
 def sqlite_to_assist_matrix(norm=None):
 	'''
-	read champion assist matrix from database
+	read champion assist matrix from database, Assist(i,j) means i assists j
 	norm: None / 'picks'
 	'''
 	assist_matrix_df = initial_matrix()

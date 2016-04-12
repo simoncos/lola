@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-LoLa data crawling based on Cassiopeia.
+LoLa champion rank.
 """
 import pandas as pd
 import numpy as np
@@ -17,16 +17,16 @@ def print_full(df):
 	print(df)
 	pd.reset_option('display.max_rows')
 
-def champion_win_rank():
+def champion_win_rate_rank():
 	pass
 
-def champion_pick_rank():
+def champion_pick_rate_rank():
     pass
 
-def champion_ban_rank():
+def champion_ban_rate_rank():
 	pass 
 
-def champion_kda_rank():
+def champion_average_kda_rank():
 	pass
 
 def champion_distribution(champion_matrix_df, champion): #TODO
@@ -45,12 +45,13 @@ def champion_matrix_rank(champion_matrix_df, criteron, norm=False):
 	norm: True, False
 	TODO: eigen_ratio and eigen_diff criteron can only be used in kill matrix, in assist do not make sense (would be forbidden in future)
 	'''
-	champion_matrix = champion_matrix_df.as_matrix().astype(float) # must be float for linalg.eigs
-	
-	if norm == True:
+	# must be float for linalg.eigs	
+	champion_matrix = champion_matrix_df.as_matrix().astype(float)
+
+	if norm == 'row': # use row sum to normalize
 		row_sum = champion_matrix.sum(axis=1)
 		champion_matrix = champion_matrix / row_sum[:, np.newaxis] # pandas broadcast
-
+	
 	# Count
 	if criteron == 'count':
 		print("Champion Rank by counts:")
@@ -94,17 +95,17 @@ def champion_matrix_rank(champion_matrix_df, criteron, norm=False):
 	# PageRank: similar results with eigenvector centrality
 	elif criteron == 'pagerank':
 		print("Champion Rank by PageRank")
-		G = nx.to_networkx_graph(champion_matrix)
+		G = nx.DiGraph(champion_matrix)
 		pr = nx.pagerank(G)
 		rank_df = pd.DataFrame()
 		rank_df['champion'] = pd.Series(champion_matrix_df.index)
 		rank_df['pagerank'] = pd.DataFrame(data=list(pr.values()), index=list(pr.keys()))
 		print_full(rank_df.sort_values(by='pagerank', ascending=False))	
 
-	# HITS: hub=auth
+	# HITS:
 	elif criteron == 'hits':
 		print("Champion Rank by HITS")
-		G = nx.to_networkx_graph(champion_matrix)
+		G = nx.DiGraph(champion_matrix)
 		hub, auth = nx.hits(G)
 		hub_rank_df = pd.DataFrame()
 		hub_rank_df['champion'] = pd.Series(champion_matrix_df.index)
