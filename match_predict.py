@@ -1,4 +1,5 @@
 import sqlite3
+import pandas as pd
 from sklearn.svm import SVC
 import time
 from sklearn import cross_validation
@@ -15,50 +16,32 @@ from statics import champion_counts
 # Connect database
 conn = sqlite3.connect('lola.db')
 cursor = conn.cursor()
-
-#Calculate percent
-cursor.execute('SELECT * FROM TotalChampionStats')
-stats = cursor.fetchall()
+df = pd.read_sql('SELECT * FROM ChampionMatchStats', conn, index_col=['champion'])
 
 all_stats = {}
 all_stats_arr = []
 names = []
 
-for item in stats:
-    name = item[0].encode('utf-8')
-    names.append(name)
-    kills = item[1]/(champion_counts[name])*10000
-    deaths = item[2]/(champion_counts[name])*10000
-    assists = item[3]/(champion_counts[name])*10000
-    gold = item[4]/(champion_counts[name])
-    magic = item[5]/(champion_counts[name])
-    physical = item[6]/(champion_counts[name])
-    true = item[7]/(champion_counts[name])
-    taken = item[8]/(champion_counts[name])
-    control = item[9]/(champion_counts[name])
-    wardK = item[10]/(champion_counts[name])
-    wardP = item[11]/(champion_counts[name])
-    tmp_dict = {'kills': kills, 'assists': assists, 'assists': assists, 'gold': gold, 'magic': magic, 'physical': physical, 'true': true,
-    'taken': taken, 'control': control,'wardK': wardK,'wardP': wardP,}
-    tmp_arr = [gold, magic, physical, true, taken, control, wardK, wardP]
-    all_stats[name] = tmp_dict
+for champion in df.index:
+    names.append(champion)
+    kills = df.ix[champion]['kills']/df.ix[champion]['picks']*1000
+    deaths = df.ix[champion]['deaths']/df.ix[champion]['picks']*1000
+    assists = df.ix[champion]['assists']/df.ix[champion]['picks']*1000
+    gold_earned = df.ix[champion]['gold_earned']/df.ix[champion]['picks']
+    magic_damage = df.ix[champion]['magic_damage']/df.ix[champion]['picks']
+    physical_damage = df.ix[champion]['physical_damage']/df.ix[champion]['picks']
+    true_damage = df.ix[champion]['true_damage']/df.ix[champion]['picks']
+    damage_taken = df.ix[champion]['damage_taken']/df.ix[champion]['picks']
+    crowd_control_dealt = df.ix[champion]['crowd_control_dealt']/df.ix[champion]['picks']*10
+    ward_kills = df.ix[champion]['ward_kills']/df.ix[champion]['picks']*1000
+    wards_placed = df.ix[champion]['wards_placed']/df.ix[champion]['picks']*1000
+    tmp_dict = {'kills': kills, 'assists': assists, 'deaths': deaths, 'gold_earned': gold_earned, 'magic_damage': magic_damage,
+        'physical_damage': physical_damage, 'true_damage': true_damage,'damage_taken': damage_taken, 'crowd_control_dealt': crowd_control_dealt,
+        'ward_kills': ward_kills,'wards_placed': wards_placed}
+    tmp_arr = [kills, assists, deaths, gold_earned, magic_damage, physical_damage, true_damage, damage_taken, crowd_control_dealt, ward_kills,
+        wards_placed]
+    all_stats[champion] = tmp_dict
     all_stats_arr.append(tmp_arr)
-print all_stats['Riven']
-print all_stats['Vayne']
-print all_stats['Zyra']
-'''
-kills = item[1]/(champion_counts[name]/100)
-    deaths = item[2]/(champion_counts[name]/100)
-    assists = item[3]/(champion_counts[name]/100)
-    gold = item[4]/(champion_counts[name]*100)
-    magic = item[5]/(champion_counts[name]*100)
-    physical = item[6]/(champion_counts[name]*100)
-    true = item[7]/(champion_counts[name]*100)
-    taken = item[8]/(champion_counts[name]*100)
-    control = item[9]/(champion_counts[name]*10)
-    wardK = item[10]/(champion_counts[name]*10)
-    wardP = item[11]/(champion_counts[name]*10)
-'''
 
 # Initialize set of data
 all_team = []
@@ -67,30 +50,30 @@ result = []
 # Select matches, champions, sides and result
 st = time.time()
 
-cursor.execute('SELECT match_id, win FROM Team WHERE side = ? LIMIT 2000 OFFSET 10000', ('blue',))
+cursor.execute('SELECT match_id, win FROM Team WHERE side = ? LIMIT 3000 OFFSET 10000', ('blue',))
 matches = cursor.fetchall()
 for match in matches:
 # match = (u'2053870096', 0)
     item = []
     for i in range(0, len(all_stats['Jax'])):
-    item.append(50)
+        item.append(0)
 # item = [50, 50, 50, ...]
-    cursor.execute('SELECT * FROM CountedMatch WHERE match_id = ?', (match[0].encode('utf-8'),))
+    cursor.execute('SELECT * FROM MatchChampion WHERE match_id = ?', (match[0].encode('utf-8'),))
     team = cursor.fetchall()
     team = team[0]
 # team = (2053870096, u'Graves', u'Alistar', u'Twitch', u'Yasuo', u'Braum', u'Quinn', u'Riven', u'Zed', u'Miss Fortune', u'Zac')
     for champion in team[1:6]:
-    i = 0
-    for v in all_stats[champion].values():
-    item[i] += v
-    i += 1
+        i = 0
+        for v in all_stats[champion].values():
+            item[i] += v
+            i += 1
     for champion in team[6:]:
-    i = 0
-    for v in all_stats[champion].values():
-    item[i] -= v
-    i += 1
+        i = 0
+        for v in all_stats[champion].values():
+            item[i] -= v
+            i += 1
     all_team.append(item)
-# [[84, 26, 9, 34, 50, 51, 67, -151], ...]
+# [[0, 0, 2, 4, 3, 51387, -921, -26326, -34600, -2184, -3876],...]
 
     result.append(match[1])
 # [1, 1, 0, ...]
