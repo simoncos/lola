@@ -25,39 +25,39 @@ all_stats_arr = []
 names = []
 
 for item in stats:
-	name = item[0].encode('utf-8')
-	names.append(name)
-	kills = item[1]/(champion_counts[name])*10000
-	deaths = item[2]/(champion_counts[name])*10000
-	assists = item[3]/(champion_counts[name])*10000
-	gold = item[4]/(champion_counts[name])
-	magic = item[5]/(champion_counts[name])
-	physical = item[6]/(champion_counts[name])
-	true = item[7]/(champion_counts[name])
-	taken = item[8]/(champion_counts[name])
-	control = item[9]/(champion_counts[name])
-	wardK = item[10]/(champion_counts[name])
-	wardP = item[11]/(champion_counts[name])
-	tmp_dict = {'kills': kills, 'assists': assists, 'assists': assists, 'gold': gold, 'magic': magic, 'physical': physical, 'true': true,
-		'taken': taken, 'control': control,'wardK': wardK,'wardP': wardP,}
-	tmp_arr = [gold, magic, physical, true, taken, control, wardK, wardP]
-	all_stats[name] = tmp_dict
-	all_stats_arr.append(tmp_arr)
+    name = item[0].encode('utf-8')
+    names.append(name)
+    kills = item[1]/(champion_counts[name])*10000
+    deaths = item[2]/(champion_counts[name])*10000
+    assists = item[3]/(champion_counts[name])*10000
+    gold = item[4]/(champion_counts[name])
+    magic = item[5]/(champion_counts[name])
+    physical = item[6]/(champion_counts[name])
+    true = item[7]/(champion_counts[name])
+    taken = item[8]/(champion_counts[name])
+    control = item[9]/(champion_counts[name])
+    wardK = item[10]/(champion_counts[name])
+    wardP = item[11]/(champion_counts[name])
+    tmp_dict = {'kills': kills, 'assists': assists, 'assists': assists, 'gold': gold, 'magic': magic, 'physical': physical, 'true': true,
+    'taken': taken, 'control': control,'wardK': wardK,'wardP': wardP,}
+    tmp_arr = [gold, magic, physical, true, taken, control, wardK, wardP]
+    all_stats[name] = tmp_dict
+    all_stats_arr.append(tmp_arr)
 print all_stats['Riven']
 print all_stats['Vayne']
 print all_stats['Zyra']
 '''
 kills = item[1]/(champion_counts[name]/100)
-	deaths = item[2]/(champion_counts[name]/100)
-	assists = item[3]/(champion_counts[name]/100)
-	gold = item[4]/(champion_counts[name]*100)
-	magic = item[5]/(champion_counts[name]*100)
-	physical = item[6]/(champion_counts[name]*100)
-	true = item[7]/(champion_counts[name]*100)
-	taken = item[8]/(champion_counts[name]*100)
-	control = item[9]/(champion_counts[name]*10)
-	wardK = item[10]/(champion_counts[name]*10)
-	wardP = item[11]/(champion_counts[name]*10)
+    deaths = item[2]/(champion_counts[name]/100)
+    assists = item[3]/(champion_counts[name]/100)
+    gold = item[4]/(champion_counts[name]*100)
+    magic = item[5]/(champion_counts[name]*100)
+    physical = item[6]/(champion_counts[name]*100)
+    true = item[7]/(champion_counts[name]*100)
+    taken = item[8]/(champion_counts[name]*100)
+    control = item[9]/(champion_counts[name]*10)
+    wardK = item[10]/(champion_counts[name]*10)
+    wardP = item[11]/(champion_counts[name]*10)
 '''
 
 # Initialize set of data
@@ -71,28 +71,28 @@ cursor.execute('SELECT match_id, win FROM Team WHERE side = ? LIMIT 2000 OFFSET 
 matches = cursor.fetchall()
 for match in matches:
 # match = (u'2053870096', 0)
-	item = []
-	for i in range(0, len(all_stats['Jax'])):
-		item.append(50)
+    item = []
+    for i in range(0, len(all_stats['Jax'])):
+    item.append(50)
 # item = [50, 50, 50, ...]
-	cursor.execute('SELECT * FROM CountedMatch WHERE match_id = ?', (match[0].encode('utf-8'),))
-	team = cursor.fetchall()
-	team = team[0]
+    cursor.execute('SELECT * FROM CountedMatch WHERE match_id = ?', (match[0].encode('utf-8'),))
+    team = cursor.fetchall()
+    team = team[0]
 # team = (2053870096, u'Graves', u'Alistar', u'Twitch', u'Yasuo', u'Braum', u'Quinn', u'Riven', u'Zed', u'Miss Fortune', u'Zac')
-	for champion in team[1:6]:
-		i = 0
-		for v in all_stats[champion].values():
-			item[i] += v
-			i += 1
-	for champion in team[6:]:
-		i = 0
-		for v in all_stats[champion].values():
-			item[i] -= v
-			i += 1
-	all_team.append(item)
+    for champion in team[1:6]:
+    i = 0
+    for v in all_stats[champion].values():
+    item[i] += v
+    i += 1
+    for champion in team[6:]:
+    i = 0
+    for v in all_stats[champion].values():
+    item[i] -= v
+    i += 1
+    all_team.append(item)
 # [[84, 26, 9, 34, 50, 51, 67, -151], ...]
 
-	result.append(match[1])
+    result.append(match[1])
 # [1, 1, 0, ...]
 
 print len(all_team)
