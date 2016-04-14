@@ -142,6 +142,8 @@ def matrix_norm_by_pick(matrix_df):
 	normed_matrix = matrix_df.divide(pick_infor_matrix, axis='index')
 	return(normed_matrix)
 
+# TODO: normalized matrix in sqlite_to_assist_matrix / sqlite_to_kill_matrix
+
 ''' TODO:devided matrix by version and avg_tier
 def AM_table():
 	conn = sqlite3.connect('lola.db')
