@@ -18,8 +18,8 @@ CREATE TABLE `ParticipantTimeline` (
                 `creeps_per_min_delta` real,
                 `cs_diff_per_min_delta` real,
                 `gold_per_min_delta` real,
-                `xp_diff_per_min_delta` real,
                 `xp_per_min_delta` real,
+                `xp_diff_per_min_delta` real,
                 `damage_taken_per_min_delta` real,
                 `damage_taken_diff_per_min_delta` real
                 -- PRIMARY KEY(id)
