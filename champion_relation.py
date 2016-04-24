@@ -13,24 +13,22 @@ pick_infor_matrix = pick_ban_infor['picks']
 conn.close()
 
 #-----kill matrix-----#
-def similar_champions(champion_name):
-    kill_matrix = champion_matrix.sqlite_to_kill_matrix('picks') # norm by picks
-    kill_matrix_T = kill_matrix.T
-    coci_kill_matrix = kill_matrix * kill_matrix_T # coci_kill
-    temp_coci_kill_ten = pd.DataFrame(coci_kill_matrix.ix[champion_name]).sort(champion_name,ascending=False).iloc[0:10]
+def similar_killer(champion_name):
+    kill_matrix_adjacency = champion_matrix.sqlite_to_kill_matrix('picks').T # norm by picks; edge from column to row
+    bibli_kill_matrix = kill_matrix_adjacency.T * kill_matrix_adjacency # bibliography kill matrix, bibli_kill
+    temp_bibli_kill_ten = pd.DataFrame(bibli_kill_matrix.ix[champion_name]).sort(champion_name,ascending=False).iloc[0:10]
 
-    plt_coci_kill = temp_coci_kill_ten.plot(kind='barh', title=champion_name + ' is similar with(TOP 10)', stacked=False).set_xlabel('Proportion').get_figure()
-    plt_coci_kill.savefig(champion_name + '_similar.png')
+    plt_bibli_kill = temp_bibli_kill_ten.plot(kind='barh', title=champion_name + ' is similar with(TOP 10)', stacked=False).set_xlabel('Proportion').get_figure()
+    plt_bibli_kill.savefig(champion_name + '_similar_killer.png')
 
 #-----assist matrix-----#
 def good_partner(champion_name):
-    assist_matrix = champion_matrix.sqlite_to_assist_matrix('picks') # norm by picks
-    assist_matrix_T = assist_matrix.T 
-    coci_matrix = assist_matrix * assist_matrix_T # coci_assist
-    temp_coci_ten = pd.DataFrame(coci_matrix.ix[champion_name]).sort(champion_name,ascending=False).iloc[0:10]
+    assist_matrix_adjacency = champion_matrix.sqlite_to_assist_matrix('picks').T # norm by picks; edge from column to row
+    bibli_matrix = assist_matrix_adjacency.T * assist_matrix_adjacency # bibliography assist matrix, bibli_assist
+    temp_bibli_ten = pd.DataFrame(bibli_matrix.ix[champion_name]).sort(champion_name,ascending=False).iloc[0:10]
 
-    plt_coci = temp_coci_ten.plot(kind='barh', title='Good partner of ' + champion_name + '(TOP 10)', stacked=False).set_xlabel('Proportion').get_figure()
-    plt_coci.savefig(champion_name + '_similar.png')
+    plt_bibli = temp_bibli_ten.plot(kind='barh', title='Good partner of ' + champion_name + '(TOP 10)', stacked=False).set_xlabel('Proportion').get_figure()
+    plt_bibli.savefig(champion_name + '_partner.png')
 
 
 #-----champion counter-----#
