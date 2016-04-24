@@ -5,7 +5,9 @@ from sklearn.cluster import AgglomerativeClustering
 from scipy import spatial
 import matplotlib.pyplot as plt
 
-#All fields' name
+# TODO: py2 print to py3
+
+# All fields' name
 fields = ['kills', 'deaths', 'assists', 'gold_earned', 'magic_damage', 'physical_damage', 'true_damage', 'damage_taken',
     'crowd_control_dealt', 'ward_kills', 'wards_placed']
 fields_total = ['total_gold_earned','total_magic_damage','total_physical_damage', 'total_true_damage', 'total_damage_taken',
