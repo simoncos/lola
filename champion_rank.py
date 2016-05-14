@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-LoLa champion rank.
+LoLa champion ranking
 """
 import pandas as pd
 import numpy as np
@@ -8,15 +8,18 @@ from scipy import spatial
 from scipy.sparse import linalg
 import networkx as nx
 import matplotlib.pyplot as plt
+import champion_matrix as lola # TODO: lola library namespace
 
 def print_full(df): 
     '''
     print all rows of pd.DataFrame
     '''
     pd.set_option('display.max_rows', len(df))
+    print('\n')
     print(df)
     pd.reset_option('display.max_rows')
 
+# TODO:
 def champion_win_rate_rank():
     pass
 
@@ -37,28 +40,28 @@ def champion_distribution(champion_matrix_df, champion): #TODO
 def champion_cosine_similarity(champion_matrix_df, champion_1, champion_2): #TODO
     return 1 - spatial.distance.cosine(champion_matrix_df.ix[champion_1], champion_matrix_df.ix[champion_2])
 
-def champion_matrix_rank(champion_matrix_df, criteron, norm=False):
+def champion_matrix_rank(champion_matrix_df, criteron, norm=None, row_sum_norm=False):
     '''
     champion_matrix_df: pd.DataFrame, kill/death/assist counts between champions, 
                         (a,b)=i means a kills / killed by / assists b for i times 
-    criteron: 'count', 'eigen', 'eigen_ratio', 'eigen_diff', 'pagerank', 'hits' 
-    norm: True, False
+    criteron: 'sum', 'eigen', 'eigen_ratio', 'eigen_diff', 'pagerank', 'hits' 
+    norm: row_pick, col_pick, counter_inci, partner_inci (K/D - counter; A - partner)
+    row_sum_norm: row_sum norm without external information
     TODO: eigen_ratio and eigen_diff criteron can only be used in kill matrix, in assist do not make sense (would be forbidden in future)
     '''
-    # must be float for linalg.eigs 
-    champion_matrix = champion_matrix_df.as_matrix().astype(float)
-
-    if norm == 'row': # use row sum to normalize
-        row_sum = champion_matrix.sum(axis=1)
-        champion_matrix = champion_matrix / row_sum[:, np.newaxis] # pandas broadcast
+    champion_matrix = lola.dataframe_to_champion_matrix(champion_matrix_df, norm)
     
+    if row_sum_norm == True:
+        row_sum = champion_matrix.sum(axis=1)
+        champion_matrix = champion_matrix / row_sum[:, np.newaxis] # numpy broadcast    
+        
     # Count
-    if criteron == 'count':
-        print("Champion Rank by counts:")
+    if criteron == 'sum':
+        print("Champion Rank by sum:")
         rank_df = pd.DataFrame()
         rank_df['champion'] = pd.Series(champion_matrix_df.index)
-        rank_df['count'] = champion_matrix.sum(axis=1)
-        print_full(rank_df.sort_values(by='count', ascending=False))
+        rank_df['sum'] = champion_matrix.sum(axis=1) # row sum
+        print_full(rank_df.sort_values(by='sum', ascending=False))
 
     # ED
     elif criteron == 'eigen':
@@ -66,7 +69,7 @@ def champion_matrix_rank(champion_matrix_df, criteron, norm=False):
         rank_df = pd.DataFrame()
         rank_df['champion'] = pd.Series(champion_matrix_df.index)
         # eigenvector with largest eigenvalue (k=1), sometimes all negative, sometimes all positive, absolute values unchanged
-        rank_df['eigen_1'] = pd.DataFrame(abs(linalg.eigs(champion_matrix, k=1)[1]))
+        rank_df['eigen_1'] = pd.DataFrame(abs(linalg.eigs(champion_matrix, k=1)[1])) # matrix must be float for linalg.eigs 
         print_full(rank_df.sort_values(by='eigen_1', ascending=False))
 
         #rank_df['eigen_2'] = pd.DataFrame(abs(linalg.eigs(champion_matrix, k=2)[1][:,1]))      
@@ -74,7 +77,7 @@ def champion_matrix_rank(champion_matrix_df, criteron, norm=False):
 
     # ED Ratio, eigen(M)/eigen(M.T)
     elif criteron == 'eigen_ratio':
-        print("Champion Rank by eigenvector centrality ratio")
+        print("Champion Rank by eigenvector centrality ratio:")
         rank_df = pd.DataFrame()
         rank_df['champion'] = pd.Series(champion_matrix_df.index)
         rank_df['eigen'] = pd.DataFrame(abs(linalg.eigs(champion_matrix, k=1)[1]))
@@ -84,7 +87,7 @@ def champion_matrix_rank(champion_matrix_df, criteron, norm=False):
 
     # ED Diff, eigen(M)-eigen(M.T)
     elif criteron == 'eigen_diff':
-        print("Champion Rank by eigenvector centrality difference")
+        print("Champion Rank by eigenvector centrality difference:")
         rank_df = pd.DataFrame()
         rank_df['champion'] = pd.Series(champion_matrix_df.index)
         rank_df['eigen'] = pd.DataFrame(abs(linalg.eigs(champion_matrix, k=1)[1]))
@@ -94,7 +97,7 @@ def champion_matrix_rank(champion_matrix_df, criteron, norm=False):
 
     # PageRank: similar results with eigenvector centrality
     elif criteron == 'pagerank':
-        print("Champion Rank by PageRank")
+        print("Champion Rank by PageRank:")
         G = nx.DiGraph(champion_matrix)
         pr = nx.pagerank(G)
         rank_df = pd.DataFrame()
@@ -104,7 +107,7 @@ def champion_matrix_rank(champion_matrix_df, criteron, norm=False):
 
     # HITS:
     elif criteron == 'hits':
-        print("Champion Rank by HITS")
+        print("Champion Rank by HITS:")
         G = nx.DiGraph(champion_matrix)
         hub, auth = nx.hits(G)
         hub_rank_df = pd.DataFrame()
@@ -118,8 +121,6 @@ def champion_matrix_rank(champion_matrix_df, criteron, norm=False):
 
     else:
         raise ValueError('Invalid criteron provided.')
-
-#TODO: pick, ban, win
 
 '''
 TODO: Visualization Part

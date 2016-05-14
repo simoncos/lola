@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-LoLa champion relationship matrix.
+LoLa champion relationship matrix
 """
 import time
 import pandas as pd
 import numpy as np
 import sqlite3
+import itertools
 
 # TODO: DECORATOR
 def time_report():
@@ -20,14 +21,14 @@ def initial_matrix():
     initial champion-champion matrix, no direction
     '''
     conn = sqlite3.connect('lola.db')
+    # TODO: champion static data
     cursor = conn.execute("SELECT champion FROM ChampionMatchStats")
-    temp = cursor.fetchall()
+    champions = cursor.fetchall()
     conn.close()
-    temp_list = []
-    for i in range(len(temp)):
-        temp_list.append(temp[i][0])
-    temp_list_T = list(np.array(temp_list).T)
-    initial_matrix_df = pd.DataFrame(columns=temp_list, index=temp_list_T).fillna(0)
+    champion_list = []
+    for i in range(len(champions)):
+        champion_list.append(champions[i][0])
+    initial_matrix_df = pd.DataFrame(columns=champion_list, index=champion_list).fillna(0)
     return initial_matrix_df
 
 def kill_matrix():
@@ -74,6 +75,38 @@ def assist_matrix():
     assist_matrix_df.to_csv('assist_matrix.csv')
     return assist_matrix_df
 
+def incidence_matrices():
+    conn = sqlite3.connect('lola.db')
+    match_ids = pd.read_sql("SELECT match_id FROM MatchChampion", conn)['match_id']
+
+    counter_matrix = initial_matrix()
+    partner_matrix = initial_matrix()
+
+    count = 0
+    print('processed match count:')
+    for m in match_ids: # ten champions each match, combinations
+        count += 1
+        if count % 100 == 0:
+            print(count)
+        match_champions = conn.execute("SELECT * FROM MatchChampion WHERE match_id = ?", (str(m),)).fetchall()
+        champions = list(match_champions[0])
+        champions.remove(match_champions[0][0]) # remove match_id in the list
+        champions = [c.decode('utf8') for c in champions] # from byte like b'xx'
+        champions_team_1 = champions[:5]
+        champions_team_2 = champions[5:]
+
+        for t in (champions_team_1, champions_team_2):
+            for cp in itertools.combinations(t, 2):    
+                partner_matrix[cp[0]][cp[1]] += 1
+                partner_matrix[cp[1]][cp[0]] += 1
+
+        for cc in itertools.product(champions_team_1, champions_team_2):
+            counter_matrix[cc[0]][cc[1]] += 1
+            counter_matrix[cc[1]][cc[0]] += 1
+
+    conn.close()
+    return counter_matrix, partner_matrix
+
 def kill_matrix_to_sqlite():
     kill_matrix_df = kill_matrix()
     conn = sqlite3.connect('lola.db')
@@ -96,7 +129,21 @@ def assist_matrix_to_sqlite(assist_matrix_df):
     conn.commit()
     conn.close()
 
-def sqlite_to_kill_matrix(norm=None):
+def incidence_matrices_to_sqlite():
+    incidence_matrices_df = incidence_matrices()
+    counter_matrix_df = incidence_matrices_df[0]
+    partner_matrix_df = incidence_matrices_df[1]
+
+    conn = sqlite3.connect('lola.db')
+    temp_champions = list(counter_matrix_df.columns)
+    for i in temp_champions:
+        for j in temp_champions:
+            conn.execute("INSERT OR REPLACE INTO ChampionIncidenceMatrix(champion_1,champion_2,counters, partners) VALUES(?,?,?,?)",(i, j, int(counter_matrix_df[j][i]), int(partner_matrix_df[j][i])))
+        print('$-----Table:ChampionIncidenceMatrix Mission:inci infor-%s [Finished].-----$'%i)
+    conn.commit()
+    conn.close()
+
+def sqlite_to_kill_matrix():
     '''
     read champion kill matrix from database, Kill(i,j) means i kills j
     norm: None / 'picks'
@@ -107,8 +154,6 @@ def sqlite_to_kill_matrix(norm=None):
     for row in cursor:
         kill_matrix_df.ix[row[0]][row[1]] = row[2]
     conn.close()
-    if norm == 'picks':
-        kill_matrix_df = matrix_norm_by_pick(kill_matrix_df)
     return kill_matrix_df
 
 def sqlite_to_death_matrix(norm=None):
@@ -116,7 +161,7 @@ def sqlite_to_death_matrix(norm=None):
     read champion death matrix from database, Death(i,j) means i is victim of j
     norm: None / 'picks'
     '''
-    death_matrix_df = sqlite_to_kill_matrix(norm).transpose()
+    death_matrix_df = sqlite_to_kill_matrix(norm).transpose() # D is K.transpose()
     return death_matrix_df
 
 def sqlite_to_assist_matrix(norm=None):
@@ -130,19 +175,72 @@ def sqlite_to_assist_matrix(norm=None):
     for row in cursor:
         assist_matrix_df.ix[row[1]][row[0]] = row[2]
     conn.close()
-    if norm == 'picks':
-        assist_matrix_df = matrix_norm_by_pick(assist_matrix_df)
     return assist_matrix_df
 
-def matrix_norm_by_pick(matrix_df):
+def sqlite_to_incidence_matrix(relation):
+    '''
+    read champion incidence matrix from database, Incidence(i,j) means i and j are both picked (undirected)
+    '''
+    incidence_matrix_df = initial_matrix()
+    conn = sqlite3.connect('lola.db')
+
+    if relation == 'counter':
+        cursor = conn.execute("SELECT champion_1,champion_2,counters FROM ChampionIncidenceMatrix")
+        for row in cursor:
+            incidence_matrix_df.ix[row[0]][row[1]] = row[2]
+            incidence_matrix_df[row[0]][row[1]] = row[2]            
+    elif relation == 'partner':
+        cursor = conn.execute("SELECT champion_1,champion_2,partners FROM ChampionIncidenceMatrix")
+        for row in cursor:
+            incidence_matrix_df.ix[row[0]][row[1]] = row[2]
+            incidence_matrix_df[row[0]][row[1]] = row[2]            
+    conn.close()
+    return incidence_matrix_df
+
+def dataframe_to_champion_matrix(matrix_df, norm):
+    '''
+    generate normalized champion matrix, numpy.ndarray
+    '''
+    if norm == None:
+        champion_matrix = matrix_df.as_matrix().astype(float)
+    elif norm == 'row_pick':
+        normed_matrix_df = matrix_norm_by_pick(matrix_df, 'row')
+        champion_matrix = normed_matrix_df.as_matrix().astype(float)
+    elif norm == 'col_pick':
+        normed_matrix_df = matrix_norm_by_pick(matrix_df, 'col')
+        champion_matrix = normed_matrix_df.as_matrix().astype(float)
+    elif norm == 'counter_inci':
+        champion_matrix = matrix_norm_by_incidence(matrix_df, 'counter')
+    elif norm == 'partner_inci':
+        champion_matrix = matrix_norm_by_incidence(matrix_df, 'partner')    
+    else:
+        raise ValueError('No such normalization method: {}'.format(norm))
+
+    return champion_matrix
+
+def matrix_norm_by_pick(matrix_df, direction):
+    '''
+    norm by picks of row champion
+    '''
     conn = sqlite3.connect('lola.db')
     pick_ban_info = pd.read_sql("SELECT champion,picks,bans FROM ChampionMatchStats", conn, index_col=['champion'])
     conn.close()
-    pick_infor_matrix = pick_ban_info['picks']
-    normed_matrix = matrix_df.divide(pick_infor_matrix, axis='index')
-    return(normed_matrix)
+    pick_infor_matrix_df = pick_ban_info['picks']
+    if direction == 'row':
+        normed_matrix_df = matrix_df.divide(pick_infor_matrix_df, axis='index') # no nan in normal cases
+    elif direction == 'col':
+        normed_matrix_df = matrix_df.divide(pick_infor_matrix_df, axis='columns')        
+    return(normed_matrix_df)
 
-# TODO: normalized matrix in sqlite_to_assist_matrix / sqlite_to_kill_matrix
+def matrix_norm_by_incidence(matrix_df, relation): 
+    '''
+    norm by incidence of counter/partner pairs
+    '''
+    matrix = matrix_df.as_matrix().astype(float)
+    inci_matrix = sqlite_to_incidence_matrix(relation).as_matrix().astype(float)        
+    normed_matrix = np.divide(matrix, inci_matrix) # matrix divide matrix element-wise
+    normed_matrix = np.nan_to_num(normed_matrix) # fill nan with 0
+    return(normed_matrix)
 
 ''' TODO:devided matrix by version and avg_tier
 def AM_table():

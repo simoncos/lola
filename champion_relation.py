@@ -4,7 +4,7 @@ LoLa champion relationship
 """
 import pandas as pd
 import sqlite3
-import champion_matrix
+import champion_matrix as lola
 
 #-----fetch picks bans-----#
 conn = sqlite3.connect('lola.db')
@@ -14,7 +14,7 @@ conn.close()
 
 #-----kill matrix-----#
 def similar_killer(champion_name):
-    kill_matrix_adjacency = champion_matrix.sqlite_to_kill_matrix('picks').T # norm by picks; edge from column to row
+    kill_matrix_adjacency = lola.sqlite_to_kill_matrix('picks').T # norm by picks; edge from column to row
     bibli_kill_matrix = kill_matrix_adjacency.T * kill_matrix_adjacency # bibliography kill matrix, bibli_kill
     temp_bibli_kill_ten = pd.DataFrame(bibli_kill_matrix.ix[champion_name]).sort(champion_name,ascending=False).iloc[0:10]
 
@@ -23,7 +23,7 @@ def similar_killer(champion_name):
 
 #-----assist matrix-----#
 def good_partner(champion_name):
-    assist_matrix_adjacency = champion_matrix.sqlite_to_assist_matrix('picks').T # norm by picks; edge from column to row
+    assist_matrix_adjacency = lola.sqlite_to_assist_matrix('picks').T # norm by picks; edge from column to row
     bibli_matrix = assist_matrix_adjacency.T * assist_matrix_adjacency # bibliography assist matrix, bibli_assist
     temp_bibli_ten = pd.DataFrame(bibli_matrix.ix[champion_name]).sort(champion_name,ascending=False).iloc[0:10]
 
@@ -33,7 +33,7 @@ def good_partner(champion_name):
 
 #-----champion counter-----#
 def counter(champion_name):
-    kill_matrix = champion_matrix.sqlite_to_kill_matrix('picks') # norm by picks
+    kill_matrix = lola.sqlite_to_kill_matrix('picks') # norm by picks
     temp_series = pd.DataFrame(kill_matrix.ix[champion_name]).sort(champion_name,ascending=False).iloc[0:10]#, ascending=False
     plttt = temp_series.plot(kind='barh', title='Top 10 choices to counter ' + champion_name, stacked=False).set_xlabel('Proportion').get_figure()
     plttt.savefig(champion_name +'_counter.png')
@@ -41,7 +41,7 @@ def counter(champion_name):
 
 #-----champion assist-----#
 def assist(champion_name):
-    assist_matrix = champion_matrix.sqlite_to_assist_matrix('picks') # norm by picks
+    assist_matrix = lola.sqlite_to_assist_matrix('picks') # norm by picks
     temp_series = pd.DataFrame(assist_matrix[champion_name]).sort(champion_name,ascending=False).iloc[0:10] # select column ,column been assisted by row
     plttt = temp_series.plot(kind='barh', title='Top 10 choices to assist ' + champion_name, stacked=False).set_xlabel('Proportion').get_figure()
     plttt.savefig(champion_name + '_assist.png')

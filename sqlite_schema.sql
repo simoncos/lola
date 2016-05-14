@@ -5,25 +5,6 @@ CREATE TABLE `Summoner` (
                 `is_crawled`    integer NOT NULL
                 -- PRIMARY KEY(id)
 );
-CREATE TABLE `ParticipantTimeline` (
-                -- `id` integer NOT NULL,
-                `summoner_id`   text NOT NULL, /*key*/
-                `match_id`      text NOT NULL, /*key*/
-                `delta` text NOT NULL, /*key*/
-                `side`  text NOT NULL,
-                `participant_id` text NOT NULL,
-                `role` text NOT NULL,
-                `lane` text NOT NULL,
-
-                `creeps_per_min_delta` real,
-                `cs_diff_per_min_delta` real,
-                `gold_per_min_delta` real,
-                `xp_per_min_delta` real,
-                `xp_diff_per_min_delta` real,
-                `damage_taken_per_min_delta` real,
-                `damage_taken_diff_per_min_delta` real
-                -- PRIMARY KEY(id)
-);
 CREATE TABLE `Match` (
                 -- `id` integer NOT NULL,
                 `match_id`      text NOT NULL UNIQUE, /*key*/
@@ -120,6 +101,25 @@ CREATE TABLE `Participant` (
                 CONSTRAINT unq_match_participant UNIQUE(match_id, participant_id)
                 -- PRIMARY KEY(id)
 );
+CREATE TABLE `ParticipantTimeline` (
+                -- `id` integer NOT NULL,
+                `summoner_id`   text NOT NULL, /*key*/
+                `match_id`      text NOT NULL, /*key*/
+                `delta` text NOT NULL, /*key*/
+                `side`  text NOT NULL,
+                `participant_id` text NOT NULL,
+                `role` text NOT NULL,
+                `lane` text NOT NULL,
+
+                `creeps_per_min_delta` real,
+                `cs_diff_per_min_delta` real,
+                `gold_per_min_delta` real,
+                `xp_per_min_delta` real,
+                `xp_diff_per_min_delta` real,
+                `damage_taken_per_min_delta` real,
+                `damage_taken_diff_per_min_delta` real
+                -- PRIMARY KEY(id)
+);
 CREATE TABLE `ChampionMatchStats` (
                 `champion`      TEXT NOT NULL UNIQUE, /*key*/
                 `picks` integer NOT NULL DEFAULT 0,
@@ -182,6 +182,16 @@ CREATE TABLE `ChampionAssistMatrix` (
                 `killer`        text NOT NULL, /*key*/
                 `assist`        text NOT NULL, /*key*/
                 `assists`       integer NOT NULL,
+                `version`       text,
+                `avg_tier`      text
+                -- PRIMARY KEY(id)
+);
+CREATE TABLE `ChampionIncidenceMatrix` (
+        -- `id` integer NOT NULL,
+                `champion_1`        text NOT NULL, /*key*/
+                `champion_2`        text NOT NULL, /*key*/
+                `counters`       integer NOT NULL,
+                `partners`       integer NOT NULL,
                 `version`       text,
                 `avg_tier`      text
                 -- PRIMARY KEY(id)
