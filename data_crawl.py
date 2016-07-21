@@ -40,25 +40,33 @@ def auto_retry(api_call_method):
                 raise error
     return call_wrapper
 
-        
+
+def riotapi_setting(api_key, region):
+    try:
+        riotapi.set_rate_limits((10, 10), (500, 600))
+        riotapi.set_api_key(api_key)
+        riotapi.set_region(region)
+    except Exception as e:
+        raise e
+
 def main():
-    riotapi.set_rate_limits((10, 10), (500, 600))
     riotapi.get_summoner_by_id = auto_retry(riotapi.get_summoner_by_id) # handling server errors
     riotapi.get_match_list = auto_retry(riotapi.get_match_list)
     riotapi.get_match = auto_retry(riotapi.get_match)
-    print('\nCrawling process starts...')
-    # set your api key amd seed summoner here
-    begin_crawling(api_key='', seed_summoner_id='')
 
-def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON2016', ranked_queues='RANKED_SOLO_5x5'):
+    # set your api key, region and seed summoner here
+    riotapi_setting(api_key, region='NA')
+
+    print('\nCrawling process starts...')
+    begin_crawling(seed_summoner_id)
+
+def begin_crawling(seed_summoner_id, seasons='PRESEASON2016', ranked_queues='RANKED_SOLO_5x5'):
     '''
     Breadth first crawling interations, Summoner -> Match -> Summoner...
     '''
     #seed intialization
     try:
         print('Seed initializing...')
-        riotapi.set_api_key(api_key)
-        riotapi.set_region(region)
         seed_summoner = riotapi.get_summoner_by_id(seed_summoner_id)    
         conn = sqlite3.connect('lola.db')
         conn.execute("INSERT INTO Summoner VALUES('{}','{}',{})".format(seed_summoner.id, seed_summoner.name, 0)) #watch out "" / ''
@@ -131,8 +139,8 @@ def begin_crawling(api_key, seed_summoner_id, region='NA', seasons='PRESEASON201
             total_match_duplicate += duplicate_match_no
             total_match_none += none_match_no
             print('\ntotal processed summoner:', total_summoner_processed,'\ntotal processed match:', total_match_processed, \
-            	  '\ntotal crawled match', total_match_cralwed, '\ntotal duplicate match:', total_match_duplicate,  \
-            	  '\ntotal none match:', total_match_none)
+                  '\ntotal crawled match', total_match_cralwed, '\ntotal duplicate match:', total_match_duplicate,  \
+                  '\ntotal none match:', total_match_none)
 
         # read new queue for next iteration
         try:
