@@ -1,6 +1,6 @@
 import sqlite3
 import time
-from statics import champions
+from data_statics import champions
 
 '''
 Update MatchChampion:
@@ -60,8 +60,8 @@ def champion_match_stats_to_sqlite():
     print('Updating champion stats of matches to ChampionMatchStats...')
     # Select kda, damages, wards... of every champions
     st = time.time()
-    for champion in champions:
-        cursor.execute('SELECT champion FROM ChampionMatchStats WHERE champion = ?', (champion,))
+    for champion in champions():
+        cursor.execute('SELECT champion FROM ChampionMatchStats WHERE champion = ?', (champion.name,))
         exist = cursor.fetchone()
         if exist is None:
             print(champion)
