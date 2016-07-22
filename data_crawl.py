@@ -54,13 +54,14 @@ def main():
     riotapi.get_match_list = auto_retry(riotapi.get_match_list)
     riotapi.get_match = auto_retry(riotapi.get_match)
 
-    # set your api key, region and seed summoner here
-    riotapi_setting(api_key, region='NA')
-
     print('\nCrawling process starts...')
-    begin_crawling(seed_summoner_id)
 
-def begin_crawling(seed_summoner_id, seasons='PRESEASON2016', ranked_queues='RANKED_SOLO_5x5'):
+    # set your api_key, region, seed_summoner_id, seasons, ranked_queues
+    # inadequate settings of may lead to 404
+    riotapi_setting(api_key, region='NA')
+    begin_crawling(seed_summoner_id='22005573', seasons='PRESEASON2016',ranked_queues='RANKED_SOLO_5x5')
+
+def begin_crawling(seed_summoner_id, seasons, ranked_queues):
     '''
     Breadth first crawling interations, Summoner -> Match -> Summoner...
     '''
