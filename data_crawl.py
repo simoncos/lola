@@ -117,6 +117,7 @@ def begin_crawling(seed_summoner_id, seasons, ranked_queues):
             for  mf in match_reference_list[:]:
                 if is_match_duplicate(mf, conn) == False:                    
                     try:
+                        # TODO: urllib.error.URLError: <urlopen error [Errno 11001] getaddrinfo failed>
                         match = riotapi.get_match(mf) # match reference -> match
                     except Exception as e:
                         raise(e)
@@ -194,10 +195,10 @@ def match_to_sqlite(match, summoner, conn):
         participant_timeline_to_sqlite(p, match, conn)
 
     if match.timeline is None: # match.timeline may be None
-        print("Match {} does not have Timeline data, skip..".format(match.id))
+        print("Match {} does not have Match.Timeline data, skip..".format(match.id))
         return
     if match.timeline.frames is None: # match.timeline.frames may be None
-        print("Match does not have Timeline.Frames data, skip..".format(match.id))
+        print("Match {} does not have Match.Timeline.Frames data, skip..".format(match.id))
         return
 
     for f in match.timeline.frames[:]:
