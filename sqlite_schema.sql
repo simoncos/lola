@@ -1,3 +1,5 @@
+/* initialize database with command: sqlite3 lola.db < sqlite_schema.sql */
+
 CREATE TABLE `Summoner` (
                 -- `id` integer NOT NULL,
                 `summoner_id`   text NOT NULL UNIQUE, /*key*/

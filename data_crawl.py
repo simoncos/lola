@@ -75,7 +75,7 @@ def begin_crawling(seed_summoner_id, seasons, ranked_queues):
         conn.close()
         print('\nInitialization completed.')
     except Exception as e:
-        print('\nInitialization failed possibly because the seed is already in database:', e)
+        print('\nInitialization failed: ', e) # possibly because the seed is already in database
         pass
  
     # summoner queue interations
@@ -102,6 +102,11 @@ def begin_crawling(seed_summoner_id, seasons, ranked_queues):
             conn = sqlite3.connect('lola.db')
             summoner = riotapi.get_summoner_by_id(summoner_id)
             match_reference_list = riotapi.get_match_list(summoner=summoner, seasons=seasons, ranked_queues=ranked_queues)
+
+            if match_reference_list is None: # TODO: tag this summoner to be 400/404 status (or the loop may happen quite rarely)
+                print("This summoner has None MatchList, skip..")
+                continue
+
             print('\nSummoner {} ({}) in {}, {}: '.format(summoner.name, summoner.id, ranked_queues, seasons))
             print('Total Match Number of the summoner: {}'.format(len(match_reference_list)))
 
@@ -187,9 +192,16 @@ def match_to_sqlite(match, summoner, conn):
         summoner_to_sqlite(p, summoner, conn)
         participant_to_sqlite(p, match, conn)
         participant_timeline_to_sqlite(p, match, conn)
-    if match.timeline.frames is not None:
-        for f in match.timeline.frames[:]:
-            frame_kill_event_to_sqlite(f, match, conn)
+
+    if match.timeline is None: # match.timeline may be None
+        print("This match does not have Timeline data, skip..")
+        return
+    if match.timeline.frames is None: # match.timeline.frames may be None
+        print("This match does not have Timeline.Frames data, skip..")
+        return
+
+    for f in match.timeline.frames[:]:
+        frame_kill_event_to_sqlite(f, match, conn)
 
 def team_to_sqlite(team, match, conn):
     '''
