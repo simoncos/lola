@@ -104,7 +104,7 @@ def begin_crawling(seed_summoner_id, seasons, ranked_queues):
             match_reference_list = riotapi.get_match_list(summoner=summoner, seasons=seasons, ranked_queues=ranked_queues)
 
             if match_reference_list is None: # TODO: tag this summoner to be 400/404 status (or the loop may happen quite rarely)
-                print("This summoner has None MatchList, skip..")
+                print("Summoner {} has None MatchList, skip..".format(summoner_id))
                 continue
 
             print('\nSummoner {} ({}) in {}, {}: '.format(summoner.name, summoner.id, ranked_queues, seasons))
@@ -194,10 +194,10 @@ def match_to_sqlite(match, summoner, conn):
         participant_timeline_to_sqlite(p, match, conn)
 
     if match.timeline is None: # match.timeline may be None
-        print("This match does not have Timeline data, skip..")
+        print("Match {} does not have Timeline data, skip..".format(match.id))
         return
     if match.timeline.frames is None: # match.timeline.frames may be None
-        print("This match does not have Timeline.Frames data, skip..")
+        print("Match does not have Timeline.Frames data, skip..".format(match.id))
         return
 
     for f in match.timeline.frames[:]:
