@@ -1,6 +1,6 @@
 # LoLA
 
-LoLA is a LoL (League of Legends) game data analysis / analytics project.
+LoLA is a LoL (League of Legends) game data analysis / analytics project. See [report](/report).
 
 ## Crawling
 
