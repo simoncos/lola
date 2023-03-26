@@ -8,7 +8,7 @@ The data crawling part is based on [Riot API](https://developer.riotgames.com/ap
 
 This part has been well tested with `Python 3.5`, though in some environments (e.g. `Windows cmd`) a `decode`/`encode` error may occur in `print` functions due to multi-language issue; you can just comment out all `print` codes without any influcence on crawling itself. `Python 2.X` may also run well with a few edits.
 
-We have obtained data of over 220,000 `Ranked-SOLO-5x5` matches with details in the North American region, Pre-Season 2016. We plan to share our database file later.
+We have obtained data of over 220,000 `Ranked-SOLO-5x5` matches with details in the North American region, Pre-Season 2016.
 
 ## Analysis
 
@@ -23,3 +23,7 @@ We are doing analyses such as:
 Our results will be uploaded continuously. As we are doing many experiments, code in this part is quite messy now and will be refined later.
 
 If you are interested in this project or have any problem, feel free to participate in.
+
+## Dataset
+
+- [Google Drive](https://drive.google.com/file/d/1X9B60eUSWarMEG9RS3JHbWDaeNuB48LF/view?usp=sharing)
