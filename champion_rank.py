@@ -9,7 +9,7 @@ from scipy.sparse import linalg
 import networkx as nx
 import matplotlib.pyplot as plt
 import champion_matrix as lola # TODO: lola library namespace
-
+\n
 def print_full(df): 
     '''
     print all rows of pd.DataFrame
