@@ -5,8 +5,6 @@ from sklearn.cluster import AgglomerativeClustering
 from scipy import spatial
 import matplotlib.pyplot as plt
 
-# TODO: py2 print to py3
-
 # All fields' name
 fields = ['kills', 'deaths', 'assists', 'gold_earned', 'magic_damage', 'physical_damage', 'true_damage', 'damage_taken',
     'crowd_control_dealt', 'ward_kills', 'wards_placed']
@@ -64,8 +62,8 @@ for champion in df.index:
     all_stats[champion] = tmp_dict
     all_stats_arr.append(tmp_arr)
 
-#for (k, v) in all_stats.items():
-#   print k, '\n', v
+for (k, v) in all_stats.items():
+  print(k, '\n', v)
 
 #------------------k-means------------------#
 meandistortions = []
@@ -79,19 +77,19 @@ for i in range(0, num_clusters):
 i = 0
 for label in km.labels_:
     label_dict[label].append(names[i])
-    #print names[i], int(label) 
+    print(names[i], int(label)) 
     cursor.execute('UPDATE ChampionMatchStats SET label=? WHERE champion=?', (int(label), names[i],))
     i += 1
 #Show clustering results and average statistics
 for i in range(0, len(label_dict)):
-    print label_dict[i]
-    print count_avg_dict(i), '\n'
+    print(label_dict[i])
+    print(count_avg_dict(i), '\n')
 centers = km.cluster_centers_.tolist()
 sum_dist = 0
 for label in range(0, num_clusters):
     for name in label_dict[label]:
         sum_dist += spatial.distance.euclidean(all_stats_arr[names.index(name)], centers[label])
-#print num_clusters, sum_dist/128
+print(num_clusters, sum_dist/128)
     
 #Calculate distance between clusters
 dist_cluster = 0
@@ -100,9 +98,9 @@ for i in range(0, num_clusters):
     for j in range(i+1, num_clusters):
         dist_cluster += spatial.distance.euclidean(centers[i], centers[j])
         num_normalize += 1
-print 'k-means\nnumber of clusters:', num_clusters
-print 'distortion:', sum_dist/128
-print 'distance betweeen clusters/distortion: %.5f\n' % (dist_cluster/(num_normalize*sum_dist/128))
+print(f'k-means\nnumber of clusters: {num_clusters}')
+print(f'distortion: {sum_dist/128}')
+print('distance betweeen clusters/distortion: %.5f\n' % (dist_cluster/(num_normalize*sum_dist/128)))
 '''
 meandistortions.append(dist_cluster/(num_normalize*sum_dist/128))
 plt.plot(num_clusters, meandistortions, 'bx-')
@@ -141,7 +139,7 @@ sum_dist = 0
 for i in range(0, num_clusters):
     for name in new_label_dict[i]:
         sum_dist += spatial.distance.euclidean(all_stats_arr[names.index(name)], centroids[i])
-#print num, sum_dist/128
+print(num, sum_dist/128)
 #meandistortions.append(sum_dist/128)
 
 #Calculate distance between clusters
@@ -151,9 +149,9 @@ for i in range(0, num_clusters):
     for j in range(i+1, num_clusters):
         dist_cluster += spatial.distance.euclidean(centroids[i], centroids[j])
         num_normalize += 1
-print 'agglomerative clustering\nnumber of clusters:', num_clusters
-print 'distortion:', sum_dist/128
-print 'distance betweeen clusters/distortion: %.5f' % (dist_cluster/(num_normalize*sum_dist/128))
+print(f'agglomerative clustering\nnumber of clusters: {num_clusters}')
+print(f'distortion: {sum_dist}')
+print('distance betweeen clusters/distortion: %.5f' % (dist_cluster/(num_normalize*sum_dist/128)))
 
 '''
 print all_stats['Rumble']
