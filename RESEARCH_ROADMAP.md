@@ -84,7 +84,7 @@ LoL-MDC（Applied Sciences 2025）把 8 万 token 的 Riot 比赛 JSON 压缩成
 - 目标：NeurIPS Datasets & Benchmarks / Nature Scientific Data / AIIDE / IEEE DataPort。
 - 风险：需处理玩家隐私（ID 哈希化）与 Riot 数据条款；工程为主。
 
-**R2. 英雄克制结构的博弈论分解（直接升级原 centrality 工作）**
+**R2. 英雄克制结构的博弈论分解（直接升级原 centrality 工作）** — *原型已跑通，见 `analysis/`*
 - 做法：在 kill/对位胜负矩阵上应用 Nash averaging / mElo 与 spinning-top 分析，量化"传递性强度 vs 石头剪刀布循环"，再按 7 个 tier × 5 个 patch 切片，回答：*平衡性和克制循环如何随段位与补丁变化？*
 - 卖点：严格的英雄交互矩阵中心性/博弈结构论文至今空白；本项目 2016 年已有全部矩阵基建。
 - 目标：IEEE Transactions on Games / TMLR / IEEE CoG。

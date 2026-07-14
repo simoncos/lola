@@ -1,0 +1,247 @@
+{
+  "champions": 128,
+  "total_kill_events": 12663291,
+  "energy_shares": {
+    "transitive_share": 0.9239,
+    "cyclic_share": 0.0761
+  },
+  "spearman_vs_legacy_eigenvector": 0.0401,
+  "top_ratings": [
+    {
+      "champion": "LeBlanc",
+      "rating": 0.4535116624033319
+    },
+    {
+      "champion": "Zed",
+      "rating": 0.4400936236529582
+    },
+    {
+      "champion": "Fizz",
+      "rating": 0.3909304305710484
+    },
+    {
+      "champion": "Anivia",
+      "rating": 0.3773222373825033
+    },
+    {
+      "champion": "Talon",
+      "rating": 0.37261768180768085
+    },
+    {
+      "champion": "Kassadin",
+      "rating": 0.36884760480252404
+    },
+    {
+      "champion": "Rengar",
+      "rating": 0.36412180622132706
+    },
+    {
+      "champion": "Shaco",
+      "rating": 0.34998350710778786
+    },
+    {
+      "champion": "Nocturne",
+      "rating": 0.3402098110097434
+    },
+    {
+      "champion": "Tristana",
+      "rating": 0.3360118256771782
+    },
+    {
+      "champion": "Katarina",
+      "rating": 0.3334758388487621
+    },
+    {
+      "champion": "Twitch",
+      "rating": 0.3185971752031506
+    },
+    {
+      "champion": "Evelynn",
+      "rating": 0.31804952775967804
+    },
+    {
+      "champion": "Wukong",
+      "rating": 0.31112643538332957
+    },
+    {
+      "champion": "Garen",
+      "rating": 0.31083336299196285
+    }
+  ],
+  "bottom_ratings": [
+    {
+      "champion": "Thresh",
+      "rating": -0.9614141457854268
+    },
+    {
+      "champion": "Alistar",
+      "rating": -0.9678474906143719
+    },
+    {
+      "champion": "Braum",
+      "rating": -1.1545525106736256
+    },
+    {
+      "champion": "Janna",
+      "rating": -1.3953631268224593
+    },
+    {
+      "champion": "Soraka",
+      "rating": -1.8745920364069022
+    }
+  ],
+  "top_cyclic_triads": [
+    {
+      "cycle": "Talon > Vel'Koz > Taric > Talon",
+      "strength_logodds": 1.496,
+      "min_pair_interactions": 214
+    },
+    {
+      "cycle": "Janna > Tryndamere > Ziggs > Janna",
+      "strength_logodds": 1.461,
+      "min_pair_interactions": 264
+    },
+    {
+      "cycle": "Cho'Gath > Taric > Tryndamere > Cho'Gath",
+      "strength_logodds": 1.447,
+      "min_pair_interactions": 266
+    },
+    {
+      "cycle": "Azir > Taric > Talon > Azir",
+      "strength_logodds": 1.445,
+      "min_pair_interactions": 244
+    },
+    {
+      "cycle": "Azir > Taric > Rengar > Azir",
+      "strength_logodds": 1.441,
+      "min_pair_interactions": 244
+    },
+    {
+      "cycle": "Janna > Tryndamere > Orianna > Janna",
+      "strength_logodds": 1.428,
+      "min_pair_interactions": 643
+    },
+    {
+      "cycle": "Lux > Taric > Rengar > Lux",
+      "strength_logodds": 1.404,
+      "min_pair_interactions": 669
+    },
+    {
+      "cycle": "Cho'Gath > Taric > Fiora > Cho'Gath",
+      "strength_logodds": 1.382,
+      "min_pair_interactions": 266
+    },
+    {
+      "cycle": "Rengar > Vel'Koz > Taric > Rengar",
+      "strength_logodds": 1.356,
+      "min_pair_interactions": 214
+    },
+    {
+      "cycle": "Gangplank > Janna > Tryndamere > Gangplank",
+      "strength_logodds": 1.354,
+      "min_pair_interactions": 665
+    },
+    {
+      "cycle": "Talon > Veigar > Taric > Talon",
+      "strength_logodds": 1.342,
+      "min_pair_interactions": 229
+    },
+    {
+      "cycle": "Aatrox > Rumble > Sona > Aatrox",
+      "strength_logodds": 1.328,
+      "min_pair_interactions": 224
+    },
+    {
+      "cycle": "Orianna > Taric > Tryndamere > Orianna",
+      "strength_logodds": 1.327,
+      "min_pair_interactions": 216
+    },
+    {
+      "cycle": "Braum > Tryndamere > Gangplank > Braum",
+      "strength_logodds": 1.323,
+      "min_pair_interactions": 882
+    },
+    {
+      "cycle": "Ahri > Taric > Talon > Ahri",
+      "strength_logodds": 1.319,
+      "min_pair_interactions": 288
+    }
+  ],
+  "top_cyclic_pairs": [
+    {
+      "pair": "Ziggs beats Janna",
+      "cyclic_logodds": 0.734,
+      "interactions": 264
+    },
+    {
+      "pair": "Azir beats Taric",
+      "cyclic_logodds": 0.7,
+      "interactions": 244
+    },
+    {
+      "pair": "Zilean beats Illaoi",
+      "cyclic_logodds": 0.688,
+      "interactions": 228
+    },
+    {
+      "pair": "Taric beats Tryndamere",
+      "cyclic_logodds": 0.673,
+      "interactions": 532
+    },
+    {
+      "pair": "Cho'Gath beats Taric",
+      "cyclic_logodds": 0.667,
+      "interactions": 266
+    },
+    {
+      "pair": "Galio beats Annie",
+      "cyclic_logodds": 0.626,
+      "interactions": 385
+    },
+    {
+      "pair": "Orianna beats Janna",
+      "cyclic_logodds": 0.617,
+      "interactions": 643
+    },
+    {
+      "pair": "Veigar beats Janna",
+      "cyclic_logodds": 0.61,
+      "interactions": 504
+    },
+    {
+      "pair": "Janna beats Tryndamere",
+      "cyclic_logodds": 0.603,
+      "interactions": 665
+    },
+    {
+      "pair": "Taric beats Rengar",
+      "cyclic_logodds": 0.601,
+      "interactions": 806
+    },
+    {
+      "pair": "Galio beats Teemo",
+      "cyclic_logodds": 0.6,
+      "interactions": 216
+    },
+    {
+      "pair": "Vel'Koz beats Taric",
+      "cyclic_logodds": 0.597,
+      "interactions": 214
+    },
+    {
+      "pair": "Rumble beats Sona",
+      "cyclic_logodds": 0.595,
+      "interactions": 248
+    },
+    {
+      "pair": "Gangplank beats Braum",
+      "cyclic_logodds": 0.572,
+      "interactions": 882
+    },
+    {
+      "pair": "Taric beats Talon",
+      "cyclic_logodds": 0.562,
+      "interactions": 288
+    }
+  ]
+}
