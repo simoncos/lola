@@ -2,6 +2,12 @@
 
 LoLA is a LoL (League of Legends) game data analysis / analytics project. See [report](/report).
 
+> **2026 update**: this project is being revived. See the
+> [research roadmap](RESEARCH_ROADMAP.md), the supporting
+> [literature reviews](docs/literature/), and the in-progress
+> [dataset-paper workstream (R1)](docs/r1-dataset-paper/PLAN.md) with its
+> curation toolkit in [`lola_dataset/`](lola_dataset/).
+
 ## Crawling
 
 The data crawling part is based on [Riot API](https://developer.riotgames.com/api-methods/) and a Python wrapper [Cassiopeia](https://github.com/meraki-analytics/cassiopeia) (There is a In-Memory cache problem in Cass, refer to [here](https://github.com/meraki-analytics/cassiopeia/issues/40)). A SQLite database is designed and used in this project, which remodels and stores game objects for our analysis objectives. The database I/O part involves [sqlite3](https://docs.python.org/3.5/library/sqlite3.html) and [pandas](http://pandas.pydata.org/). 
