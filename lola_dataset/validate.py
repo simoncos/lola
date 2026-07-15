@@ -82,24 +82,29 @@ def validate(db_path: str) -> dict:
         }
 
     # --- Referential integrity ----------------------------------------------
+    # Match IDs are stored inconsistently (TEXT in Match, INTEGER in
+    # MatchChampion); normalize once into an indexed temp table so the orphan
+    # checks stay index-backed even on the 21.7M-row kill-event table.
     integrity = {}
-    for table, fk in [
-        ("Participant", "match_id"),
-        ("Team", "match_id"),
-        ("FrameKillEvent", "match_id"),
-        ("MatchChampion", "match_id"),
-    ]:
-        if table in existing and "Match" in existing:
-            integrity[f"{table}_orphans"] = _one(
-                cur,
-                f"""
-                SELECT COUNT(*) FROM {table} t
-                WHERE NOT EXISTS (
-                    SELECT 1 FROM Match m
-                    WHERE CAST(m.match_id AS TEXT) = CAST(t.{fk} AS TEXT)
+    if "Match" in existing:
+        cur.execute(
+            "CREATE TEMP TABLE _mid AS SELECT CAST(match_id AS TEXT) AS mid FROM Match"
+        )
+        cur.execute("CREATE INDEX _mid_idx ON _mid(mid)")
+        for table, fk in [
+            ("Participant", "match_id"),
+            ("Team", "match_id"),
+            ("FrameKillEvent", "match_id"),
+            ("MatchChampion", "match_id"),
+        ]:
+            if table in existing:
+                integrity[f"{table}_orphans"] = _one(
+                    cur,
+                    f"""
+                    SELECT COUNT(*) FROM {table} t
+                    WHERE CAST(t.{fk} AS TEXT) NOT IN (SELECT mid FROM _mid)
+                    """,
                 )
-                """,
-            )
     report["referential_integrity"] = integrity
 
     # --- Per-match cardinality ----------------------------------------------
