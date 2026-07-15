@@ -42,11 +42,11 @@ def stats(db_path: str) -> dict:
         )
     ]
 
-    # Duration histogram (5-minute buckets)
+    # Duration histogram (5-minute buckets; duration column is in minutes)
     out["duration_histogram_5min"] = {
         f"{b * 5}-{b * 5 + 5}min": c
         for b, c in cur.execute(
-            "SELECT duration / 300, COUNT(*) FROM Match GROUP BY duration / 300 ORDER BY 1"
+            "SELECT duration / 5, COUNT(*) FROM Match GROUP BY duration / 5 ORDER BY 1"
         )
     }
 

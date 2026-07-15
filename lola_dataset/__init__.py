@@ -26,5 +26,8 @@ TABLES = [
     "ChampionIncidenceMatrix",
 ]
 
-# Threshold below which a match is considered a remake (seconds).
-REMAKE_DURATION_S = 300
+# Match.duration is stored in MINUTES (verified on the real DB: range 7-87;
+# the 2016 crawler stored Cassiopeia's duration in minutes, and the dataset
+# predates the remake feature entirely). Matches shorter than this threshold
+# are flagged as very short (early surrender / AFK-abandoned games).
+SHORT_MATCH_MINUTES = 10

@@ -34,7 +34,7 @@ def main(db_path: str) -> None:
     for i in range(N_MATCHES):
         match_id = str(1000 + i)
         version = VERSIONS[i % len(VERSIONS)]
-        duration = 200 if i == 0 else random.randint(1200, 2700)  # match 0 = remake
+        duration = 4 if i == 0 else random.randint(20, 55)  # minutes; match 0 = very short
         cur.execute("INSERT INTO Match VALUES (?,?,?,?,1,1)",
                     (match_id, version, duration, '{"raw": "json-with-names"}'))
 
@@ -88,7 +88,7 @@ def main(db_path: str) -> None:
             killer_idx = random.randrange(10)
             victim_pool = range(5, 10) if killer_idx < 5 else range(0, 5)
             victim_idx = random.choice(list(victim_pool))
-            happen = random.randint(90, duration)
+            happen = random.randint(90, duration * 60)  # seconds within the match
             cur.execute("INSERT INTO FrameKillEvent VALUES (?,?,?,?,?,?)",
                         (match_id, happen, champs[victim_idx], happen // 60,
                          champs[killer_idx], None))

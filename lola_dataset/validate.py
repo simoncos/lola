@@ -8,7 +8,8 @@ Produces a JSON report answering the questions that gate cleaning decisions
   (the legacy crawler deduplicated by database row order, which is unsafe)
 - referential integrity: participants/teams/kill events without a Match row
 - per-match cardinality: matches without exactly 10 participants / 2 teams
-- remake share (duration < REMAKE_DURATION_S)
+- very-short-match share (duration < SHORT_MATCH_MINUTES; duration is stored
+  in minutes — verified on the real DB, and the era predates remakes)
 - matches-per-summoner distribution (feasibility of player-sequence studies)
 """
 
@@ -18,7 +19,7 @@ import json
 import sqlite3
 from pathlib import Path
 
-from . import REMAKE_DURATION_S, TABLES
+from . import SHORT_MATCH_MINUTES, TABLES
 
 
 def _one(cur: sqlite3.Cursor, sql: str, params: tuple = ()) -> int | float | None:
@@ -56,10 +57,12 @@ def validate(db_path: str) -> dict:
                     "SELECT version, COUNT(*) FROM Match GROUP BY version ORDER BY version"
                 ).fetchall()
             ),
-            "duration_min_s": _one(cur, "SELECT MIN(duration) FROM Match"),
-            "duration_max_s": _one(cur, "SELECT MAX(duration) FROM Match"),
-            "remakes_lt_%ds" % REMAKE_DURATION_S: _one(
-                cur, "SELECT COUNT(*) FROM Match WHERE duration < ?", (REMAKE_DURATION_S,)
+            "duration_min_minutes": _one(cur, "SELECT MIN(duration) FROM Match"),
+            "duration_max_minutes": _one(cur, "SELECT MAX(duration) FROM Match"),
+            "very_short_lt_%dmin" % SHORT_MATCH_MINUTES: _one(
+                cur,
+                "SELECT COUNT(*) FROM Match WHERE duration < ?",
+                (SHORT_MATCH_MINUTES,),
             ),
         }
 

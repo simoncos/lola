@@ -1,0 +1,73 @@
+{
+  "db": "/tmp/claude-0/-home-user-lola/71147c5f-0051-509f-954f-c5ae8508b5a2/scratchpad/lola.db",
+  "missing_tables": [],
+  "row_counts": {
+    "Summoner": 487484,
+    "Match": 222652,
+    "MatchChampion": 222652,
+    "FrameKillEvent": 21692852,
+    "Team": 445304,
+    "TeamBan": 1330757,
+    "Participant": 2226520,
+    "ParticipantTimeline": 8906080,
+    "ChampionMatchStats": 128,
+    "ChampionKillMatrix": 16384,
+    "ChampionAssistMatrix": 16384,
+    "ChampionIncidenceMatrix": 16384
+  },
+  "match": {
+    "distinct_match_ids": 222652,
+    "versions": {
+      "5.21.0.297": 8,
+      "5.22.0.289": 3545,
+      "5.22.0.297": 16122,
+      "5.22.0.301": 21688,
+      "5.23.0.239": 28564,
+      "5.23.0.250": 23428,
+      "5.24.0.251": 4701,
+      "5.24.0.254": 14889,
+      "5.24.0.256": 81187,
+      "5.24.0.259": 27222,
+      "6.1.0.484": 1298
+    },
+    "duration_min_s": 7,
+    "duration_max_s": 87,
+    "remakes_lt_300s": 222652
+  },
+  "kill_events": {
+    "total_rows": 21692852,
+    "surplus_duplicate_rows": 8565364,
+    "duplicate_share": 0.394847
+  },
+  "referential_integrity": {
+    "Participant_orphans": 0,
+    "Team_orphans": 0,
+    "FrameKillEvent_orphans": 0,
+    "MatchChampion_orphans": 0
+  },
+  "cardinality": {
+    "matches_without_10_participants": 0,
+    "matches_missing_participants": 0,
+    "matches_without_2_teams": 0,
+    "matches_without_single_winner": 0
+  },
+  "matches_per_summoner": {
+    "summoners": 487484,
+    "mean": 4.57,
+    "p50": 2,
+    "p90": 9,
+    "p99": 37,
+    "with_ge_20_matches": 13272,
+    "with_ge_50_matches": 3404
+  },
+  "previous_season_tiers": {
+    "BRONZE": 64761,
+    "CHALLENGER": 12838,
+    "DIAMOND": 340569,
+    "GOLD": 596917,
+    "MASTER": 42041,
+    "PLATINUM": 445910,
+    "SILVER": 523124,
+    "UNRANKED": 200360
+  }
+}

@@ -14,19 +14,24 @@
 
 | 项 | 值 |
 |---|---|
-| 比赛 | 222,652 场 Ranked-SOLO-5x5（去重清洗后：TODO） |
+| 比赛 | 222,652 场 Ranked-SOLO-5x5 |
 | 区服 / 时期 | NA / Pre-Season 2016（patch 5.21, 5.22, 5.23, 5.24, 6.1） |
 | 玩家 | 487,484 summoners（匿名化后 ID） |
 | Participant 记录 | 2,226,520（40+ 终局统计字段/条） |
 | Timeline 记录 | 8,906,080（0-10/10-20/20-30/30-end 四段 per-min delta） |
-| 击杀事件 | 21,692,852 原始行（按 (match_id, happen, victim) 去重后：TODO） |
+| 击杀事件 | 21,692,852 原始行；按 (match_id, happen, victim) 去重后 **13,127,488**（重复率 39.5%，见 Preprocessing） |
 | 禁用记录 | 1,330,757 |
 | 英雄数 | 128（2016-01 前的英雄池） |
-| tier 覆盖 | Bronze–Challenger（字段为上赛季段位） |
+| tier 覆盖 | Bronze–Challenger（字段为上赛季段位；participant 计数：Gold 597k / Silver 523k / Plat 446k / Diamond 341k / Unranked 200k / Bronze 65k / Master 42k / Challenger 13k） |
 
-- **每个 patch × tier 的比赛数分布**：TODO（stats 报告生成）
-- **比赛时长分布 / remake 比例**：TODO
-- **每个 summoner 的比赛数分布**（中位数/分位数）：TODO（决定玩家序列研究可行性）
+- **build 版本分布**（2026-07 M1 体检，`reports/validate.json`）：
+  5.24.x 共 128,000（58%，四个 build）、5.23.x 51,992、5.22.x 41,355、
+  6.1.0.484 仅 1,298、5.21.0.297 仅 8——**补丁分布严重不均**，跨补丁实验以
+  5.22→5.24 为主战场，6.1 只够做小样本外推检验。
+- **比赛时长**：7–87 **分钟**（duration 列单位为分钟；该时期无重开局机制）。
+- **每个 summoner 的比赛数分布**：中位数 2、p90=9、p99=37；
+  ≥20 场者 13,272 人、≥50 场者 3,404 人 → 玩家序列研究在此子集可行。
+- **完整性**（M1 实测）：孤儿记录 0；每场恰好 10 participants、2 teams、唯一胜者。
 
 ## Collection Process
 
@@ -38,9 +43,13 @@
 
 ## Preprocessing / Cleaning
 
-- 击杀事件按 (match_id, happen, victim) 去重（原始爬虫可能重复写入）：去除 TODO 行。
-- duration < 300s 的重开局：TODO 场（标注 `is_remake`，默认剔除出基准任务）。
-- 完整性校验结果（Participant=10/场、Team=2/场 等）：TODO。
+- 击杀事件按 (match_id, happen, victim) 去重：去除 **8,565,364** 条重复行
+  （39.5%；2016 爬虫存在重复写入，当年建矩阵靠行序去重，本次改为键去重）。
+- duration < 10 分钟的极短比赛（提前投降/挂机废局）：标注并默认剔除出基准任务
+  （具体数量见 stats 报告；该时期无 remake 机制）。
+- 完整性校验（M1 实测全部通过）：孤儿记录 0、每场 10 participants / 2 teams / 唯一胜者。
+- **Match 表无时间戳列**（2016 schema 局限）：时间顺序以 build 版本 + match_id
+  升序（Riot match ID 单调递增）为代理。
 - 2016 API 的 role/lane 字段噪声较大，按原样保留并在文档中警示（参见 R10 推断方案）。
 
 ## Anonymization & Ethics
