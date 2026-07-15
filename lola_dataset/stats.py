@@ -11,16 +11,29 @@ import sqlite3
 from pathlib import Path
 
 
-def _match_tier_expr() -> str:
-    """Majority previous-season tier of the 10 participants of a match."""
-    return """
-        SELECT p.match_id AS match_id,
-               (SELECT previous_season_tier FROM Participant q
-                WHERE q.match_id = p.match_id
-                GROUP BY previous_season_tier
-                ORDER BY COUNT(*) DESC LIMIT 1) AS avg_tier
-        FROM Participant p GROUP BY p.match_id
+def _build_majority_tier_table(cur: sqlite3.Cursor) -> None:
+    """Majority previous-season tier per match, as an indexed temp table.
+
+    Single pass + window function; a correlated-subquery version of this
+    (evaluated per match, joined through CAST) took hours on the real DB.
+    Match.match_id and Participant.match_id are both TEXT, so the final join
+    needs no CAST and stays index-backed.
     """
+    cur.execute(
+        """
+        CREATE TEMP TABLE _majority_tier AS
+        SELECT match_id, tier FROM (
+            SELECT match_id, previous_season_tier AS tier,
+                   ROW_NUMBER() OVER (
+                       PARTITION BY match_id
+                       ORDER BY COUNT(*) DESC, previous_season_tier
+                   ) AS rn
+            FROM Participant
+            GROUP BY match_id, previous_season_tier
+        ) WHERE rn = 1
+        """
+    )
+    cur.execute("CREATE INDEX _majority_tier_idx ON _majority_tier(match_id)")
 
 
 def stats(db_path: str) -> dict:
@@ -29,14 +42,14 @@ def stats(db_path: str) -> dict:
     out: dict = {"db": str(db_path)}
 
     # Patch x majority-tier match counts
+    _build_majority_tier_table(cur)
     out["matches_by_version_and_tier"] = [
         {"version": v, "tier": t, "matches": c}
         for v, t, c in cur.execute(
-            f"""
-            SELECT m.version, mt.avg_tier, COUNT(*)
-            FROM Match m JOIN ({_match_tier_expr()}) mt
-              ON CAST(mt.match_id AS TEXT) = CAST(m.match_id AS TEXT)
-            GROUP BY m.version, mt.avg_tier
+            """
+            SELECT m.version, mt.tier, COUNT(*)
+            FROM Match m JOIN _majority_tier mt ON mt.match_id = m.match_id
+            GROUP BY m.version, mt.tier
             ORDER BY m.version, COUNT(*) DESC
             """
         )

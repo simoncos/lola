@@ -30,9 +30,9 @@
       "5.24.0.259": 27222,
       "6.1.0.484": 1298
     },
-    "duration_min_s": 7,
-    "duration_max_s": 87,
-    "remakes_lt_300s": 222652
+    "duration_min_minutes": 7,
+    "duration_max_minutes": 87,
+    "very_short_lt_10min": 36
   },
   "kill_events": {
     "total_rows": 21692852,

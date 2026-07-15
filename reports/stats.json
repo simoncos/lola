@@ -1,0 +1,1363 @@
+{
+  "db": "/tmp/claude-0/-home-user-lola/71147c5f-0051-509f-954f-c5ae8508b5a2/scratchpad/lola.db",
+  "matches_by_version_and_tier": [
+    {
+      "version": "5.21.0.297",
+      "tier": "UNRANKED",
+      "matches": 3
+    },
+    {
+      "version": "5.21.0.297",
+      "tier": "PLATINUM",
+      "matches": 2
+    },
+    {
+      "version": "5.21.0.297",
+      "tier": "GOLD",
+      "matches": 2
+    },
+    {
+      "version": "5.21.0.297",
+      "tier": "SILVER",
+      "matches": 1
+    },
+    {
+      "version": "5.22.0.289",
+      "tier": "GOLD",
+      "matches": 1129
+    },
+    {
+      "version": "5.22.0.289",
+      "tier": "SILVER",
+      "matches": 890
+    },
+    {
+      "version": "5.22.0.289",
+      "tier": "DIAMOND",
+      "matches": 678
+    },
+    {
+      "version": "5.22.0.289",
+      "tier": "PLATINUM",
+      "matches": 427
+    },
+    {
+      "version": "5.22.0.289",
+      "tier": "UNRANKED",
+      "matches": 311
+    },
+    {
+      "version": "5.22.0.289",
+      "tier": "BRONZE",
+      "matches": 72
+    },
+    {
+      "version": "5.22.0.289",
+      "tier": "MASTER",
+      "matches": 22
+    },
+    {
+      "version": "5.22.0.289",
+      "tier": "CHALLENGER",
+      "matches": 16
+    },
+    {
+      "version": "5.22.0.297",
+      "tier": "GOLD",
+      "matches": 4795
+    },
+    {
+      "version": "5.22.0.297",
+      "tier": "SILVER",
+      "matches": 3886
+    },
+    {
+      "version": "5.22.0.297",
+      "tier": "PLATINUM",
+      "matches": 3192
+    },
+    {
+      "version": "5.22.0.297",
+      "tier": "DIAMOND",
+      "matches": 3186
+    },
+    {
+      "version": "5.22.0.297",
+      "tier": "UNRANKED",
+      "matches": 353
+    },
+    {
+      "version": "5.22.0.297",
+      "tier": "MASTER",
+      "matches": 332
+    },
+    {
+      "version": "5.22.0.297",
+      "tier": "BRONZE",
+      "matches": 252
+    },
+    {
+      "version": "5.22.0.297",
+      "tier": "CHALLENGER",
+      "matches": 126
+    },
+    {
+      "version": "5.22.0.301",
+      "tier": "GOLD",
+      "matches": 6486
+    },
+    {
+      "version": "5.22.0.301",
+      "tier": "SILVER",
+      "matches": 5178
+    },
+    {
+      "version": "5.22.0.301",
+      "tier": "PLATINUM",
+      "matches": 4603
+    },
+    {
+      "version": "5.22.0.301",
+      "tier": "DIAMOND",
+      "matches": 4386
+    },
+    {
+      "version": "5.22.0.301",
+      "tier": "MASTER",
+      "matches": 445
+    },
+    {
+      "version": "5.22.0.301",
+      "tier": "BRONZE",
+      "matches": 326
+    },
+    {
+      "version": "5.22.0.301",
+      "tier": "UNRANKED",
+      "matches": 140
+    },
+    {
+      "version": "5.22.0.301",
+      "tier": "CHALLENGER",
+      "matches": 124
+    },
+    {
+      "version": "5.23.0.239",
+      "tier": "GOLD",
+      "matches": 9165
+    },
+    {
+      "version": "5.23.0.239",
+      "tier": "SILVER",
+      "matches": 7116
+    },
+    {
+      "version": "5.23.0.239",
+      "tier": "PLATINUM",
+      "matches": 5542
+    },
+    {
+      "version": "5.23.0.239",
+      "tier": "DIAMOND",
+      "matches": 5311
+    },
+    {
+      "version": "5.23.0.239",
+      "tier": "MASTER",
+      "matches": 616
+    },
+    {
+      "version": "5.23.0.239",
+      "tier": "BRONZE",
+      "matches": 432
+    },
+    {
+      "version": "5.23.0.239",
+      "tier": "CHALLENGER",
+      "matches": 196
+    },
+    {
+      "version": "5.23.0.239",
+      "tier": "UNRANKED",
+      "matches": 186
+    },
+    {
+      "version": "5.23.0.250",
+      "tier": "GOLD",
+      "matches": 7626
+    },
+    {
+      "version": "5.23.0.250",
+      "tier": "SILVER",
+      "matches": 5774
+    },
+    {
+      "version": "5.23.0.250",
+      "tier": "DIAMOND",
+      "matches": 4485
+    },
+    {
+      "version": "5.23.0.250",
+      "tier": "PLATINUM",
+      "matches": 4451
+    },
+    {
+      "version": "5.23.0.250",
+      "tier": "MASTER",
+      "matches": 406
+    },
+    {
+      "version": "5.23.0.250",
+      "tier": "BRONZE",
+      "matches": 305
+    },
+    {
+      "version": "5.23.0.250",
+      "tier": "UNRANKED",
+      "matches": 210
+    },
+    {
+      "version": "5.23.0.250",
+      "tier": "CHALLENGER",
+      "matches": 171
+    },
+    {
+      "version": "5.24.0.251",
+      "tier": "GOLD",
+      "matches": 1528
+    },
+    {
+      "version": "5.24.0.251",
+      "tier": "SILVER",
+      "matches": 1134
+    },
+    {
+      "version": "5.24.0.251",
+      "tier": "PLATINUM",
+      "matches": 915
+    },
+    {
+      "version": "5.24.0.251",
+      "tier": "DIAMOND",
+      "matches": 843
+    },
+    {
+      "version": "5.24.0.251",
+      "tier": "MASTER",
+      "matches": 103
+    },
+    {
+      "version": "5.24.0.251",
+      "tier": "BRONZE",
+      "matches": 103
+    },
+    {
+      "version": "5.24.0.251",
+      "tier": "CHALLENGER",
+      "matches": 42
+    },
+    {
+      "version": "5.24.0.251",
+      "tier": "UNRANKED",
+      "matches": 33
+    },
+    {
+      "version": "5.24.0.254",
+      "tier": "GOLD",
+      "matches": 4952
+    },
+    {
+      "version": "5.24.0.254",
+      "tier": "SILVER",
+      "matches": 3670
+    },
+    {
+      "version": "5.24.0.254",
+      "tier": "PLATINUM",
+      "matches": 2956
+    },
+    {
+      "version": "5.24.0.254",
+      "tier": "DIAMOND",
+      "matches": 2607
+    },
+    {
+      "version": "5.24.0.254",
+      "tier": "BRONZE",
+      "matches": 268
+    },
+    {
+      "version": "5.24.0.254",
+      "tier": "MASTER",
+      "matches": 208
+    },
+    {
+      "version": "5.24.0.254",
+      "tier": "UNRANKED",
+      "matches": 124
+    },
+    {
+      "version": "5.24.0.254",
+      "tier": "CHALLENGER",
+      "matches": 104
+    },
+    {
+      "version": "5.24.0.256",
+      "tier": "GOLD",
+      "matches": 27225
+    },
+    {
+      "version": "5.24.0.256",
+      "tier": "SILVER",
+      "matches": 20015
+    },
+    {
+      "version": "5.24.0.256",
+      "tier": "PLATINUM",
+      "matches": 16348
+    },
+    {
+      "version": "5.24.0.256",
+      "tier": "DIAMOND",
+      "matches": 13154
+    },
+    {
+      "version": "5.24.0.256",
+      "tier": "BRONZE",
+      "matches": 1990
+    },
+    {
+      "version": "5.24.0.256",
+      "tier": "MASTER",
+      "matches": 1276
+    },
+    {
+      "version": "5.24.0.256",
+      "tier": "UNRANKED",
+      "matches": 830
+    },
+    {
+      "version": "5.24.0.256",
+      "tier": "CHALLENGER",
+      "matches": 349
+    },
+    {
+      "version": "5.24.0.259",
+      "tier": "GOLD",
+      "matches": 8544
+    },
+    {
+      "version": "5.24.0.259",
+      "tier": "SILVER",
+      "matches": 6948
+    },
+    {
+      "version": "5.24.0.259",
+      "tier": "PLATINUM",
+      "matches": 5742
+    },
+    {
+      "version": "5.24.0.259",
+      "tier": "DIAMOND",
+      "matches": 4454
+    },
+    {
+      "version": "5.24.0.259",
+      "tier": "BRONZE",
+      "matches": 700
+    },
+    {
+      "version": "5.24.0.259",
+      "tier": "MASTER",
+      "matches": 399
+    },
+    {
+      "version": "5.24.0.259",
+      "tier": "UNRANKED",
+      "matches": 271
+    },
+    {
+      "version": "5.24.0.259",
+      "tier": "CHALLENGER",
+      "matches": 164
+    },
+    {
+      "version": "6.1.0.484",
+      "tier": "GOLD",
+      "matches": 464
+    },
+    {
+      "version": "6.1.0.484",
+      "tier": "SILVER",
+      "matches": 305
+    },
+    {
+      "version": "6.1.0.484",
+      "tier": "PLATINUM",
+      "matches": 272
+    },
+    {
+      "version": "6.1.0.484",
+      "tier": "DIAMOND",
+      "matches": 180
+    },
+    {
+      "version": "6.1.0.484",
+      "tier": "BRONZE",
+      "matches": 27
+    },
+    {
+      "version": "6.1.0.484",
+      "tier": "MASTER",
+      "matches": 26
+    },
+    {
+      "version": "6.1.0.484",
+      "tier": "UNRANKED",
+      "matches": 22
+    },
+    {
+      "version": "6.1.0.484",
+      "tier": "CHALLENGER",
+      "matches": 2
+    }
+  ],
+  "duration_histogram_5min": {
+    "5-10min": 36,
+    "10-15min": 737,
+    "15-20min": 3478,
+    "20-25min": 36333,
+    "25-30min": 49336,
+    "30-35min": 58691,
+    "35-40min": 40868,
+    "40-45min": 21407,
+    "45-50min": 8320,
+    "50-55min": 2507,
+    "55-60min": 714,
+    "60-65min": 176,
+    "65-70min": 33,
+    "70-75min": 13,
+    "75-80min": 1,
+    "80-85min": 1,
+    "85-90min": 1
+  },
+  "champions": [
+    {
+      "champion": "Lucian",
+      "picks": 70555,
+      "wins": 34962,
+      "win_rate": 0.4955,
+      "bans": 2811
+    },
+    {
+      "champion": "Lee Sin",
+      "picks": 69697,
+      "wins": 33067,
+      "win_rate": 0.4744,
+      "bans": 9906
+    },
+    {
+      "champion": "Vayne",
+      "picks": 64266,
+      "wins": 31849,
+      "win_rate": 0.4956,
+      "bans": 15221
+    },
+    {
+      "champion": "Thresh",
+      "picks": 59664,
+      "wins": 28442,
+      "win_rate": 0.4767,
+      "bans": 1390
+    },
+    {
+      "champion": "Miss Fortune",
+      "picks": 54442,
+      "wins": 29753,
+      "win_rate": 0.5465,
+      "bans": 16936
+    },
+    {
+      "champion": "Blitzcrank",
+      "picks": 47327,
+      "wins": 24847,
+      "win_rate": 0.525,
+      "bans": 11429
+    },
+    {
+      "champion": "Tristana",
+      "picks": 45630,
+      "wins": 22438,
+      "win_rate": 0.4917,
+      "bans": 1505
+    },
+    {
+      "champion": "Ezreal",
+      "picks": 41327,
+      "wins": 20131,
+      "win_rate": 0.4871,
+      "bans": 724
+    },
+    {
+      "champion": "Brand",
+      "picks": 37974,
+      "wins": 20488,
+      "win_rate": 0.5395,
+      "bans": 49810
+    },
+    {
+      "champion": "Morgana",
+      "picks": 35065,
+      "wins": 17613,
+      "win_rate": 0.5023,
+      "bans": 2946
+    },
+    {
+      "champion": "Zed",
+      "picks": 35060,
+      "wins": 17505,
+      "win_rate": 0.4993,
+      "bans": 11799
+    },
+    {
+      "champion": "Caitlyn",
+      "picks": 35060,
+      "wins": 16415,
+      "win_rate": 0.4682,
+      "bans": 2566
+    },
+    {
+      "champion": "Lux",
+      "picks": 34563,
+      "wins": 18104,
+      "win_rate": 0.5238,
+      "bans": 2046
+    },
+    {
+      "champion": "Jinx",
+      "picks": 33556,
+      "wins": 16637,
+      "win_rate": 0.4958,
+      "bans": 824
+    },
+    {
+      "champion": "Malphite",
+      "picks": 33312,
+      "wins": 17588,
+      "win_rate": 0.528,
+      "bans": 22828
+    },
+    {
+      "champion": "Yasuo",
+      "picks": 31731,
+      "wins": 15107,
+      "win_rate": 0.4761,
+      "bans": 69653
+    },
+    {
+      "champion": "Janna",
+      "picks": 28852,
+      "wins": 15643,
+      "win_rate": 0.5422,
+      "bans": 968
+    },
+    {
+      "champion": "Rengar",
+      "picks": 28463,
+      "wins": 14103,
+      "win_rate": 0.4955,
+      "bans": 38135
+    },
+    {
+      "champion": "Fizz",
+      "picks": 28455,
+      "wins": 14448,
+      "win_rate": 0.5077,
+      "bans": 16671
+    },
+    {
+      "champion": "Jax",
+      "picks": 28010,
+      "wins": 13953,
+      "win_rate": 0.4981,
+      "bans": 131995
+    },
+    {
+      "champion": "Master Yi",
+      "picks": 27359,
+      "wins": 14071,
+      "win_rate": 0.5143,
+      "bans": 13066
+    },
+    {
+      "champion": "Ahri",
+      "picks": 26695,
+      "wins": 13884,
+      "win_rate": 0.5201,
+      "bans": 2118
+    },
+    {
+      "champion": "Leona",
+      "picks": 26127,
+      "wins": 13391,
+      "win_rate": 0.5125,
+      "bans": 944
+    },
+    {
+      "champion": "Riven",
+      "picks": 25736,
+      "wins": 12023,
+      "win_rate": 0.4672,
+      "bans": 7194
+    },
+    {
+      "champion": "Renekton",
+      "picks": 23755,
+      "wins": 11618,
+      "win_rate": 0.4891,
+      "bans": 3708
+    },
+    {
+      "champion": "Alistar",
+      "picks": 23484,
+      "wins": 11500,
+      "win_rate": 0.4897,
+      "bans": 1158
+    },
+    {
+      "champion": "Soraka",
+      "picks": 23265,
+      "wins": 11909,
+      "win_rate": 0.5119,
+      "bans": 123202
+    },
+    {
+      "champion": "Twisted Fate",
+      "picks": 22982,
+      "wins": 11921,
+      "win_rate": 0.5187,
+      "bans": 2994
+    },
+    {
+      "champion": "Annie",
+      "picks": 22503,
+      "wins": 11271,
+      "win_rate": 0.5009,
+      "bans": 7198
+    },
+    {
+      "champion": "Dr. Mundo",
+      "picks": 22412,
+      "wins": 12140,
+      "win_rate": 0.5417,
+      "bans": 150702
+    },
+    {
+      "champion": "Braum",
+      "picks": 22119,
+      "wins": 11002,
+      "win_rate": 0.4974,
+      "bans": 868
+    },
+    {
+      "champion": "Graves",
+      "picks": 21702,
+      "wins": 11411,
+      "win_rate": 0.5258,
+      "bans": 26960
+    },
+    {
+      "champion": "LeBlanc",
+      "picks": 21525,
+      "wins": 9868,
+      "win_rate": 0.4584,
+      "bans": 5913
+    },
+    {
+      "champion": "Ekko",
+      "picks": 20994,
+      "wins": 9929,
+      "win_rate": 0.4729,
+      "bans": 2817
+    },
+    {
+      "champion": "Tahm Kench",
+      "picks": 20813,
+      "wins": 10280,
+      "win_rate": 0.4939,
+      "bans": 110006
+    },
+    {
+      "champion": "Shen",
+      "picks": 20638,
+      "wins": 10496,
+      "win_rate": 0.5086,
+      "bans": 1426
+    },
+    {
+      "champion": "Xin Zhao",
+      "picks": 20571,
+      "wins": 10312,
+      "win_rate": 0.5013,
+      "bans": 6872
+    },
+    {
+      "champion": "Trundle",
+      "picks": 19759,
+      "wins": 10580,
+      "win_rate": 0.5355,
+      "bans": 9793
+    },
+    {
+      "champion": "Nautilus",
+      "picks": 19640,
+      "wins": 10124,
+      "win_rate": 0.5155,
+      "bans": 807
+    },
+    {
+      "champion": "Fiora",
+      "picks": 19480,
+      "wins": 9692,
+      "win_rate": 0.4975,
+      "bans": 44960
+    },
+    {
+      "champion": "Lulu",
+      "picks": 19281,
+      "wins": 9538,
+      "win_rate": 0.4947,
+      "bans": 1763
+    },
+    {
+      "champion": "Bard",
+      "picks": 19096,
+      "wins": 8752,
+      "win_rate": 0.4583,
+      "bans": 1237
+    },
+    {
+      "champion": "Darius",
+      "picks": 18979,
+      "wins": 9205,
+      "win_rate": 0.485,
+      "bans": 51870
+    },
+    {
+      "champion": "Nasus",
+      "picks": 18776,
+      "wins": 9646,
+      "win_rate": 0.5137,
+      "bans": 4223
+    },
+    {
+      "champion": "Kindred",
+      "picks": 18774,
+      "wins": 9191,
+      "win_rate": 0.4896,
+      "bans": 44413
+    },
+    {
+      "champion": "Sona",
+      "picks": 18269,
+      "wins": 9672,
+      "win_rate": 0.5294,
+      "bans": 741
+    },
+    {
+      "champion": "Poppy",
+      "picks": 18196,
+      "wins": 8539,
+      "win_rate": 0.4693,
+      "bans": 13696
+    },
+    {
+      "champion": "Irelia",
+      "picks": 18015,
+      "wins": 9077,
+      "win_rate": 0.5039,
+      "bans": 11525
+    },
+    {
+      "champion": "Tryndamere",
+      "picks": 17322,
+      "wins": 8917,
+      "win_rate": 0.5148,
+      "bans": 38183
+    },
+    {
+      "champion": "Quinn",
+      "picks": 17058,
+      "wins": 8843,
+      "win_rate": 0.5184,
+      "bans": 16509
+    },
+    {
+      "champion": "Wukong",
+      "picks": 16990,
+      "wins": 8846,
+      "win_rate": 0.5207,
+      "bans": 1274
+    },
+    {
+      "champion": "Garen",
+      "picks": 16925,
+      "wins": 8773,
+      "win_rate": 0.5183,
+      "bans": 35676
+    },
+    {
+      "champion": "Kalista",
+      "picks": 16635,
+      "wins": 8257,
+      "win_rate": 0.4964,
+      "bans": 1411
+    },
+    {
+      "champion": "Vi",
+      "picks": 16089,
+      "wins": 7925,
+      "win_rate": 0.4926,
+      "bans": 2141
+    },
+    {
+      "champion": "Nami",
+      "picks": 15958,
+      "wins": 8381,
+      "win_rate": 0.5252,
+      "bans": 112
+    },
+    {
+      "champion": "Diana",
+      "picks": 15867,
+      "wins": 7876,
+      "win_rate": 0.4964,
+      "bans": 4361
+    },
+    {
+      "champion": "Volibear",
+      "picks": 15614,
+      "wins": 8323,
+      "win_rate": 0.533,
+      "bans": 2469
+    },
+    {
+      "champion": "Udyr",
+      "picks": 15507,
+      "wins": 8182,
+      "win_rate": 0.5276,
+      "bans": 1556
+    },
+    {
+      "champion": "Vladimir",
+      "picks": 15163,
+      "wins": 7259,
+      "win_rate": 0.4787,
+      "bans": 1021
+    },
+    {
+      "champion": "Nidalee",
+      "picks": 14855,
+      "wins": 6802,
+      "win_rate": 0.4579,
+      "bans": 2750
+    },
+    {
+      "champion": "Gangplank",
+      "picks": 14813,
+      "wins": 7562,
+      "win_rate": 0.5105,
+      "bans": 13204
+    },
+    {
+      "champion": "Rammus",
+      "picks": 14650,
+      "wins": 7829,
+      "win_rate": 0.5344,
+      "bans": 11137
+    },
+    {
+      "champion": "Pantheon",
+      "picks": 14375,
+      "wins": 7290,
+      "win_rate": 0.5071,
+      "bans": 1232
+    },
+    {
+      "champion": "Shaco",
+      "picks": 14327,
+      "wins": 7315,
+      "win_rate": 0.5106,
+      "bans": 2431
+    },
+    {
+      "champion": "Amumu",
+      "picks": 14115,
+      "wins": 7544,
+      "win_rate": 0.5345,
+      "bans": 1341
+    },
+    {
+      "champion": "Gnar",
+      "picks": 13939,
+      "wins": 6833,
+      "win_rate": 0.4902,
+      "bans": 1087
+    },
+    {
+      "champion": "Illaoi",
+      "picks": 13937,
+      "wins": 6344,
+      "win_rate": 0.4552,
+      "bans": 73825
+    },
+    {
+      "champion": "Ashe",
+      "picks": 13932,
+      "wins": 6825,
+      "win_rate": 0.4899,
+      "bans": 185
+    },
+    {
+      "champion": "Draven",
+      "picks": 13227,
+      "wins": 6637,
+      "win_rate": 0.5018,
+      "bans": 701
+    },
+    {
+      "champion": "Malzahar",
+      "picks": 12956,
+      "wins": 6914,
+      "win_rate": 0.5337,
+      "bans": 1939
+    },
+    {
+      "champion": "Kassadin",
+      "picks": 12813,
+      "wins": 5968,
+      "win_rate": 0.4658,
+      "bans": 1434
+    },
+    {
+      "champion": "Hecarim",
+      "picks": 12797,
+      "wins": 6451,
+      "win_rate": 0.5041,
+      "bans": 1240
+    },
+    {
+      "champion": "Cho'Gath",
+      "picks": 12587,
+      "wins": 6217,
+      "win_rate": 0.4939,
+      "bans": 3253
+    },
+    {
+      "champion": "Anivia",
+      "picks": 12570,
+      "wins": 6569,
+      "win_rate": 0.5226,
+      "bans": 2499
+    },
+    {
+      "champion": "Elise",
+      "picks": 12569,
+      "wins": 5947,
+      "win_rate": 0.4731,
+      "bans": 3191
+    },
+    {
+      "champion": "Corki",
+      "picks": 11990,
+      "wins": 6092,
+      "win_rate": 0.5081,
+      "bans": 695
+    },
+    {
+      "champion": "Teemo",
+      "picks": 11961,
+      "wins": 5843,
+      "win_rate": 0.4885,
+      "bans": 1569
+    },
+    {
+      "champion": "Orianna",
+      "picks": 11887,
+      "wins": 5473,
+      "win_rate": 0.4604,
+      "bans": 137
+    },
+    {
+      "champion": "Talon",
+      "picks": 11797,
+      "wins": 6242,
+      "win_rate": 0.5291,
+      "bans": 1611
+    },
+    {
+      "champion": "Sivir",
+      "picks": 11737,
+      "wins": 5606,
+      "win_rate": 0.4776,
+      "bans": 104
+    },
+    {
+      "champion": "Ryze",
+      "picks": 11330,
+      "wins": 5202,
+      "win_rate": 0.4591,
+      "bans": 2878
+    },
+    {
+      "champion": "Viktor",
+      "picks": 11301,
+      "wins": 5511,
+      "win_rate": 0.4877,
+      "bans": 576
+    },
+    {
+      "champion": "Jarvan IV",
+      "picks": 10735,
+      "wins": 5210,
+      "win_rate": 0.4853,
+      "bans": 528
+    },
+    {
+      "champion": "Warwick",
+      "picks": 10140,
+      "wins": 5128,
+      "win_rate": 0.5057,
+      "bans": 527
+    },
+    {
+      "champion": "Shyvana",
+      "picks": 10019,
+      "wins": 5085,
+      "win_rate": 0.5075,
+      "bans": 838
+    },
+    {
+      "champion": "Vel'Koz",
+      "picks": 10015,
+      "wins": 5256,
+      "win_rate": 0.5248,
+      "bans": 202
+    },
+    {
+      "champion": "Zac",
+      "picks": 9974,
+      "wins": 4926,
+      "win_rate": 0.4939,
+      "bans": 953
+    },
+    {
+      "champion": "Twitch",
+      "picks": 9850,
+      "wins": 4887,
+      "win_rate": 0.4961,
+      "bans": 200
+    },
+    {
+      "champion": "Rek'Sai",
+      "picks": 9833,
+      "wins": 4852,
+      "win_rate": 0.4934,
+      "bans": 791
+    },
+    {
+      "champion": "Azir",
+      "picks": 9782,
+      "wins": 4478,
+      "win_rate": 0.4578,
+      "bans": 985
+    },
+    {
+      "champion": "Kayle",
+      "picks": 9690,
+      "wins": 5042,
+      "win_rate": 0.5203,
+      "bans": 1680
+    },
+    {
+      "champion": "Katarina",
+      "picks": 9126,
+      "wins": 4404,
+      "win_rate": 0.4826,
+      "bans": 1541
+    },
+    {
+      "champion": "Olaf",
+      "picks": 8945,
+      "wins": 4360,
+      "win_rate": 0.4874,
+      "bans": 1023
+    },
+    {
+      "champion": "Karma",
+      "picks": 8874,
+      "wins": 4378,
+      "win_rate": 0.4934,
+      "bans": 149
+    },
+    {
+      "champion": "Veigar",
+      "picks": 8554,
+      "wins": 3946,
+      "win_rate": 0.4613,
+      "bans": 9043
+    },
+    {
+      "champion": "Nocturne",
+      "picks": 8007,
+      "wins": 4058,
+      "win_rate": 0.5068,
+      "bans": 315
+    },
+    {
+      "champion": "Kha'Zix",
+      "picks": 7938,
+      "wins": 3518,
+      "win_rate": 0.4432,
+      "bans": 368
+    },
+    {
+      "champion": "Evelynn",
+      "picks": 7714,
+      "wins": 3898,
+      "win_rate": 0.5053,
+      "bans": 1618
+    },
+    {
+      "champion": "Lissandra",
+      "picks": 7650,
+      "wins": 3687,
+      "win_rate": 0.482,
+      "bans": 273
+    },
+    {
+      "champion": "Taric",
+      "picks": 7607,
+      "wins": 3978,
+      "win_rate": 0.5229,
+      "bans": 328
+    },
+    {
+      "champion": "Syndra",
+      "picks": 7530,
+      "wins": 3554,
+      "win_rate": 0.472,
+      "bans": 264
+    },
+    {
+      "champion": "Zilean",
+      "picks": 7521,
+      "wins": 3809,
+      "win_rate": 0.5064,
+      "bans": 741
+    },
+    {
+      "champion": "Zyra",
+      "picks": 7464,
+      "wins": 3859,
+      "win_rate": 0.517,
+      "bans": 222
+    },
+    {
+      "champion": "Varus",
+      "picks": 7436,
+      "wins": 3645,
+      "win_rate": 0.4902,
+      "bans": 89
+    },
+    {
+      "champion": "Heimerdinger",
+      "picks": 6807,
+      "wins": 3409,
+      "win_rate": 0.5008,
+      "bans": 1555
+    },
+    {
+      "champion": "Gragas",
+      "picks": 6568,
+      "wins": 2888,
+      "win_rate": 0.4397,
+      "bans": 375
+    },
+    {
+      "champion": "Kennen",
+      "picks": 6534,
+      "wins": 3109,
+      "win_rate": 0.4758,
+      "bans": 235
+    },
+    {
+      "champion": "Jayce",
+      "picks": 6380,
+      "wins": 3032,
+      "win_rate": 0.4752,
+      "bans": 261
+    },
+    {
+      "champion": "Akali",
+      "picks": 6073,
+      "wins": 2842,
+      "win_rate": 0.468,
+      "bans": 1184
+    },
+    {
+      "champion": "Swain",
+      "picks": 5902,
+      "wins": 3034,
+      "win_rate": 0.5141,
+      "bans": 546
+    },
+    {
+      "champion": "Xerath",
+      "picks": 5329,
+      "wins": 2651,
+      "win_rate": 0.4975,
+      "bans": 155
+    },
+    {
+      "champion": "Sion",
+      "picks": 5328,
+      "wins": 2772,
+      "win_rate": 0.5203,
+      "bans": 173
+    },
+    {
+      "champion": "Singed",
+      "picks": 5237,
+      "wins": 2717,
+      "win_rate": 0.5188,
+      "bans": 295
+    },
+    {
+      "champion": "Kog'Maw",
+      "picks": 5228,
+      "wins": 2375,
+      "win_rate": 0.4543,
+      "bans": 925
+    },
+    {
+      "champion": "Sejuani",
+      "picks": 5066,
+      "wins": 2589,
+      "win_rate": 0.5111,
+      "bans": 264
+    },
+    {
+      "champion": "Aatrox",
+      "picks": 4850,
+      "wins": 2405,
+      "win_rate": 0.4959,
+      "bans": 1095
+    },
+    {
+      "champion": "Nunu",
+      "picks": 4692,
+      "wins": 2276,
+      "win_rate": 0.4851,
+      "bans": 165
+    },
+    {
+      "champion": "Ziggs",
+      "picks": 4545,
+      "wins": 2163,
+      "win_rate": 0.4759,
+      "bans": 136
+    },
+    {
+      "champion": "Rumble",
+      "picks": 4467,
+      "wins": 2049,
+      "win_rate": 0.4587,
+      "bans": 142
+    },
+    {
+      "champion": "Fiddlesticks",
+      "picks": 4405,
+      "wins": 2045,
+      "win_rate": 0.4642,
+      "bans": 279
+    },
+    {
+      "champion": "Maokai",
+      "picks": 4233,
+      "wins": 2014,
+      "win_rate": 0.4758,
+      "bans": 146
+    },
+    {
+      "champion": "Cassiopeia",
+      "picks": 3559,
+      "wins": 1692,
+      "win_rate": 0.4754,
+      "bans": 197
+    },
+    {
+      "champion": "Karthus",
+      "picks": 3406,
+      "wins": 1644,
+      "win_rate": 0.4827,
+      "bans": 165
+    },
+    {
+      "champion": "Skarner",
+      "picks": 2947,
+      "wins": 1540,
+      "win_rate": 0.5226,
+      "bans": 392
+    },
+    {
+      "champion": "Galio",
+      "picks": 2509,
+      "wins": 1256,
+      "win_rate": 0.5006,
+      "bans": 361
+    },
+    {
+      "champion": "Yorick",
+      "picks": 1757,
+      "wins": 836,
+      "win_rate": 0.4758,
+      "bans": 333
+    },
+    {
+      "champion": "Mordekaiser",
+      "picks": 1412,
+      "wins": 625,
+      "win_rate": 0.4426,
+      "bans": 2288
+    },
+    {
+      "champion": "Urgot",
+      "picks": 1335,
+      "wins": 606,
+      "win_rate": 0.4539,
+      "bans": 343
+    }
+  ],
+  "kills_by_5min": {
+    "0-5min": 375841,
+    "5-10min": 1387611,
+    "10-15min": 2057591,
+    "15-20min": 2373737,
+    "20-25min": 2496243,
+    "25-30min": 2069987,
+    "30-35min": 1341103,
+    "35-40min": 658092,
+    "40-45min": 256532,
+    "45-50min": 81462,
+    "50-55min": 22018,
+    "55-60min": 5559,
+    "60-65min": 1272,
+    "65-70min": 317,
+    "70-75min": 83,
+    "75-80min": 26,
+    "80-85min": 9,
+    "85-90min": 5
+  },
+  "blue_side_win_rate": 0.506
+}
