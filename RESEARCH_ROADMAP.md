@@ -84,10 +84,15 @@ LoL-MDC（Applied Sciences 2025）把 8 万 token 的 Riot 比赛 JSON 压缩成
 - 目标：NeurIPS Datasets & Benchmarks / Nature Scientific Data / AIIDE / IEEE DataPort。
 - 风险：需处理玩家隐私（ID 哈希化）与 Riot 数据条款；工程为主。
 
-**R2. 英雄克制结构的博弈论分解（直接升级原 centrality 工作）** — *原型已跑通，见 `analysis/`*
-- 做法：在 kill/对位胜负矩阵上应用 Nash averaging / mElo 与 spinning-top 分析，量化"传递性强度 vs 石头剪刀布循环"，再按 7 个 tier × 5 个 patch 切片，回答：*平衡性和克制循环如何随段位与补丁变化？*
-- 卖点：严格的英雄交互矩阵中心性/博弈结构论文至今空白；本项目 2016 年已有全部矩阵基建。
-- 目标：IEEE Transactions on Games / TMLR / IEEE CoG。
+**R2. 英雄克制结构的博弈论分解（直接升级原 centrality 工作）** — *分析已完成；⚠️ 新颖性降级*
+- 做法：在 kill/对位胜负矩阵上做 HodgeRank 传递/循环分解 + 置换噪声校正，按 tier × patch 切片。
+- ⚠️ **2026-07-15 新颖性对抗审查结论**（见 `docs/literature/04-novelty-check-2026.md`）：
+  "首次分解"定位被抢先——方法归 Hamilton et al. 2024 与 Strang 2022；定性结论归
+  Chen & Joachims 2016；MOBA 反制建模归 Lin & Wu 2024/2025。**幸存创新点仅为"组合 +
+  真实历史 LoL 数据 + 段位/补丁稳定性 + 置换校正工具 + 第二证据链"。**
+- **建议重新定位**：降格为 R1 的旗舰演示分析（分析成果全部保留、复用），
+  独立顶会重心转向 R7。待用户确认。
+- 若仍独立：定位为"方法+实证短文"，正面对标上述先行工作，投 IEEE CoG/短文。
 
 **R3. 补丁因果效应与十年 meta 演化**
 - 做法：先在 5.21→6.1 五个补丁内做 He et al.（FDG 2021）式的因果效应估计（buff 一个英雄如何传导到其他英雄胜率）；若再爬取一份现代（match-v5 可得的近两年）数据，即可做**十年跨度的 meta 演化对比**——这是只有"老数据持有者"能做的研究。
@@ -109,9 +114,10 @@ LoL-MDC（Applied Sciences 2025）把 8 万 token 的 Riot 比赛 JSON 压缩成
 
 ### ⭐ T3：空白最大但需要造标签
 
-**R7. 基于遥测的消极行为检测（AFK / 故意送人头）**
+**R7. 基于遥测的消极行为检测（AFK / 故意送人头）** — *新颖性审查后升为独立发表首选*
 - 做法：从 timeline 构造弱标签（长时间零输出、异常死亡序列、经济曲线骤停），训练首个学术界公开的行为型 griefing 检测器；Kou 2020 的分类学做理论框架。
-- 卖点：学术空白 + 只需本数据即可做；风险：无真值标签，需精心设计弱监督评估。
+- 卖点：**三轮文献调研确认学术界几乎空白（仅厂商专利/博客）**；只需本数据即可做；
+  可行性已验证（1.3 万名 ≥20 场玩家）。风险：无真值标签，需精心设计弱监督评估。
 - 目标：CHI PLAY / FDG / IEEE ToG。
 
 **R8. 小号/代练检测（原 README 里"Cheating Detection"的现代版）**

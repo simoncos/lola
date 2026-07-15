@@ -26,6 +26,7 @@ LoLA 是 2016 年的 LoL 数据分析课程项目（CUHK）；本次将其复活
 | M4/T1 基准：draft 胜率预测 baseline | `benchmarks/draft_baseline.py` + output | ✅ |
 | R2 论文骨架（标题/摘要/结构/图表清单） | `docs/r2-paper/OUTLINE.md` | ✅ v0.1 |
 | 新旧分析对应关系 + 分投决策 | `docs/LEGACY_CONNECTIONS.md` | ✅ R1/R2 分投已定 |
+| 对抗式新颖性审查（4 路检索） | `docs/literature/04-novelty-check-2026.md` | ✅ R2 定位需调整（见下） |
 
 ## 三、核心研究结论（论文素材）
 
@@ -87,17 +88,32 @@ python benchmarks/draft_baseline.py --parquet /tmp/parquet
 - SQLite 查询若在 join 两侧使用 CAST 会使索引失效（曾导致 2 小时+ 卡死），
   模式：预建带索引的临时表（见 `lola_dataset/validate.py` / `stats.py`）。
 
+## 五点五、⚠️ 新颖性审查的重大结论（2026-07-15）
+
+四路对抗式检索（`docs/literature/04-novelty-check-2026.md`）后：
+
+- **R2 原定位被实质性抢先**：Hodge 传递/循环分解方法归 Hamilton et al. 2024
+  （arXiv:2412.14427）+ Strang 2022；"MOBA 非传递小、强度主导"定性结论归
+  Chen & Joachims 2016（blade-chest）；MOBA 反制建模归 Lin & Wu 2024/2025。
+  R2 幸存创新点收窄为"组合 + 真实历史数据 + 段位/补丁稳定性 + 置换校正工具 +
+  第二证据链"。**分析成果全部有效，只是不足以独立撑起顶会新颖性。**
+- **推荐**（待用户决定）：R2 降格为 R1 的旗舰演示分析；独立发表重心转向 **R7**
+  （遥测挂机/送人头检测，三轮调研确认学术空白）。
+- **R1 措辞须收窄**："不可再生"仅在"分钟级时间线+击杀事件+全段位+22 万场"组合粒度
+  上成立（2016 终局统计在 Kaggle 有存档；GPTilt 已对当前版本做类似内容）。
+- **R1 最大落地风险**：Riot ToS/再分发许可——审稿人必问，须设 ToS 专节主动应对。
+
 ## 六、下一步待办（按优先级）
 
-1. **R2 论文写作**：按 `docs/r2-paper/OUTLINE.md` 起草正文；
-   绘制 Fig 2（raw vs corrected 柱状 + 92% 置换基线）与 Fig 3（build 演化）；
-   补 HodgeRank（Jiang et al. 2011）引用与校正估计器偏差讨论。
-2. **M2 清洗决策定稿**：极短局（<10min，773 场）与 6.1/5.21 小切片的处理写进数据卡。
-3. **M3 发布**：Riot Developer Policies 复核 → 许可证定稿（建议 CC BY-NC 4.0
-   + Riot 免责句）→ Zenodo 私有草稿 → HuggingFace（域名需加白名单或本地操作）。
-4. **M4 扩展**：T2 早期胜率基准（timeline 特征）；FM/Transformer 基线对齐
-   DraftRec 设置。
-5. **R7 探索**（挂机/送人头弱监督检测）：13,272 名 ≥20 场玩家已确认可行。
+0. **先决策（用户）**：R2 走哪条路——(A) 并入 R1 做演示分析；(B) 独立方法+实证短文；
+   (C) 独立重心转 R7。推荐 A+C。后续待办依此调整。
+1. **R1 推进（新颖性审查后优先级上升）**：措辞收窄（DATACARD 已改）；补 ToS 专节；
+   Riot Developer Policies 复核 → 许可证（CC BY 4.0 + Riot 免责句）→ Zenodo 私有草稿。
+2. **若 R2 独立**：精读 Hamilton 2412.14427 与 Chen-Joachims WSDM 2016（核对数字）；
+   按 OUTLINE v0.2"必引先行工作"表逐条划界；补图 2/3。
+3. **M2 清洗决策定稿**：极短局（<10min）与 6.1/5.21 小切片处理写进数据卡。
+4. **M4 扩展**：T2 早期胜率基准（timeline 特征）；FM/Transformer 基线对齐 DraftRec。
+5. **R7 探索（升为独立发表首选）**：挂机/送人头弱监督检测；13,272 名 ≥20 场玩家已确认可行。
 6. **数据备份**：确认用户本地留存 lola.zip 与盐值；Release 页补 SHA-256 说明。
 
 ## 七、关键文件地图
@@ -106,7 +122,8 @@ python benchmarks/draft_baseline.py --parquet /tmp/parquet
 RESEARCH_ROADMAP.md            # 十个研究方向总览（R1–R10）
 docs/literature/               # 三份文献综述（引用都核实过）
 docs/r1-dataset-paper/         # R1: PLAN / DATACARD / BENCHMARKS / DATA_ACCESS / PUBLISHING
-docs/r2-paper/OUTLINE.md       # R2 论文骨架（标题、摘要草稿、图表清单）
+docs/literature/04-novelty-check-2026.md  # 对抗式新颖性审查（R2 定位、必引先行工作、R1 风险）
+docs/r2-paper/OUTLINE.md       # R2 论文骨架 v0.2（已按新颖性审查修订定位）
 docs/HANDOFF.md                # 本文档
 lola_dataset/                  # validate / stats / export CLI（python -m lola_dataset）
 tests/make_synthetic_db.py     # 合成库冒烟测试

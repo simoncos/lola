@@ -60,11 +60,34 @@
 - 数据为玩家在公开排位系统中产生的比赛事实记录；不含聊天、通信或任何用户生成内容。
 - 法务核查记录（Riot Developer Policies / GDPR 评估）：TODO。
 
+### ⚠️ ToS/许可证风险（新颖性审查标记为审稿人必问、最大落地风险）
+
+- Riot API 条款禁止"个人档案/侦察工具/基于个人玩家的数据"，且**不授予批量比赛数据的
+  再分发权**。带（哈希）玩家键 + 段位标签的每人级数据与此存在张力。
+- 先例参差：GPTilt 发布匿名研究聚合（依赖社区容忍，非明确授权）；Oracle's Elixir 发布
+  的是**职业（公众人物、聚合）**数据，法律基础不同——都不是"匿名批量排位数据再分发"的
+  干净先例。
+- **对策（写入论文 ToS 专节，主动 pre-empt）**：数据于 2016 年在当时 API 条款下采集；
+  仅供非商业研究；已完全匿名化；提供 takedown / RTBF 联系方式；聚合与 schema 以 CC BY 4.0
+  发布并声明底层为 Riot IP。发布前须完成此核查并归档。
+
 ## Distribution
 
 - 格式：Parquet（按表组织，Participant/Timeline/KillEvent 附 version 列便于分区过滤）。
 - 渠道：HuggingFace Datasets + Zenodo（DOI）：TODO 链接。
-- 许可：TODO（建议 CC BY-NC 4.0 + Riot 数据来源声明："isn't endorsed by Riot Games…" 标准免责句）。
+- 许可：建议聚合/schema 以 **CC BY 4.0** 发布，并声明底层游戏数据为 Riot IP、
+  附 Riot 标准免责句（"isn't endorsed by Riot Games…"）。
+
+### ⚠️ 不可再生性的精确表述（2026-07-15 新颖性审查后收窄）
+
+- **成立**：Riot match-v4 于 2021-09 从 API 移除；官方保留策略"比赛 2 年、timeline 1 年"
+  （2019-08 起），2016 timeline 约 2017 年即过期，早于 match-v5，**无法回采**。
+- **须收窄**：2016 年的**终局统计**在 Kaggle（`paololol/league-of-legends-ranked-matches`）
+  等社区存档中仍存在。本数据集的**独有性**在于"**分钟级时间线 + 原始击杀事件 + 全段位
+  + 22 万场规模**"这一组合粒度。措辞：*"据我们所知，唯一保存下来的、在此组合粒度上的
+  2016 排位语料"*，**不得**声称"唯一的 2016 排位数据"。
+- **内容组合非首创**：GPTilt（HuggingFace, 2024–25）已对**当前版本、王者段**提供类似组合。
+  本数据集定位为"首个**保存下来的历史版本**"，非"首个"。
 
 ## Uses
 
