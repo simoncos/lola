@@ -17,6 +17,11 @@
 2. **IEEE CoG 2027**（会议备选，通常 1–2 月截稿）
 3. **FDG 2027**（重实证的 data track）
 
+**发表策略（2026-07-15 定）：与 R1 数据集论文分投**，本文引用 R1 为数据来源
+（R1 先挂 Zenodo DOI 即可引用，无需等其见刊）。
+与 2016 年旧分析的逐条对应关系（Related Work / Discussion 素材）见
+[docs/LEGACY_CONNECTIONS.md](../LEGACY_CONNECTIONS.md) 第三节。
+
 ## Abstract 草稿（含真实数字）
 
 > Counter-pick ("rock-paper-scissors") relationships between champions are

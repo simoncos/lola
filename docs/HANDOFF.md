@@ -25,6 +25,7 @@ LoLA 是 2016 年的 LoL 数据分析课程项目（CUHK）；本次将其复活
 | R2 分析：build 演化 + bootstrap CI | `analysis/matchup_extended.py` + output | ✅ |
 | M4/T1 基准：draft 胜率预测 baseline | `benchmarks/draft_baseline.py` + output | ✅ |
 | R2 论文骨架（标题/摘要/结构/图表清单） | `docs/r2-paper/OUTLINE.md` | ✅ v0.1 |
+| 新旧分析对应关系 + 分投决策 | `docs/LEGACY_CONNECTIONS.md` | ✅ R1/R2 分投已定 |
 
 ## 三、核心研究结论（论文素材）
 

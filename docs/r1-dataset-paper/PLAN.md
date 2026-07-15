@@ -4,6 +4,11 @@
 > 并撰写数据集论文。核心卖点：Riot match-v4 已废弃（2021-09）、match-v5 仅保留约两年历史，
 > **该窗口（patch 5.21–6.1）的 timeline + 击杀事件数据今天已无法从官方渠道重新采集。**
 
+**发表策略（2026-07-15 定）：与 R2 克制结构论文分投**——本文投数据集类
+venue，R2 引用本文的 Zenodo DOI 投方法类 venue。与 2016 年旧工作的对应
+（Collection Process 素材、质量审计对照）见
+[docs/LEGACY_CONNECTIONS.md](../LEGACY_CONNECTIONS.md) 第二节。
+
 ## 里程碑
 
 ### M0 — 工具链搭建 ✅（本次提交）
