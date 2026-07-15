@@ -12,16 +12,12 @@
 - [x] 数据卡模板（`DATACARD_TEMPLATE.md`）
 - [x] 基准任务定义（`BENCHMARKS.md`）
 
-### M1 — 真实数据体检（需要本地的 lola.db）
-- [ ] 在本地对 2.1GB 的 `lola.db` 运行：
-  ```bash
-  pip install -r lola_dataset/requirements.txt
-  python -m lola_dataset validate --db lola.db --out reports/validate.json
-  python -m lola_dataset stats    --db lola.db --out reports/stats.json
-  ```
-- [ ] 把两份 JSON 报告提交回仓库（不含任何玩家个人信息，可安全提交）
-- [ ] 依据报告确认：击杀事件重复率、Participant/Match 完整性、每个 summoner 的比赛数分布
-      （决定 R7/R8 玩家序列研究可行性）
+### M1 — 真实数据体检 ✅（2026-07-15，经 GitHub Release dataset-v0 获取数据后完成）
+- [x] validate + stats 已在真实 lola.db（3.5GB，SHA-256 校验通过）上运行
+- [x] 两份 JSON 报告已提交（`reports/validate.json`、`reports/stats.json`）
+- [x] 关键结论：击杀事件重复率 39.5%（键去重后 13,127,488 条）；完整性零异常；
+      duration 单位为分钟；补丁分布不均（5.24 占 58%）；
+      ≥20 场玩家 13,272 人 → R7/R8 可行
 
 ### M2 — 清洗决策（依据 M1 报告定标准并记录在数据卡）
 - [ ] 重开局（remake）处理：duration < 300s 的比赛剔除或标注
@@ -29,9 +25,10 @@
 - [ ] timeline 缺失/残缺比赛的处理策略
 - [ ] role/lane 字段噪声评估（2016 API 的 lane/role 公认不可靠 → 引出 R10）
 
-### M3 — 匿名化与发布格式
-- [ ] `python -m lola_dataset export --db lola.db --out parquet/ --salt <secret>`
-      （summoner_id/name 加盐哈希；`Match.data` 原始 JSON 默认剔除——内含玩家名）
+### M3 — 匿名化与发布格式（导出已完成，发布待法务核查）
+- [x] 匿名化 Parquet 导出已在真实库上完成并抽查（375MB / 7 表；
+      48.7 万 summoner ID 全部加盐哈希；玩家名与原始 JSON 已剔除；
+      盐值保存在会话工作区 `SALT_PRIVATE.txt`，**不入 git，需自行留存**）
 - [ ] 盐值与映射表**永不发布**（保留在本地，用于作者内部纵向研究）
 - [ ] 上传 HuggingFace Datasets + Zenodo（拿 DOI），附加载脚本
 - [ ] 法务核查：Riot Developer Policies / 数据 ToS；GDPR（玩家名属个人数据 → 全部删除，

@@ -1,0 +1,586 @@
+{
+  "champions": 128,
+  "slices": [
+    {
+      "slice": "overall",
+      "matches": 222652,
+      "pair_observations": 5566300,
+      "transitive_share_raw": 0.7293,
+      "cyclic_share_raw": 0.2707,
+      "cyclic_share_corrected": 0.0502,
+      "signal_to_noise": 2.942,
+      "top10": [
+        {
+          "champion": "Miss Fortune",
+          "rating": 0.1961
+        },
+        {
+          "champion": "Janna",
+          "rating": 0.1799
+        },
+        {
+          "champion": "Dr. Mundo",
+          "rating": 0.1791
+        },
+        {
+          "champion": "Brand",
+          "rating": 0.1707
+        },
+        {
+          "champion": "Trundle",
+          "rating": 0.1559
+        },
+        {
+          "champion": "Amumu",
+          "rating": 0.1523
+        },
+        {
+          "champion": "Rammus",
+          "rating": 0.1509
+        },
+        {
+          "champion": "Malzahar",
+          "rating": 0.1499
+        },
+        {
+          "champion": "Volibear",
+          "rating": 0.1468
+        },
+        {
+          "champion": "Sona",
+          "rating": 0.1316
+        }
+      ],
+      "bottom5": [
+        {
+          "champion": "Urgot",
+          "rating": -0.1665
+        },
+        {
+          "champion": "Kog'Maw",
+          "rating": -0.1673
+        },
+        {
+          "champion": "Mordekaiser",
+          "rating": -0.208
+        },
+        {
+          "champion": "Kha'Zix",
+          "rating": -0.2139
+        },
+        {
+          "champion": "Gragas",
+          "rating": -0.2278
+        }
+      ]
+    },
+    {
+      "slice": "patch 5.22",
+      "matches": 41355,
+      "pair_observations": 1033875,
+      "transitive_share_raw": 0.4772,
+      "cyclic_share_raw": 0.5228,
+      "cyclic_share_corrected": 0.0425,
+      "signal_to_noise": 0.819,
+      "top10": [
+        {
+          "champion": "Dr. Mundo",
+          "rating": 0.2378
+        },
+        {
+          "champion": "Skarner",
+          "rating": 0.2269
+        },
+        {
+          "champion": "Singed",
+          "rating": 0.2163
+        },
+        {
+          "champion": "Volibear",
+          "rating": 0.2022
+        },
+        {
+          "champion": "Brand",
+          "rating": 0.2004
+        },
+        {
+          "champion": "Rammus",
+          "rating": 0.1853
+        },
+        {
+          "champion": "Miss Fortune",
+          "rating": 0.1817
+        },
+        {
+          "champion": "Vel'Koz",
+          "rating": 0.181
+        },
+        {
+          "champion": "Malzahar",
+          "rating": 0.1795
+        },
+        {
+          "champion": "Tryndamere",
+          "rating": 0.1644
+        }
+      ],
+      "bottom5": [
+        {
+          "champion": "Zed",
+          "rating": -0.2346
+        },
+        {
+          "champion": "Gragas",
+          "rating": -0.257
+        },
+        {
+          "champion": "Kog'Maw",
+          "rating": -0.2683
+        },
+        {
+          "champion": "Mordekaiser",
+          "rating": -0.2971
+        },
+        {
+          "champion": "Urgot",
+          "rating": -0.444
+        }
+      ]
+    },
+    {
+      "slice": "patch 5.23",
+      "matches": 51992,
+      "pair_observations": 1299800,
+      "transitive_share_raw": 0.4602,
+      "cyclic_share_raw": 0.5398,
+      "cyclic_share_corrected": 0.0364,
+      "signal_to_noise": 0.745,
+      "top10": [
+        {
+          "champion": "Rammus",
+          "rating": 0.2312
+        },
+        {
+          "champion": "Amumu",
+          "rating": 0.193
+        },
+        {
+          "champion": "Dr. Mundo",
+          "rating": 0.192
+        },
+        {
+          "champion": "Brand",
+          "rating": 0.1866
+        },
+        {
+          "champion": "Quinn",
+          "rating": 0.1773
+        },
+        {
+          "champion": "Talon",
+          "rating": 0.1701
+        },
+        {
+          "champion": "Nami",
+          "rating": 0.1695
+        },
+        {
+          "champion": "Trundle",
+          "rating": 0.1511
+        },
+        {
+          "champion": "Sona",
+          "rating": 0.1511
+        },
+        {
+          "champion": "Miss Fortune",
+          "rating": 0.1506
+        }
+      ],
+      "bottom5": [
+        {
+          "champion": "Bard",
+          "rating": -0.1754
+        },
+        {
+          "champion": "Nidalee",
+          "rating": -0.1758
+        },
+        {
+          "champion": "Akali",
+          "rating": -0.2179
+        },
+        {
+          "champion": "Gragas",
+          "rating": -0.2267
+        },
+        {
+          "champion": "Kha'Zix",
+          "rating": -0.2648
+        }
+      ]
+    },
+    {
+      "slice": "patch 5.24",
+      "matches": 127999,
+      "pair_observations": 3199975,
+      "transitive_share_raw": 0.6494,
+      "cyclic_share_raw": 0.3506,
+      "cyclic_share_corrected": 0.0436,
+      "signal_to_noise": 1.866,
+      "top10": [
+        {
+          "champion": "Miss Fortune",
+          "rating": 0.2168
+        },
+        {
+          "champion": "Janna",
+          "rating": 0.2157
+        },
+        {
+          "champion": "Trundle",
+          "rating": 0.165
+        },
+        {
+          "champion": "Talon",
+          "rating": 0.1597
+        },
+        {
+          "champion": "Brand",
+          "rating": 0.1548
+        },
+        {
+          "champion": "Volibear",
+          "rating": 0.1498
+        },
+        {
+          "champion": "Udyr",
+          "rating": 0.1479
+        },
+        {
+          "champion": "Malzahar",
+          "rating": 0.1467
+        },
+        {
+          "champion": "Amumu",
+          "rating": 0.1433
+        },
+        {
+          "champion": "Graves",
+          "rating": 0.1367
+        }
+      ],
+      "bottom5": [
+        {
+          "champion": "Kassadin",
+          "rating": -0.1727
+        },
+        {
+          "champion": "Rumble",
+          "rating": -0.1769
+        },
+        {
+          "champion": "Kha'Zix",
+          "rating": -0.1915
+        },
+        {
+          "champion": "Mordekaiser",
+          "rating": -0.2017
+        },
+        {
+          "champion": "Gragas",
+          "rating": -0.2111
+        }
+      ]
+    },
+    {
+      "slice": "tier low",
+      "matches": 60348,
+      "pair_observations": 1508700,
+      "transitive_share_raw": 0.5224,
+      "cyclic_share_raw": 0.4776,
+      "cyclic_share_corrected": 0.0361,
+      "signal_to_noise": 1.027,
+      "top10": [
+        {
+          "champion": "Brand",
+          "rating": 0.2641
+        },
+        {
+          "champion": "Miss Fortune",
+          "rating": 0.2172
+        },
+        {
+          "champion": "Amumu",
+          "rating": 0.208
+        },
+        {
+          "champion": "Graves",
+          "rating": 0.192
+        },
+        {
+          "champion": "Zyra",
+          "rating": 0.1825
+        },
+        {
+          "champion": "Dr. Mundo",
+          "rating": 0.1796
+        },
+        {
+          "champion": "Volibear",
+          "rating": 0.1732
+        },
+        {
+          "champion": "Malzahar",
+          "rating": 0.1678
+        },
+        {
+          "champion": "Taric",
+          "rating": 0.1491
+        },
+        {
+          "champion": "Trundle",
+          "rating": 0.1435
+        }
+      ],
+      "bottom5": [
+        {
+          "champion": "Mordekaiser",
+          "rating": -0.2065
+        },
+        {
+          "champion": "Bard",
+          "rating": -0.2235
+        },
+        {
+          "champion": "Gragas",
+          "rating": -0.2509
+        },
+        {
+          "champion": "Nidalee",
+          "rating": -0.3186
+        },
+        {
+          "champion": "Ryze",
+          "rating": -0.3345
+        }
+      ]
+    },
+    {
+      "slice": "tier mid",
+      "matches": 115453,
+      "pair_observations": 2886325,
+      "transitive_share_raw": 0.619,
+      "cyclic_share_raw": 0.381,
+      "cyclic_share_corrected": 0.0604,
+      "signal_to_noise": 1.692,
+      "top10": [
+        {
+          "champion": "Miss Fortune",
+          "rating": 0.2044
+        },
+        {
+          "champion": "Dr. Mundo",
+          "rating": 0.1966
+        },
+        {
+          "champion": "Janna",
+          "rating": 0.1871
+        },
+        {
+          "champion": "Rammus",
+          "rating": 0.1754
+        },
+        {
+          "champion": "Trundle",
+          "rating": 0.1667
+        },
+        {
+          "champion": "Brand",
+          "rating": 0.1577
+        },
+        {
+          "champion": "Talon",
+          "rating": 0.1559
+        },
+        {
+          "champion": "Sona",
+          "rating": 0.1554
+        },
+        {
+          "champion": "Malphite",
+          "rating": 0.1438
+        },
+        {
+          "champion": "Amumu",
+          "rating": 0.1405
+        }
+      ],
+      "bottom5": [
+        {
+          "champion": "Urgot",
+          "rating": -0.179
+        },
+        {
+          "champion": "Kog'Maw",
+          "rating": -0.1894
+        },
+        {
+          "champion": "Gragas",
+          "rating": -0.2172
+        },
+        {
+          "champion": "Nidalee",
+          "rating": -0.2242
+        },
+        {
+          "champion": "Kha'Zix",
+          "rating": -0.2476
+        }
+      ]
+    },
+    {
+      "slice": "tier high",
+      "matches": 43939,
+      "pair_observations": 1098475,
+      "transitive_share_raw": 0.4194,
+      "cyclic_share_raw": 0.5806,
+      "cyclic_share_corrected": 0.0483,
+      "signal_to_noise": 0.633,
+      "top10": [
+        {
+          "champion": "Janna",
+          "rating": 0.208
+        },
+        {
+          "champion": "Talon",
+          "rating": 0.1846
+        },
+        {
+          "champion": "Malzahar",
+          "rating": 0.1725
+        },
+        {
+          "champion": "Rammus",
+          "rating": 0.1691
+        },
+        {
+          "champion": "Miss Fortune",
+          "rating": 0.1585
+        },
+        {
+          "champion": "Sion",
+          "rating": 0.1585
+        },
+        {
+          "champion": "Twisted Fate",
+          "rating": 0.1484
+        },
+        {
+          "champion": "Dr. Mundo",
+          "rating": 0.1459
+        },
+        {
+          "champion": "Volibear",
+          "rating": 0.1458
+        },
+        {
+          "champion": "Trundle",
+          "rating": 0.1441
+        }
+      ],
+      "bottom5": [
+        {
+          "champion": "Azir",
+          "rating": -0.2045
+        },
+        {
+          "champion": "Gragas",
+          "rating": -0.2051
+        },
+        {
+          "champion": "Rumble",
+          "rating": -0.2069
+        },
+        {
+          "champion": "Illaoi",
+          "rating": -0.3385
+        },
+        {
+          "champion": "Mordekaiser",
+          "rating": -0.6336
+        }
+      ]
+    }
+  ],
+  "top_cyclic_pairs_overall": [
+    {
+      "pair": "Olaf counters Darius",
+      "cyclic_logodds": 0.346,
+      "games": 367
+    },
+    {
+      "pair": "Kennen counters Renekton",
+      "cyclic_logodds": 0.345,
+      "games": 358
+    },
+    {
+      "pair": "Teemo counters Bard",
+      "cyclic_logodds": 0.319,
+      "games": 455
+    },
+    {
+      "pair": "Janna counters Rumble",
+      "cyclic_logodds": 0.314,
+      "games": 303
+    },
+    {
+      "pair": "Nami counters Vel'Koz",
+      "cyclic_logodds": 0.312,
+      "games": 346
+    },
+    {
+      "pair": "Zed counters Vel'Koz",
+      "cyclic_logodds": 0.302,
+      "games": 806
+    },
+    {
+      "pair": "Ryze counters Illaoi",
+      "cyclic_logodds": 0.295,
+      "games": 336
+    },
+    {
+      "pair": "Renekton counters Akali",
+      "cyclic_logodds": 0.294,
+      "games": 330
+    },
+    {
+      "pair": "Shyvana counters Shen",
+      "cyclic_logodds": 0.285,
+      "games": 461
+    },
+    {
+      "pair": "Corki counters Elise",
+      "cyclic_logodds": 0.283,
+      "games": 347
+    },
+    {
+      "pair": "Jax counters Xerath",
+      "cyclic_logodds": 0.279,
+      "games": 326
+    },
+    {
+      "pair": "Shen counters Twitch",
+      "cyclic_logodds": 0.275,
+      "games": 470
+    }
+  ],
+  "rating_spearman_vs_overall": {
+    "patch 5.22": 0.7834,
+    "patch 5.23": 0.8982,
+    "patch 5.24": 0.957,
+    "tier low": 0.9071,
+    "tier mid": 0.9789,
+    "tier high": 0.7737
+  }
+}
