@@ -63,7 +63,7 @@ def load_pairs(parquet_dir: str) -> pd.DataFrame:
         tier_counts[["match_id", "tier_bucket"]], on="match_id", how="left"
     )
     return pairs[["match_id", "blue_champion", "red_champion", "blue_win",
-                  "patch", "tier_bucket"]]
+                  "version", "patch", "tier_bucket"]]
 
 
 def win_matrix(pairs: pd.DataFrame, champions: list[str]) -> np.ndarray:

@@ -1,0 +1,54 @@
+[
+  {
+    "setting": "cross-patch",
+    "sizes": {
+      "train": 112921,
+      "val": 16235,
+      "test": 93460
+    },
+    "majority": {
+      "accuracy": 0.5064,
+      "auc": 0.5,
+      "log_loss": 0.6931,
+      "ece": null
+    },
+    "logistic_regression": {
+      "accuracy": 0.5474,
+      "auc": 0.5683,
+      "log_loss": 0.6867,
+      "ece": 0.0171
+    },
+    "gradient_boosting": {
+      "accuracy": 0.543,
+      "auc": 0.5604,
+      "log_loss": 0.6876,
+      "ece": 0.0044
+    }
+  },
+  {
+    "setting": "same-patch",
+    "sizes": {
+      "train": 177751,
+      "val": 22556,
+      "test": 22309
+    },
+    "majority": {
+      "accuracy": 0.5036,
+      "auc": 0.5,
+      "log_loss": 0.6931,
+      "ece": null
+    },
+    "logistic_regression": {
+      "accuracy": 0.5552,
+      "auc": 0.5787,
+      "log_loss": 0.6834,
+      "ece": 0.0061
+    },
+    "gradient_boosting": {
+      "accuracy": 0.5485,
+      "auc": 0.5684,
+      "log_loss": 0.6857,
+      "ece": 0.006
+    }
+  }
+]

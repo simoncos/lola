@@ -1,0 +1,404 @@
+{
+  "build_evolution": {
+    "builds": [
+      {
+        "build": "5.22.0.297",
+        "matches": 16122
+      },
+      {
+        "build": "5.22.0.301",
+        "matches": 21688
+      },
+      {
+        "build": "5.23.0.239",
+        "matches": 28564
+      },
+      {
+        "build": "5.23.0.250",
+        "matches": 23428
+      },
+      {
+        "build": "5.24.0.254",
+        "matches": 14889
+      },
+      {
+        "build": "5.24.0.256",
+        "matches": 81187
+      },
+      {
+        "build": "5.24.0.259",
+        "matches": 27222
+      }
+    ],
+    "rating_stability": [
+      {
+        "from": "5.22.0.297",
+        "to": "5.22.0.301",
+        "rating_spearman": 0.6969
+      },
+      {
+        "from": "5.22.0.301",
+        "to": "5.23.0.239",
+        "rating_spearman": 0.6046
+      },
+      {
+        "from": "5.23.0.239",
+        "to": "5.23.0.250",
+        "rating_spearman": 0.6903
+      },
+      {
+        "from": "5.23.0.250",
+        "to": "5.24.0.254",
+        "rating_spearman": 0.6417
+      },
+      {
+        "from": "5.24.0.254",
+        "to": "5.24.0.256",
+        "rating_spearman": 0.7717
+      },
+      {
+        "from": "5.24.0.256",
+        "to": "5.24.0.259",
+        "rating_spearman": 0.7748
+      }
+    ],
+    "top_movers": [
+      {
+        "boundary": "5.22.0.297 -> 5.22.0.301",
+        "biggest_gainers": [
+          {
+            "champion": "Urgot",
+            "delta": 0.3442
+          },
+          {
+            "champion": "Zilean",
+            "delta": 0.3197
+          },
+          {
+            "champion": "Kog'Maw",
+            "delta": 0.2298
+          },
+          {
+            "champion": "Talon",
+            "delta": 0.2272
+          },
+          {
+            "champion": "Fiora",
+            "delta": 0.2234
+          }
+        ],
+        "biggest_losers": [
+          {
+            "champion": "Tryndamere",
+            "delta": -0.3245
+          },
+          {
+            "champion": "Fiddlesticks",
+            "delta": -0.3052
+          },
+          {
+            "champion": "Vel'Koz",
+            "delta": -0.2036
+          },
+          {
+            "champion": "Evelynn",
+            "delta": -0.199
+          },
+          {
+            "champion": "Corki",
+            "delta": -0.1964
+          }
+        ]
+      },
+      {
+        "boundary": "5.22.0.301 -> 5.23.0.239",
+        "biggest_gainers": [
+          {
+            "champion": "Urgot",
+            "delta": 0.4359
+          },
+          {
+            "champion": "Mordekaiser",
+            "delta": 0.419
+          },
+          {
+            "champion": "Evelynn",
+            "delta": 0.2269
+          },
+          {
+            "champion": "Gnar",
+            "delta": 0.2077
+          },
+          {
+            "champion": "Fiddlesticks",
+            "delta": 0.1829
+          }
+        ],
+        "biggest_losers": [
+          {
+            "champion": "Karthus",
+            "delta": -0.242
+          },
+          {
+            "champion": "Xin Zhao",
+            "delta": -0.2395
+          },
+          {
+            "champion": "Singed",
+            "delta": -0.2357
+          },
+          {
+            "champion": "Zilean",
+            "delta": -0.1916
+          },
+          {
+            "champion": "Lucian",
+            "delta": -0.1859
+          }
+        ]
+      },
+      {
+        "boundary": "5.23.0.239 -> 5.23.0.250",
+        "biggest_gainers": [
+          {
+            "champion": "Zyra",
+            "delta": 0.2447
+          },
+          {
+            "champion": "Corki",
+            "delta": 0.223
+          },
+          {
+            "champion": "Malzahar",
+            "delta": 0.2187
+          },
+          {
+            "champion": "Poppy",
+            "delta": 0.1935
+          },
+          {
+            "champion": "Akali",
+            "delta": 0.1814
+          }
+        ],
+        "biggest_losers": [
+          {
+            "champion": "Mordekaiser",
+            "delta": -0.2966
+          },
+          {
+            "champion": "Urgot",
+            "delta": -0.2759
+          },
+          {
+            "champion": "Twitch",
+            "delta": -0.2112
+          },
+          {
+            "champion": "Karma",
+            "delta": -0.1695
+          },
+          {
+            "champion": "Nunu",
+            "delta": -0.1616
+          }
+        ]
+      },
+      {
+        "boundary": "5.23.0.250 -> 5.24.0.254",
+        "biggest_gainers": [
+          {
+            "champion": "Cassiopeia",
+            "delta": 0.2608
+          },
+          {
+            "champion": "Sivir",
+            "delta": 0.2099
+          },
+          {
+            "champion": "Riven",
+            "delta": 0.2023
+          },
+          {
+            "champion": "Katarina",
+            "delta": 0.1667
+          },
+          {
+            "champion": "Varus",
+            "delta": 0.1522
+          }
+        ],
+        "biggest_losers": [
+          {
+            "champion": "Hecarim",
+            "delta": -0.2549
+          },
+          {
+            "champion": "Poppy",
+            "delta": -0.2452
+          },
+          {
+            "champion": "Galio",
+            "delta": -0.2406
+          },
+          {
+            "champion": "Rek'Sai",
+            "delta": -0.1917
+          },
+          {
+            "champion": "Shyvana",
+            "delta": -0.1841
+          }
+        ]
+      },
+      {
+        "boundary": "5.24.0.254 -> 5.24.0.256",
+        "biggest_gainers": [
+          {
+            "champion": "Poppy",
+            "delta": 0.2196
+          },
+          {
+            "champion": "Galio",
+            "delta": 0.1563
+          },
+          {
+            "champion": "Vi",
+            "delta": 0.1466
+          },
+          {
+            "champion": "Jayce",
+            "delta": 0.1393
+          },
+          {
+            "champion": "Talon",
+            "delta": 0.1354
+          }
+        ],
+        "biggest_losers": [
+          {
+            "champion": "Cassiopeia",
+            "delta": -0.2127
+          },
+          {
+            "champion": "Mordekaiser",
+            "delta": -0.2013
+          },
+          {
+            "champion": "Viktor",
+            "delta": -0.1676
+          },
+          {
+            "champion": "Katarina",
+            "delta": -0.14
+          },
+          {
+            "champion": "Yorick",
+            "delta": -0.1399
+          }
+        ]
+      },
+      {
+        "boundary": "5.24.0.256 -> 5.24.0.259",
+        "biggest_gainers": [
+          {
+            "champion": "Mordekaiser",
+            "delta": 0.2847
+          },
+          {
+            "champion": "Karthus",
+            "delta": 0.2745
+          },
+          {
+            "champion": "Veigar",
+            "delta": 0.1803
+          },
+          {
+            "champion": "Vi",
+            "delta": 0.1565
+          },
+          {
+            "champion": "Kog'Maw",
+            "delta": 0.1165
+          }
+        ],
+        "biggest_losers": [
+          {
+            "champion": "Nocturne",
+            "delta": -0.1845
+          },
+          {
+            "champion": "Zac",
+            "delta": -0.1593
+          },
+          {
+            "champion": "Fiddlesticks",
+            "delta": -0.1547
+          },
+          {
+            "champion": "Gragas",
+            "delta": -0.1096
+          },
+          {
+            "champion": "Aatrox",
+            "delta": -0.1008
+          }
+        ]
+      }
+    ],
+    "counter_stability": [
+      {
+        "from": "5.22.0.297",
+        "to": "5.22.0.301",
+        "cyclic_residual_pearson": -0.0022
+      },
+      {
+        "from": "5.22.0.301",
+        "to": "5.23.0.239",
+        "cyclic_residual_pearson": -0.0093
+      },
+      {
+        "from": "5.23.0.239",
+        "to": "5.23.0.250",
+        "cyclic_residual_pearson": -0.0064
+      },
+      {
+        "from": "5.23.0.250",
+        "to": "5.24.0.254",
+        "cyclic_residual_pearson": -0.0091
+      },
+      {
+        "from": "5.24.0.254",
+        "to": "5.24.0.256",
+        "cyclic_residual_pearson": -0.0091
+      },
+      {
+        "from": "5.24.0.256",
+        "to": "5.24.0.259",
+        "cyclic_residual_pearson": 0.015
+      }
+    ]
+  },
+  "corrected_cyclic_share_overall_ci": {
+    "point_estimate": 0.0511,
+    "bootstrap_reps": 12,
+    "ci95": [
+      0.0357,
+      0.0771
+    ],
+    "replicates": [
+      0.0538,
+      0.0467,
+      0.038,
+      0.0348,
+      0.0628,
+      0.0437,
+      0.0561,
+      0.0825,
+      0.0529,
+      0.0505,
+      0.0527,
+      0.0456
+    ]
+  }
+}
