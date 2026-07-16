@@ -111,12 +111,20 @@ python benchmarks/draft_baseline.py --parquet /tmp/parquet
 1. **R1 推进（现为核心主线）**：把 R2 分析写成 R1 的 Uses 章节 + T3 基准；
    措辞收窄（DATACARD 已改）；补 ToS 专节；Riot Developer Policies 复核 →
    许可证（CC BY 4.0 + Riot 免责句）→ Zenodo 私有草稿。
-2. **游戏设计论文（独立主线，方向已定）**：#1+#2 合并——"技能表达 + ban 作为感知
-   失衡信号"。方案见 `docs/game-design-directions/PROPOSAL.md`；**P0 原型已跑出强验证
-   结果**（`analysis/design_skill_and_bans.py` + output/design_p0.*）：奖励精通的英雄
-   =猪女/锴/泰隆，anti-fun=亚索/伊莉丝（教科书级验证）。下一步 P1：用玩家跨段位对照
-   做混杂校正 + 多性能指标；P2：官方难度标签外部验证 + ban 位置模型 + 显著性。
-   目标 venue FDG/IEEE ToG，与 R1 共享 Zenodo DOI。
+2. **游戏设计论文（独立主线，实证 P0–P2.5 已完成）**：#1+#2 合并——"技能表达 + ban
+   感知失衡"。方案见 `docs/game-design-directions/PROPOSAL.md`。脚本：
+   `analysis/design_skill_and_bans.py`(P0) / `design_skill_p1.py`(P1) /
+   `design_p2.py`(P2) / `design_p2_5.py`(P2.5)，output/design_p*.md。
+   **定位已收敛为测量方法论 + 设计分离发现**：
+   (1) "技能表达"三种操作化（win-vs-tier / 对线执行放大 / Riot 难度）两两不相关，
+       win-vs-tier 被匹配压缩+选择混杂（弱测度）；
+   (2) **技能回报 ≠ 机制难度**——可分离设计轴，角色分层后仍成立（核心发现）；
+   (3) 感知：anti-fun ≠ overpowered（亚索/伊莉丝/贾克斯/蒙多稳居 anti-fun），
+       奖励精通者在高分段弱显著更被 ban（RQ3，Spearman 0.18, CI[0.001,0.34]）。
+   分位置技能放大排名 role-fair 可信（mid: Lissandra/Viktor/Azir/LeBlanc…）。
+   **下一步 P3 写作**；目标 FDG/IEEE ToG，与 R1 共享 Zenodo DOI。
+   Riot 难度标签已获取：`analysis/riot_difficulty_ddragon.csv`（ddragon 1–10，
+   21 个 2016 后重做英雄标为低置信）。
 3. **M2 清洗决策定稿**：极短局（<10min）与 6.1/5.21 小切片处理写进数据卡。
 4. **M4 扩展**：T2 早期胜率基准（timeline 特征）；FM/Transformer 基线对齐 DraftRec。
 5. **R7 探索（升为独立发表首选）**：挂机/送人头弱监督检测；13,272 名 ≥20 场玩家已确认可行。

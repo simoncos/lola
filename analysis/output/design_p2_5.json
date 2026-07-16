@@ -1,0 +1,201 @@
+{
+  "champions_scored": 124,
+  "validation_vs_riot_difficulty": {
+    "overall": {
+      "spearman": 0.038,
+      "n": 124
+    },
+    "overall_excl_reworked": {
+      "spearman": 0.068,
+      "n": 107
+    },
+    "per_position": {
+      "top": {
+        "spearman": -0.018,
+        "n": 31
+      },
+      "mid": {
+        "spearman": 0.024,
+        "n": 31
+      },
+      "adc": {
+        "spearman": 0.006,
+        "n": 17
+      },
+      "jungle": {
+        "spearman": -0.025,
+        "n": 27
+      },
+      "support": {
+        "spearman": -0.229,
+        "n": 18
+      }
+    },
+    "position_controlled_partial": {
+      "spearman": -0.027,
+      "n": 124
+    }
+  },
+  "top_amplifiers_by_position": {
+    "top": [
+      {
+        "champion": "Jax",
+        "amp_z": 0.6082,
+        "difficulty": 5
+      },
+      {
+        "champion": "Cho'Gath",
+        "amp_z": 0.5686,
+        "difficulty": 5
+      },
+      {
+        "champion": "Dr. Mundo",
+        "amp_z": 0.5251,
+        "difficulty": 5
+      },
+      {
+        "champion": "Maokai",
+        "amp_z": 0.5241,
+        "difficulty": 3
+      },
+      {
+        "champion": "Rumble",
+        "amp_z": 0.4335,
+        "difficulty": 10
+      },
+      {
+        "champion": "Tryndamere",
+        "amp_z": 0.4133,
+        "difficulty": 5
+      }
+    ],
+    "mid": [
+      {
+        "champion": "Lissandra",
+        "amp_z": 0.7933,
+        "difficulty": 6
+      },
+      {
+        "champion": "Viktor",
+        "amp_z": 0.6899,
+        "difficulty": 9
+      },
+      {
+        "champion": "Xerath",
+        "amp_z": 0.5702,
+        "difficulty": 8
+      },
+      {
+        "champion": "Kassadin",
+        "amp_z": 0.5547,
+        "difficulty": 8
+      },
+      {
+        "champion": "Azir",
+        "amp_z": 0.5525,
+        "difficulty": 9
+      },
+      {
+        "champion": "LeBlanc",
+        "amp_z": 0.5235,
+        "difficulty": 9
+      }
+    ],
+    "adc": [
+      {
+        "champion": "Sivir",
+        "amp_z": 0.6407,
+        "difficulty": 4
+      },
+      {
+        "champion": "Kog'Maw",
+        "amp_z": 0.4176,
+        "difficulty": 6
+      },
+      {
+        "champion": "Quinn",
+        "amp_z": 0.4147,
+        "difficulty": 5
+      },
+      {
+        "champion": "Corki",
+        "amp_z": 0.3736,
+        "difficulty": 6
+      },
+      {
+        "champion": "Kalista",
+        "amp_z": 0.3525,
+        "difficulty": 7
+      },
+      {
+        "champion": "Caitlyn",
+        "amp_z": 0.3482,
+        "difficulty": 6
+      }
+    ],
+    "jungle": [
+      {
+        "champion": "Rek'Sai",
+        "amp_z": 0.7979,
+        "difficulty": 3
+      },
+      {
+        "champion": "Nunu",
+        "amp_z": 0.6631,
+        "difficulty": 4
+      },
+      {
+        "champion": "Hecarim",
+        "amp_z": 0.6177,
+        "difficulty": 6
+      },
+      {
+        "champion": "Nidalee",
+        "amp_z": 0.6099,
+        "difficulty": 8
+      },
+      {
+        "champion": "Elise",
+        "amp_z": 0.6028,
+        "difficulty": 9
+      },
+      {
+        "champion": "Nocturne",
+        "amp_z": 0.5486,
+        "difficulty": 4
+      }
+    ],
+    "support": [
+      {
+        "champion": "Taric",
+        "amp_z": 0.4285,
+        "difficulty": 3
+      },
+      {
+        "champion": "Lulu",
+        "amp_z": 0.4002,
+        "difficulty": 5
+      },
+      {
+        "champion": "Zilean",
+        "amp_z": 0.301,
+        "difficulty": 6
+      },
+      {
+        "champion": "Tahm Kench",
+        "amp_z": 0.2943,
+        "difficulty": 5
+      },
+      {
+        "champion": "Morgana",
+        "amp_z": 0.2735,
+        "difficulty": 1
+      },
+      {
+        "champion": "Braum",
+        "amp_z": 0.2729,
+        "difficulty": 3
+      }
+    ]
+  }
+}
