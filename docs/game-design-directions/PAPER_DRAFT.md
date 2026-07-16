@@ -28,9 +28,10 @@ while some complex champions do not reward it in resources. Second, we treat
 1.33M bans as a revealed signal of *perceived* imbalance and find it separates
 from *actual* power: several champions are banned far more than their win rate
 warrants ("anti-fun": Yasuo, Illaoi, Jax, Dr. Mundo, stable across all tiers),
-while strong champions go unbanned ("sleepers": Janna, Amumu, Malzahar).
-Champions that reward mastery are weakly but significantly more likely to be
-banned as if unfair by high-tier players (Spearman 0.18, 95% CI [0.00, 0.34]).
+while strong champions go unbanned ("sleepers": Janna, Amumu, Malzahar). A
+positive association between mastery reward and being banned-as-unfair at high
+tier appears with one skill measure (Spearman 0.18) but does not survive the
+role-stratified measure; we report it as exploratory.
 We argue that skill *reward*, mechanical *difficulty*, and perceived *fairness*
 are three separable design axes that popular metrics conflate, and we release
 the code and (anonymized) data.
@@ -209,10 +210,15 @@ at high tier; Kindred becomes anti-fun *only* at high tier.
 
 **RQ3 (do mastery-rewarding champions read as unfair?).** Correlating the P1
 skill amplification with the high-tier perceived-imbalance gap yields Spearman
-0.18 (95% CI [0.00, 0.34], n=123; Fig. 4): a weak but marginally significant
-positive association. Champions that reward mastery are somewhat more likely to
-be banned as if unfair by high-tier players — Kindred, anti-fun only at high
-tier, is the illustration. We report this as a suggestive, not strong, effect.
+0.18 (95% CI [0.00, 0.34], n=123; Fig. 4). However, the association is **not
+robust**: with the role-stratified amplification (our more trustworthy measure)
+it drops to 0.14 with a CI that includes zero ([−0.04, 0.32], n=124), and
+within-position correlations are heterogeneous (top +0.32, adc +0.37, mid
++0.08, jungle −0.14, support −0.23; small per-position n). We therefore report
+RQ3 as exploratory only: the pattern is visible in anecdotes (Kindred turns
+anti-fun only at high tier) and in lane roles, but does not survive as a
+general effect. Establishing or refuting it likely needs positional ban data
+from a later era.
 
 ## 7. Discussion
 
