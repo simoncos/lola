@@ -18,3 +18,7 @@ Per-tier-bucket ban-vs-win gaps (>= 200 picks/cell), champion-bootstrapped.
 
 - P1 lane-amplification vs high-tier perceived gap: Spearman **0.1822** (95% CI [0.0011, 0.3408], n=123)
 - Positive => champions that reward mastery are banned as if unfair by high-tier players.
+
+## External validation vs Riot difficulty
+
+- P1 amplification vs Riot difficulty: Spearman **0.0882** (95% CI [-0.108, 0.267], n=123)

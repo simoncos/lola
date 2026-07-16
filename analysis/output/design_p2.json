@@ -223,5 +223,14 @@
       "n": 123
     }
   },
-  "external_validation": {}
+  "external_validation": {
+    "p1_amp_vs_riot_difficulty": {
+      "spearman": 0.0882,
+      "ci95": [
+        -0.108,
+        0.267
+      ],
+      "n": 123
+    }
+  }
 }
