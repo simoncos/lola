@@ -1,0 +1,110 @@
+[
+  {
+    "setting": "cross-patch",
+    "sizes": {
+      "train": 112921,
+      "val": 16235,
+      "test": 93460
+    },
+    "majority": {
+      "accuracy": 0.5064,
+      "auc": 0.5,
+      "log_loss": null,
+      "ece": null
+    },
+    "logistic_regression": {
+      "accuracy": 0.7088,
+      "auc": 0.782,
+      "log_loss": 0.5597,
+      "ece": 0.0034
+    },
+    "gradient_boosting": {
+      "accuracy": 0.7071,
+      "auc": 0.7811,
+      "log_loss": 0.5608,
+      "ece": 0.0044
+    },
+    "horizon_min": 10
+  },
+  {
+    "setting": "same-patch",
+    "sizes": {
+      "train": 177751,
+      "val": 22556,
+      "test": 22309
+    },
+    "majority": {
+      "accuracy": 0.5036,
+      "auc": 0.5,
+      "log_loss": null,
+      "ece": null
+    },
+    "logistic_regression": {
+      "accuracy": 0.7133,
+      "auc": 0.7836,
+      "log_loss": 0.5587,
+      "ece": 0.0067
+    },
+    "gradient_boosting": {
+      "accuracy": 0.7123,
+      "auc": 0.7832,
+      "log_loss": 0.5596,
+      "ece": 0.0089
+    },
+    "horizon_min": 10
+  },
+  {
+    "setting": "cross-patch",
+    "sizes": {
+      "train": 110600,
+      "val": 15947,
+      "test": 91854
+    },
+    "majority": {
+      "accuracy": 0.5055,
+      "auc": 0.5,
+      "log_loss": null,
+      "ece": null
+    },
+    "logistic_regression": {
+      "accuracy": 0.8029,
+      "auc": 0.8899,
+      "log_loss": 0.415,
+      "ece": 0.0062
+    },
+    "gradient_boosting": {
+      "accuracy": 0.8023,
+      "auc": 0.8898,
+      "log_loss": 0.4148,
+      "ece": 0.0041
+    },
+    "horizon_min": 20
+  },
+  {
+    "setting": "same-patch",
+    "sizes": {
+      "train": 174368,
+      "val": 22160,
+      "test": 21873
+    },
+    "majority": {
+      "accuracy": 0.5028,
+      "auc": 0.5,
+      "log_loss": null,
+      "ece": null
+    },
+    "logistic_regression": {
+      "accuracy": 0.8028,
+      "auc": 0.8901,
+      "log_loss": 0.4146,
+      "ece": 0.0089
+    },
+    "gradient_boosting": {
+      "accuracy": 0.8026,
+      "auc": 0.8903,
+      "log_loss": 0.4138,
+      "ece": 0.0074
+    },
+    "horizon_min": 20
+  }
+]

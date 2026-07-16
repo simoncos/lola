@@ -160,9 +160,16 @@ literature's ~55% draft-only ceiling; we also report AUC, log-loss, and expected
 calibration error (rarely reported in this literature), and observe that
 cross-patch drift roughly triples calibration error.
 
-**T2 — Early-game win prediction.** From the first 10 (and 20) minutes of
-timeline deltas plus kill aggregates, predict the winner. (Baselines: logistic
-regression / gradient boosting; reference target ~70–75% at 10 minutes.)
+**T2 — Early-game win prediction.** From team-differential timeline features
+(gold/xp/cs/damage-taken deltas, lane differentials) plus kill difference and
+first blood within the horizon, predict the winner. Logistic regression reaches
+**70.9% / 71.3%** (cross-patch / same-patch) at 10 minutes and **80.3% / 80.3%**
+at 20 minutes (gradient boosting within 0.2pp), matching the literature's
+70–75% band for 10-minute prediction. Notably, and in contrast to T1, the
+cross-patch penalty nearly vanishes (≤0.5pp accuracy, no calibration
+degradation): balance patches change *which compositions* are strong, but
+"being ahead at minute 10" means the same thing across patches — execution-state
+features transfer where draft features do not.
 
 **T3 — Matchup-structure decomposition.** From per-(patch, tier) champion win
 matrices, decompose pairwise win log-odds into a transitive strength rating and
@@ -212,5 +219,6 @@ python -m lola_dataset validate --db lola.db --out reports/validate.json
 python -m lola_dataset stats    --db lola.db --out reports/stats.json
 python -m lola_dataset export    --db lola.db --out parquet/ --salt <secret>
 python benchmarks/draft_baseline.py --parquet parquet/       # T1
+python benchmarks/early_game_baseline.py --parquet parquet/  # T2
 python analysis/matchup_structure.py --parquet parquet/      # T3
 ```
