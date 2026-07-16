@@ -108,9 +108,10 @@ python benchmarks/draft_baseline.py --parquet /tmp/parquet
 
 0. **✅ R2 决策已定：路径 A**（并入 R1）。独立发表重心 = 游戏设计方向（探索中，
    见 `docs/game-design-directions/`）。R7 暂缓（非用户兴趣点，作空白储备保留）。
-1. **R1 推进（现为核心主线）**：把 R2 分析写成 R1 的 Uses 章节 + T3 基准；
-   措辞收窄（DATACARD 已改）；补 ToS 专节；Riot Developer Policies 复核 →
-   许可证（CC BY 4.0 + Riot 免责句）→ Zenodo 私有草稿。
+1. **R1 推进（现为核心主线）**：**正文初稿已完成**
+   （`docs/r1-dataset-paper/PAPER_DRAFT.md`，v0，含数据/审计/匿名化/许可/T1–T3 基准）。
+   R2 分解已作为 T3 基准写入。待办：Riot Developer Policies 复核 → Zenodo 私有草稿 →
+   HuggingFace 上传；正式排版 + 数据卡 TODO 清零（维护者/DOI）。
 2. **游戏设计论文（独立主线，实证 P0–P2.5 已完成）**：#1+#2 合并——"技能表达 + ban
    感知失衡"。方案见 `docs/game-design-directions/PROPOSAL.md`。脚本：
    `analysis/design_skill_and_bans.py`(P0) / `design_skill_p1.py`(P1) /
@@ -122,7 +123,9 @@ python benchmarks/draft_baseline.py --parquet /tmp/parquet
    (3) 感知：anti-fun ≠ overpowered（亚索/伊莉丝/贾克斯/蒙多稳居 anti-fun），
        奖励精通者在高分段弱显著更被 ban（RQ3，Spearman 0.18, CI[0.001,0.34]）。
    分位置技能放大排名 role-fair 可信（mid: Lissandra/Viktor/Azir/LeBlanc…）。
-   **下一步 P3 写作**；目标 FDG/IEEE ToG，与 R1 共享 Zenodo DOI。
+   **正文初稿 + 4 张图已完成**（`docs/game-design-directions/PAPER_DRAFT.md`，
+   `analysis/make_figures.py` → output/figures/）。待办：正式排版、精读引用全文核对、
+   R1 见 DOI 后正式引用。目标 FDG/IEEE ToG。
    Riot 难度标签已获取：`analysis/riot_difficulty_ddragon.csv`（ddragon 1–10，
    21 个 2016 后重做英雄标为低置信）。
 3. **M2 清洗决策定稿**：极短局（<10min）与 6.1/5.21 小切片处理写进数据卡。
