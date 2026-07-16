@@ -130,9 +130,10 @@ share their data."（VALORANT 政策原文；LoL 同向政策见社区镜像。�
 
 ## 六、决策清单（需项目所有者逐项确认）
 
-- [ ] 选定路径：A / B / C（推荐 A）
-- [ ] 若 A：发送申请（附录函稿；渠道：DevRel 工单
-      support-developer.riotgames.com/hc/en-us/requests/new，
+- [x] 选定路径：**A（先问再发）**——2026-07-16 用户确认
+- [ ] 发送申请：正式函稿与工单填写要点见
+      [PERMISSION_REQUEST.md](PERMISSION_REQUEST.md)（**需用户替换占位符后发送**；
+      渠道：DevRel 工单 support-developer.riotgames.com/hc/en-us/requests/new，
       抄送 3rdpartyrequests@riotgames.com）
 - [ ] 许可证从 CC BY 4.0 改为 **CC BY-NC 4.0（仅覆盖整理层/schema/工具）**
       + Riot IP 声明 + 标准免责句（§2.7 措辞照抄）

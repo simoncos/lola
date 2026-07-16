@@ -130,8 +130,10 @@ python analysis/make_figures.py
 1. **发布合规（R1 的闸门）**：✅ 条款复核已完成并归档
    （`docs/r1-dataset-paper/COMPLIANCE_REVIEW.md`）。关键发现：API Terms 含
    **终止即删除条款**（最严峻）+ 再分发限制 + 无研究豁免；但存在 9 年零执法的
-   大规模先例（Kaggle/GPTilt）与 Riot 官方分发先例。**推荐路径 A"先问再发"**
-   （申请函稿已备好，DevRel 工单渠道已查明）——**待用户决策并发送**。
+   大规模先例（Kaggle/GPTilt）与 Riot 官方分发先例。**路径 A"先问再发"已获
+   用户确认（2026-07-16）**；正式申请函 + 工单填写要点 + 发送后跟踪清单在
+   `docs/r1-dataset-paper/PERMISSION_REQUEST.md`——**待用户替换占位符后发送**
+   （4–6 周无回复则回到 COMPLIANCE_REVIEW §5 在 B/C 间决断）。
    许可证已改为 CC BY-NC 4.0（仅整理层）；对外措辞统一"假名化"非"匿名"
    （R1 草稿 §3.4/3.5 已改）。后续：Zenodo 私有草稿 → HuggingFace（需本地/白名单）
 2. **两篇正式排版**：LaTeX + 目标 venue 模板；参考文献格式化并**逐篇核对全文**；
