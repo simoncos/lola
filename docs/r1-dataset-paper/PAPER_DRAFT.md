@@ -126,20 +126,29 @@ peaks at 20–25 minutes, and the most-picked champions (Lucian 70,555; Lee Sin
 is right-skewed (median 2, p90 9, p99 37); 13,272 players have ≥20 games,
 enough for player-sequence studies on that subset.
 
-### 3.4 Anonymization and ethics
+### 3.4 Pseudonymization and ethics
 
 Summoner names are dropped; summoner IDs are replaced by a salted SHA-256 hash
 (salt withheld). The raw API JSON blob (which contained names) is not
-distributed. 2016 identifiers predate Riot's PUUID migration and are no longer
-resolvable, so re-identification risk is low; we disclose this rather than claim
-exemption. The data contains no chat or user-generated content.
+distributed. We describe the result as **pseudonymized and risk-minimized**
+rather than anonymous: under GDPR, hashed identifiers remain personal data
+while re-linking is theoretically possible. In practice linkability is
+unusually low — 2016 identifiers predate Riot's PUUID migration and the source
+records have expired from Riot's own retention — but we disclose the
+categorization, prohibit re-identification attempts in the terms of use, and
+provide a takedown / right-to-be-forgotten contact. The data contains no chat
+or user-generated content.
 
 ### 3.5 Licensing and recollectability
 
-We release our aggregation and schema under CC BY 4.0 while acknowledging the
-underlying game data is Riot's intellectual property, and we include a
+We license only our curation, schema, and tooling (CC BY-NC 4.0) while
+acknowledging that the underlying game data is Riot's intellectual property
+(with Riot's standard non-endorsement disclaimer), and we include a
 provenance-and-terms note (collected under the then-current API terms; preserved
-for non-commercial research; takedown/RTBF contact provided). On
+for non-commercial research; takedown/RTBF contact provided). Prior to public
+release we contacted Riot Developer Relations to request permission for the
+release [status/outcome to be stated here]; a clause-by-clause compliance
+review is maintained in the project repository. On
 recollectability: match-v4 was removed from the API in September 2021 and
 match-v5 retains roughly two years, so 2016 timeline/kill-event data expired
 years before the current API — we substantiate the "cannot be recollected" claim

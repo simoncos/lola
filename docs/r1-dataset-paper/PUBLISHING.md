@@ -31,12 +31,20 @@
 
 ## 发布前置条件（硬性）
 
-- [ ] 匿名化导出完成并抽查（`python -m lola_dataset export`；玩家名/原始 JSON 已剔除）
-- [ ] 许可证定稿：建议 **CC BY-NC 4.0** + Riot 标准免责声明
+> **2026-07-16 更新**：条款逐条复核已完成，见
+> [COMPLIANCE_REVIEW.md](COMPLIANCE_REVIEW.md)——含最严峻发现（终止即删除条款）、
+> 三条路径对比（推荐"先问再发"）、决策清单与可直接使用的申请函稿。
+> 措辞修正：对外统一用"假名化（pseudonymized）+ 风险最小化"，不称"匿名"。
+
+- [x] 假名化导出完成并抽查（`python -m lola_dataset export`；玩家名/原始 JSON 已剔除）
+- [ ] 许可证定稿：**CC BY-NC 4.0（仅覆盖整理层/schema/工具）** + Riot IP 声明
+      + Riot 标准免责声明
       （"LoLA-2016 isn't endorsed by Riot Games and doesn't reflect the views or
       opinions of Riot Games or anyone officially involved in producing or
       managing League of Legends. …"）
-- [ ] Riot Developer Policies 复核记录归档
+- [x] Riot Developer Policies 复核记录归档（COMPLIANCE_REVIEW.md）
+- [ ] **向 Riot DevRel 提交许可申请**（路径 A；函稿在 COMPLIANCE_REVIEW 附录，
+      需用户发送）；等待期 Zenodo 仅建私有草稿
 - [ ] 数据卡 TODO 全部清零（依赖 M1/M2 的真实数据报告）
 - [ ] 发布不可逆，以上未全勾选前只建 Zenodo **私有草稿**（draft 状态可反复修改）
 

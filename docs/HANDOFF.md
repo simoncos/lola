@@ -127,9 +127,13 @@ python analysis/make_figures.py
 
 ## 五、走向发表的待办（按优先级）
 
-1. **发布合规（R1 的闸门，需用户/本地）**：Riot Developer Policies 复核并归档 →
-   许可证定稿（建议：聚合/schema CC BY 4.0 + Riot IP 声明 + 免责句）→
-   Zenodo **私有草稿**上传（拿 DOI 但先不公开）→ HuggingFace（需本地或加白名单）
+1. **发布合规（R1 的闸门）**：✅ 条款复核已完成并归档
+   （`docs/r1-dataset-paper/COMPLIANCE_REVIEW.md`）。关键发现：API Terms 含
+   **终止即删除条款**（最严峻）+ 再分发限制 + 无研究豁免；但存在 9 年零执法的
+   大规模先例（Kaggle/GPTilt）与 Riot 官方分发先例。**推荐路径 A"先问再发"**
+   （申请函稿已备好，DevRel 工单渠道已查明）——**待用户决策并发送**。
+   许可证已改为 CC BY-NC 4.0（仅整理层）；对外措辞统一"假名化"非"匿名"
+   （R1 草稿 §3.4/3.5 已改）。后续：Zenodo 私有草稿 → HuggingFace（需本地/白名单）
 2. **两篇正式排版**：LaTeX + 目标 venue 模板；参考文献格式化并**逐篇核对全文**；
    R1 数据卡 TODO 清零（维护者、DOI 链接）
 3. **投稿窗口**：R1 → Scientific Data（滚动）或 NeurIPS D&B 2027 / AIIDE 2027
