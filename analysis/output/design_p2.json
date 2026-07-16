@@ -1,0 +1,227 @@
+{
+  "min_picks_per_cell": 200,
+  "perceived_gap_tier_shift_spearman": {
+    "low_vs_mid": 0.859,
+    "mid_vs_high": 0.7494,
+    "low_vs_high": 0.5849
+  },
+  "most_anti_fun_by_tier": {
+    "low": [
+      {
+        "champion": "Jax",
+        "gap": 4.727
+      },
+      {
+        "champion": "Darius",
+        "gap": 4.617
+      },
+      {
+        "champion": "Illaoi",
+        "gap": 4.214
+      },
+      {
+        "champion": "Dr. Mundo",
+        "gap": 3.517
+      },
+      {
+        "champion": "Yasuo",
+        "gap": 3.456
+      },
+      {
+        "champion": "Ryze",
+        "gap": 2.757
+      },
+      {
+        "champion": "Nidalee",
+        "gap": 2.42
+      },
+      {
+        "champion": "Garen",
+        "gap": 2.157
+      }
+    ],
+    "mid": [
+      {
+        "champion": "Jax",
+        "gap": 4.765
+      },
+      {
+        "champion": "Tahm Kench",
+        "gap": 4.27
+      },
+      {
+        "champion": "Illaoi",
+        "gap": 4.056
+      },
+      {
+        "champion": "Soraka",
+        "gap": 4.054
+      },
+      {
+        "champion": "Dr. Mundo",
+        "gap": 3.445
+      },
+      {
+        "champion": "Yasuo",
+        "gap": 2.912
+      },
+      {
+        "champion": "Kha'Zix",
+        "gap": 2.043
+      },
+      {
+        "champion": "Gragas",
+        "gap": 1.8
+      }
+    ],
+    "high": [
+      {
+        "champion": "Tahm Kench",
+        "gap": 5.505
+      },
+      {
+        "champion": "Soraka",
+        "gap": 4.511
+      },
+      {
+        "champion": "Illaoi",
+        "gap": 4.326
+      },
+      {
+        "champion": "Jax",
+        "gap": 3.822
+      },
+      {
+        "champion": "Dr. Mundo",
+        "gap": 3.816
+      },
+      {
+        "champion": "Yasuo",
+        "gap": 2.858
+      },
+      {
+        "champion": "Kindred",
+        "gap": 2.614
+      },
+      {
+        "champion": "Rumble",
+        "gap": 1.754
+      }
+    ]
+  },
+  "biggest_sleepers_by_tier": {
+    "low": [
+      {
+        "champion": "Amumu",
+        "gap": -2.326
+      },
+      {
+        "champion": "Zyra",
+        "gap": -2.014
+      },
+      {
+        "champion": "Malzahar",
+        "gap": -1.901
+      },
+      {
+        "champion": "Taric",
+        "gap": -1.844
+      },
+      {
+        "champion": "Volibear",
+        "gap": -1.744
+      },
+      {
+        "champion": "Miss Fortune",
+        "gap": -1.665
+      },
+      {
+        "champion": "Sona",
+        "gap": -1.646
+      },
+      {
+        "champion": "Vel'Koz",
+        "gap": -1.619
+      }
+    ],
+    "mid": [
+      {
+        "champion": "Janna",
+        "gap": -2.223
+      },
+      {
+        "champion": "Sona",
+        "gap": -1.9
+      },
+      {
+        "champion": "Talon",
+        "gap": -1.844
+      },
+      {
+        "champion": "Rammus",
+        "gap": -1.831
+      },
+      {
+        "champion": "Nami",
+        "gap": -1.778
+      },
+      {
+        "champion": "Udyr",
+        "gap": -1.775
+      },
+      {
+        "champion": "Skarner",
+        "gap": -1.77
+      },
+      {
+        "champion": "Miss Fortune",
+        "gap": -1.707
+      }
+    ],
+    "high": [
+      {
+        "champion": "Janna",
+        "gap": -2.3
+      },
+      {
+        "champion": "Talon",
+        "gap": -2.126
+      },
+      {
+        "champion": "Malzahar",
+        "gap": -1.924
+      },
+      {
+        "champion": "Sion",
+        "gap": -1.851
+      },
+      {
+        "champion": "Volibear",
+        "gap": -1.79
+      },
+      {
+        "champion": "Miss Fortune",
+        "gap": -1.627
+      },
+      {
+        "champion": "Draven",
+        "gap": -1.602
+      },
+      {
+        "champion": "Ahri",
+        "gap": -1.591
+      }
+    ]
+  },
+  "RQ3_amplification_vs_high_tier_anti_fun": {
+    "amp_vs_high_tier_perceived_gap": {
+      "spearman": 0.1822,
+      "ci95": [
+        0.0011,
+        0.3408
+      ],
+      "n": 123
+    }
+  },
+  "external_validation": {}
+}
