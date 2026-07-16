@@ -111,9 +111,12 @@ python benchmarks/draft_baseline.py --parquet /tmp/parquet
 1. **R1 推进（现为核心主线）**：把 R2 分析写成 R1 的 Uses 章节 + T3 基准；
    措辞收窄（DATACARD 已改）；补 ToS 专节；Riot Developer Policies 复核 →
    许可证（CC BY 4.0 + Riot 免责句）→ Zenodo 私有草稿。
-2. **游戏设计方向选题**：待定向检索（`game-design-directions/`）结果，与用户敲定
-   一个方向后展开；候选含英雄设计空间/冗余、按段位的技能表达（skill ceiling）、
-   comeback/snowball 机制、ban 作为设计偏好信号。
+2. **游戏设计论文（独立主线，方向已定）**：#1+#2 合并——"技能表达 + ban 作为感知
+   失衡信号"。方案见 `docs/game-design-directions/PROPOSAL.md`；**P0 原型已跑出强验证
+   结果**（`analysis/design_skill_and_bans.py` + output/design_p0.*）：奖励精通的英雄
+   =猪女/锴/泰隆，anti-fun=亚索/伊莉丝（教科书级验证）。下一步 P1：用玩家跨段位对照
+   做混杂校正 + 多性能指标；P2：官方难度标签外部验证 + ban 位置模型 + 显著性。
+   目标 venue FDG/IEEE ToG，与 R1 共享 Zenodo DOI。
 3. **M2 清洗决策定稿**：极短局（<10min）与 6.1/5.21 小切片处理写进数据卡。
 4. **M4 扩展**：T2 早期胜率基准（timeline 特征）；FM/Transformer 基线对齐 DraftRec。
 5. **R7 探索（升为独立发表首选）**：挂机/送人头弱监督检测；13,272 名 ≥20 场玩家已确认可行。

@@ -1,0 +1,245 @@
+{
+  "champions_scored_skill": 125,
+  "skill_reward_top10": [
+    {
+      "champion": "Nidalee",
+      "skill_reward_slope": 0.01948,
+      "wr_low": 0.4215,
+      "wr_high": 0.4864
+    },
+    {
+      "champion": "Nunu",
+      "skill_reward_slope": 0.0162,
+      "wr_low": 0.4811,
+      "wr_high": 0.5363
+    },
+    {
+      "champion": "Kindred",
+      "skill_reward_slope": 0.01601,
+      "wr_low": 0.4537,
+      "wr_high": 0.5108
+    },
+    {
+      "champion": "Lulu",
+      "skill_reward_slope": 0.0144,
+      "wr_low": 0.4698,
+      "wr_high": 0.5174
+    },
+    {
+      "champion": "Talon",
+      "skill_reward_slope": 0.01233,
+      "wr_low": 0.4991,
+      "wr_high": 0.5385
+    },
+    {
+      "champion": "Rek'Sai",
+      "skill_reward_slope": 0.01201,
+      "wr_low": 0.4729,
+      "wr_high": 0.5145
+    },
+    {
+      "champion": "Ryze",
+      "skill_reward_slope": 0.01141,
+      "wr_low": 0.4437,
+      "wr_high": 0.4825
+    },
+    {
+      "champion": "Rengar",
+      "skill_reward_slope": 0.01061,
+      "wr_low": 0.4855,
+      "wr_high": 0.5209
+    },
+    {
+      "champion": "Varus",
+      "skill_reward_slope": 0.01041,
+      "wr_low": 0.4886,
+      "wr_high": 0.5207
+    },
+    {
+      "champion": "Maokai",
+      "skill_reward_slope": 0.01039,
+      "wr_low": 0.455,
+      "wr_high": 0.4858
+    }
+  ],
+  "skill_reward_bottom10": [
+    {
+      "champion": "Nasus",
+      "skill_reward_slope": -0.00952,
+      "wr_low": 0.5294,
+      "wr_high": 0.4949
+    },
+    {
+      "champion": "Tahm Kench",
+      "skill_reward_slope": -0.00961,
+      "wr_low": 0.5019,
+      "wr_high": 0.4719
+    },
+    {
+      "champion": "Jax",
+      "skill_reward_slope": -0.01012,
+      "wr_low": 0.5119,
+      "wr_high": 0.4782
+    },
+    {
+      "champion": "Brand",
+      "skill_reward_slope": -0.01021,
+      "wr_low": 0.5584,
+      "wr_high": 0.5217
+    },
+    {
+      "champion": "Ekko",
+      "skill_reward_slope": -0.0112,
+      "wr_low": 0.4911,
+      "wr_high": 0.4548
+    },
+    {
+      "champion": "Nocturne",
+      "skill_reward_slope": -0.01226,
+      "wr_low": 0.5277,
+      "wr_high": 0.4815
+    },
+    {
+      "champion": "Warwick",
+      "skill_reward_slope": -0.0136,
+      "wr_low": 0.5199,
+      "wr_high": 0.4465
+    },
+    {
+      "champion": "Amumu",
+      "skill_reward_slope": -0.01719,
+      "wr_low": 0.5502,
+      "wr_high": 0.4899
+    },
+    {
+      "champion": "Illaoi",
+      "skill_reward_slope": -0.0177,
+      "wr_low": 0.47,
+      "wr_high": 0.415
+    },
+    {
+      "champion": "Zyra",
+      "skill_reward_slope": -0.0191,
+      "wr_low": 0.5483,
+      "wr_high": 0.489
+    }
+  ],
+  "quadrant_counts": {
+    "fair": 58,
+    "sleeper": 44,
+    "overpowered": 18,
+    "anti-fun": 8
+  },
+  "most_anti_fun": [
+    {
+      "champion": "Illaoi",
+      "ban_rate": 0.3316,
+      "win_rate": 0.4552,
+      "perceived_minus_actual": 4.2263
+    },
+    {
+      "champion": "Tahm Kench",
+      "ban_rate": 0.4941,
+      "win_rate": 0.4939,
+      "perceived_minus_actual": 4.0418
+    },
+    {
+      "champion": "Yasuo",
+      "ban_rate": 0.3128,
+      "win_rate": 0.4761,
+      "perceived_minus_actual": 3.19
+    },
+    {
+      "champion": "Darius",
+      "ban_rate": 0.233,
+      "win_rate": 0.485,
+      "perceived_minus_actual": 2.1156
+    },
+    {
+      "champion": "Kindred",
+      "ban_rate": 0.1995,
+      "win_rate": 0.4896,
+      "perceived_minus_actual": 1.6311
+    },
+    {
+      "champion": "Poppy",
+      "ban_rate": 0.0615,
+      "win_rate": 0.4693,
+      "perceived_minus_actual": 1.2625
+    },
+    {
+      "champion": "Rengar",
+      "ban_rate": 0.1713,
+      "win_rate": 0.4955,
+      "perceived_minus_actual": 1.136
+    },
+    {
+      "champion": "Vayne",
+      "ban_rate": 0.0684,
+      "win_rate": 0.4956,
+      "perceived_minus_actual": 0.2264
+    }
+  ],
+  "biggest_sleepers": [
+    {
+      "champion": "Vel'Koz",
+      "ban_rate": 0.0009,
+      "win_rate": 0.5248,
+      "perceived_minus_actual": -1.5857
+    },
+    {
+      "champion": "Nami",
+      "ban_rate": 0.0005,
+      "win_rate": 0.5252,
+      "perceived_minus_actual": -1.6051
+    },
+    {
+      "champion": "Udyr",
+      "ban_rate": 0.007,
+      "win_rate": 0.5276,
+      "perceived_minus_actual": -1.6498
+    },
+    {
+      "champion": "Trundle",
+      "ban_rate": 0.044,
+      "win_rate": 0.5355,
+      "perceived_minus_actual": -1.6502
+    },
+    {
+      "champion": "Talon",
+      "ban_rate": 0.0072,
+      "win_rate": 0.5291,
+      "perceived_minus_actual": -1.7095
+    },
+    {
+      "champion": "Sona",
+      "ban_rate": 0.0033,
+      "win_rate": 0.5294,
+      "perceived_minus_actual": -1.7566
+    },
+    {
+      "champion": "Volibear",
+      "ban_rate": 0.0111,
+      "win_rate": 0.533,
+      "perceived_minus_actual": -1.8394
+    },
+    {
+      "champion": "Malzahar",
+      "ban_rate": 0.0087,
+      "win_rate": 0.5337,
+      "perceived_minus_actual": -1.8856
+    },
+    {
+      "champion": "Amumu",
+      "ban_rate": 0.006,
+      "win_rate": 0.5345,
+      "perceived_minus_actual": -1.9432
+    },
+    {
+      "champion": "Janna",
+      "ban_rate": 0.0043,
+      "win_rate": 0.5422,
+      "perceived_minus_actual": -2.2794
+    }
+  ]
+}
