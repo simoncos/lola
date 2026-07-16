@@ -78,11 +78,11 @@ LoL-MDC（Applied Sciences 2025）把 8 万 token 的 Riot 比赛 JSON 压缩成
 
 ### ⭐ T1：吃独家数据红利，工作量可控
 
-**R1. 数据集论文：《LoLA-2016: A Preserved League of Legends Match Archive with Timelines and Kill Events》**
+**R1. 数据集论文：《LoLA-2016: A Preserved League of Legends Match Archive with Timelines and Kill Events》** — *✅ 初稿完成，见 `docs/r1-dataset-paper/PAPER_DRAFT.md`*
 - 做法：清洗去重 → 匿名化玩家 ID → 转 Parquet/HuggingFace → 写数据卡 + 3 个基准任务（draft 胜率预测 / 实时胜率 / 英雄克制矩阵）+ 加载工具。
-- 卖点：官方 API 已无法回采 2016 数据，该档案不可再生；模板参照 STARDATA、SC2EGSet、ESTA。
+- 卖点：官方 API 已无法回采 2016 数据的时间线+击杀事件粒度，该组合档案不可再生；模板参照 STARDATA、SC2EGSet、ESTA。
 - 目标：NeurIPS Datasets & Benchmarks / Nature Scientific Data / AIIDE / IEEE DataPort。
-- 风险：需处理玩家隐私（ID 哈希化）与 Riot 数据条款；工程为主。
+- 状态：工具链/审计/匿名化导出/T1+T3 基准/正文初稿全部完成；余 ToS 复核与 Zenodo/HF 发布。
 
 **R2. 英雄克制结构的博弈论分解（直接升级原 centrality 工作）** — *分析已完成；⚠️ 新颖性降级*
 - 做法：在 kill/对位胜负矩阵上做 HodgeRank 传递/循环分解 + 置换噪声校正，按 tier × patch 切片。

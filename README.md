@@ -2,11 +2,15 @@
 
 LoLA is a LoL (League of Legends) game data analysis / analytics project. See [report](/report).
 
-> **2026 update**: this project is being revived. See the
-> [research roadmap](RESEARCH_ROADMAP.md), the supporting
-> [literature reviews](docs/literature/), and the in-progress
-> [dataset-paper workstream (R1)](docs/r1-dataset-paper/PLAN.md) with its
-> curation toolkit in [`lola_dataset/`](lola_dataset/).
+> **2026 update**: this project has been revived as a research project. Start
+> from the [session handoff](docs/HANDOFF.md). Two paper drafts exist:
+> the [LoLA-2016 dataset paper](docs/r1-dataset-paper/PAPER_DRAFT.md) and the
+> [game-design paper *Mastery and Mistrust*](docs/game-design-directions/PAPER_DRAFT.md),
+> supported by the [research roadmap](RESEARCH_ROADMAP.md),
+> [literature reviews](docs/literature/), the curation toolkit
+> [`lola_dataset/`](lola_dataset/), and analyses in [`analysis/`](analysis/).
+> The raw dataset is preserved as GitHub Release
+> [`dataset-v0`](https://github.com/simoncos/lola/releases/tag/dataset-v0).
 
 ## Crawling
 
