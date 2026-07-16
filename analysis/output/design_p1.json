@@ -1,0 +1,137 @@
+{
+  "config": {
+    "min_player_games": 15,
+    "min_cell_games": 3,
+    "min_players_per_champ": 80
+  },
+  "champions_scored": 123,
+  "correlation_with_P0": {
+    "amp_slope_win_vs_P0_tier_slope_spearman": 0.043,
+    "amp_slope_lane_diff_vs_P0_tier_slope_spearman": -0.0136,
+    "n_champions_compared": 123
+  },
+  "top10_lane_diff_amplifiers": [
+    {
+      "champion": "Lissandra",
+      "amp_slope_lane_diff": 0.8675,
+      "amp_slope_win": 0.1422,
+      "n_players_lane_diff": 279
+    },
+    {
+      "champion": "Viktor",
+      "amp_slope_lane_diff": 0.7796,
+      "amp_slope_win": -0.0333,
+      "n_players_lane_diff": 430
+    },
+    {
+      "champion": "Rek'Sai",
+      "amp_slope_lane_diff": 0.7727,
+      "amp_slope_win": -0.0732,
+      "n_players_lane_diff": 458
+    },
+    {
+      "champion": "Nunu",
+      "amp_slope_lane_diff": 0.7274,
+      "amp_slope_win": 0.0357,
+      "n_players_lane_diff": 119
+    },
+    {
+      "champion": "Nidalee",
+      "amp_slope_lane_diff": 0.6693,
+      "amp_slope_win": 0.1263,
+      "n_players_lane_diff": 608
+    },
+    {
+      "champion": "Jax",
+      "amp_slope_lane_diff": 0.6403,
+      "amp_slope_win": 0.018,
+      "n_players_lane_diff": 864
+    },
+    {
+      "champion": "Elise",
+      "amp_slope_lane_diff": 0.6323,
+      "amp_slope_win": -0.093,
+      "n_players_lane_diff": 490
+    },
+    {
+      "champion": "Hecarim",
+      "amp_slope_lane_diff": 0.6298,
+      "amp_slope_win": 0.0062,
+      "n_players_lane_diff": 411
+    },
+    {
+      "champion": "Azir",
+      "amp_slope_lane_diff": 0.6161,
+      "amp_slope_win": 0.0504,
+      "n_players_lane_diff": 312
+    },
+    {
+      "champion": "Cho'Gath",
+      "amp_slope_lane_diff": 0.6124,
+      "amp_slope_win": -0.0976,
+      "n_players_lane_diff": 272
+    }
+  ],
+  "bottom10_lane_diff_amplifiers": [
+    {
+      "champion": "Soraka",
+      "amp_slope_lane_diff": 0.0622,
+      "amp_slope_win": 0.0139,
+      "n_players_lane_diff": 665
+    },
+    {
+      "champion": "Xin Zhao",
+      "amp_slope_lane_diff": 0.0509,
+      "amp_slope_win": -0.2807,
+      "n_players_lane_diff": 514
+    },
+    {
+      "champion": "Karma",
+      "amp_slope_lane_diff": 0.049,
+      "amp_slope_win": -0.2409,
+      "n_players_lane_diff": 262
+    },
+    {
+      "champion": "Jayce",
+      "amp_slope_lane_diff": 0.0487,
+      "amp_slope_win": 0.0277,
+      "n_players_lane_diff": 205
+    },
+    {
+      "champion": "Varus",
+      "amp_slope_lane_diff": 0.0339,
+      "amp_slope_win": -0.0328,
+      "n_players_lane_diff": 173
+    },
+    {
+      "champion": "Karthus",
+      "amp_slope_lane_diff": 0.0189,
+      "amp_slope_win": 0.1524,
+      "n_players_lane_diff": 94
+    },
+    {
+      "champion": "Draven",
+      "amp_slope_lane_diff": 0.0083,
+      "amp_slope_win": -0.0059,
+      "n_players_lane_diff": 423
+    },
+    {
+      "champion": "Leona",
+      "amp_slope_lane_diff": -0.0152,
+      "amp_slope_win": -0.0551,
+      "n_players_lane_diff": 568
+    },
+    {
+      "champion": "Aatrox",
+      "amp_slope_lane_diff": -0.0224,
+      "amp_slope_win": 0.0084,
+      "n_players_lane_diff": 121
+    },
+    {
+      "champion": "Gragas",
+      "amp_slope_lane_diff": -0.0331,
+      "amp_slope_win": -0.1456,
+      "n_players_lane_diff": 192
+    }
+  ]
+}
