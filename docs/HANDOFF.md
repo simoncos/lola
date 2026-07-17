@@ -138,7 +138,7 @@ python analysis/make_figures.py
    （R1 草稿 §3.4/3.5 已改）。后续：Zenodo 私有草稿 → HuggingFace（需本地/白名单）
 2. **两篇正式排版**：LaTeX + 目标 venue 模板；参考文献格式化并**逐篇核对全文**；
    R1 数据卡 TODO 清零（维护者、DOI 链接）
-3. **投稿 venue（2026-07-16 已详细比较，建议方案待用户最终确认）**：
+3. **投稿 venue（完整比较见 [docs/VENUE_PLAN.md](VENUE_PLAN.md)，建议方案待用户最终确认）**：
    - 设计论文 → **FDG 2027**（~1–2 月截稿；受众/先例/时间窗最优）；
      备选 CHI PLAY 2027（需补玩家体验理论对话）/ IEEE ToG（滚动兜底）
    - R1 → 视 Riot 许可结果二选一：**顺利 → Scientific Data**（数据集金标准，
