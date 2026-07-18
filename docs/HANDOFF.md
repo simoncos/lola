@@ -2,6 +2,41 @@
 
 > 目的：让新的 session（或协作者）无需读完整个对话即可继续工作。
 > 分支：`claude/legacy-project-analysis-qgz7zd`（所有工作已提交于此，未开 PR）。
+> **交接目标已明确：用户将在本地 session 继续本项目**——远程会话到此收束，
+> 本地接手指南见下一节。
+
+## 〇点五、本地 session 接手快速指南
+
+```bash
+git clone https://github.com/simoncos/lola && cd lola
+git checkout claude/legacy-project-analysis-qgz7zd
+# 数据（若本地无 lola.db）：
+curl -L -o lola.zip https://github.com/simoncos/lola/releases/download/dataset-v0/lola.zip
+sha256sum lola.zip   # 应为 9b27ef24bd9ab27756d066d4f0d14c2c3bc58b63d28e3a0b8c6ef66b7ca2f420
+unzip lola.zip       # -> lola.db（3.57GB）
+# 盐值：用户已另行保存 SALT_PRIVATE.txt（32 位 hex）；用同一盐值 export
+# 可复现与既有 Parquet 完全一致的哈希 ID
+```
+
+**本地环境相对远程的解锁项**（远程白名单限制不再适用）：
+- ✅ **arXiv 可访问** → 可执行"引用全文核对"（此前所有引用细节均为搜索摘要级；
+  优先核对：Hamilton arXiv:2412.14427、Chen-Joachims WSDM 2016、SC2EGSet、
+  PandaSkill、Lin & Wu 2408.17180）
+- ✅ **riotgames.com 可访问** → 发送申请前人工复核 /terms 与 /policies/general
+  在线原文（COMPLIANCE_REVIEW 的条文证据来自镜像+片段，需对照确认）
+- ✅ **Zenodo / HuggingFace 可访问** → 可建 Zenodo 私有草稿（拿 DOI 不公开）
+- ✅ 可直接提交 Riot DevRel 工单与邮件
+- 注意：远程会话 scratchpad（含 parquet_release/）随容器回收消失——本地用
+  `python -m lola_dataset export --db lola.db --out parquet/ --salt <已存盐值>`
+  重新生成（~7 分钟）即可，输出与远程版逐字节等价（同盐值）。
+
+**本地 session 的第一批动作（建议顺序）**：
+1. 发送 Riot 申请函（`docs/r1-dataset-paper/PERMISSION_REQUEST.md`，先按上文
+   复核在线条款原文）→ 回填跟踪清单
+2. 确认 venue 方案（`docs/VENUE_PLAN.md` §四清单）
+3. 重新生成本地 Parquet（同盐值）
+4. 引用全文核对（15 篇关键文献，两篇 PAPER_DRAFT 的 References 节为清单）
+5. 设计论文按 FDG（ACM 格式）LaTeX 化；Zenodo 私有草稿
 
 ## 〇、一段话总结本 session
 
@@ -76,15 +111,17 @@
 - 独立发表重心 = 游戏设计方向（用户兴趣）；R7（行为检测，学术空白）作储备暂缓
 - R1 与设计论文**分投**，设计论文引用 R1 的 Zenodo DOI（R1 挂 DOI 即可引用，无需等见刊）
 
-## 三、⚠️ 易丢失资产（容器回收即消失）
+## 三、⚠️ 易丢失资产（截至交接时的状态）
 
-会话 scratchpad（`/tmp/claude-0/.../scratchpad/`）中，**未入 git**：
+远程会话 scratchpad 中的未入库材料（容器回收即消失）：
 
-| 文件 | 说明 | 应对 |
+| 文件 | 说明 | 状态 |
 |---|---|---|
-| `lola.db`（3.57GB） | 原始库（lola.zip 解压） | 可随时从 Release 重下 |
-| `parquet_release/`（375MB） | 匿名化导出 | 工具可再生（需盐值） |
-| `SALT_PRIVATE.txt` | 匿名化盐值 | **用户自行留存**；丢失则换盐重导（发布前无影响） |
+| `lola.db`（3.57GB） | 原始库（lola.zip 解压） | 无风险：Release 有副本，可随时重下 |
+| `parquet_release/`（375MB） | 假名化导出 | 无风险：本地同盐值重导即逐字节等价 |
+| `SALT_PRIVATE.txt` | 匿名化盐值 | ✅ **已于 2026-07-16 发送给用户并确认保存** |
+
+→ **交接时已无任何单点丢失风险。**
 
 数据获取（已验证）：GitHub Release
 `https://github.com/simoncos/lola/releases/tag/dataset-v0`
@@ -117,13 +154,14 @@ python analysis/design_p2_5.py --parquet /tmp/parquet
 python analysis/make_figures.py
 ```
 
-已知环境坑（本 session 踩过并解决）：
-- 远程环境白名单拦截 Google Drive / HuggingFace / ddragon / arXiv 全文
-  （实测记录：`docs/r1-dataset-paper/DATA_ACCESS.md`）；GitHub 可达
-- SQLite join 两侧 CAST 会废掉索引（曾致 2 小时+ 卡死）；
+已知坑（远程 session 踩过；标注哪些在本地不再适用）：
+- ~~远程白名单拦截 Google Drive / HuggingFace / ddragon / arXiv~~ →
+  **本地全部解锁**（历史记录见 `docs/r1-dataset-paper/DATA_ACCESS.md`）
+- **仍适用**：SQLite join 两侧 CAST 会废掉索引（曾致 2 小时+ 卡死）；
   解法=预建带索引临时表（见 `lola_dataset/validate.py` / `stats.py`）
-- 文献检索：本环境读不到 arXiv 全文，引用细节均为搜索摘要级——**投稿前必须
-  精读核对**（尤其 Hamilton 2412.14427、Chen-Joachims WSDM 2016、PandaSkill）
+- **仍适用（重要）**：既有引用细节均为搜索摘要级——**投稿前必须精读核对全文**
+  （尤其 Hamilton 2412.14427、Chen-Joachims WSDM 2016、PandaSkill、SC2EGSet）；
+  本地可访问 arXiv，此项已可执行
 
 ## 五、走向发表的待办（按优先级）
 
