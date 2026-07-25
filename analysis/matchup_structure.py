@@ -1,16 +1,19 @@
-"""R2 paper-grade analysis: win-based matchup structure by patch and tier.
+"""Legacy exploratory Hodge decomposition of lineup co-occurrence outcomes.
 
-Upgrades analysis/counter_structure.py (kill-exchange proxy) to real match
-outcomes: every match yields 25 blue-vs-red champion pair observations, giving
-a 128x128 "i's team beat j's team" win matrix W. Side advantage cancels
-because both orientations are folded together.
+Every match yields 25 blue-vs-red champion pair rows. Those rows are correlated
+views of one lineup outcome, not independent head-to-head contests. Therefore
+this module may be used as a descriptive sensitivity diagnostic only. It does
+not identify lane matchups, counter-picks, or causal champion interactions.
 
 For each slice (overall / per patch family / per tier bucket) we run the same
 weighted HodgeRank decomposition: log-odds A_ij = log((W_ij+1)/(W_ji+1)) into
-a transitive rating plus a cyclic (counter-pick) residual, with weights
+a transitive rating plus a cyclic association residual, with weights
 N_ij = W_ij + W_ji (cf. mElo / Nash averaging, Balduzzi et al. 2018).
 
-Input: the anonymized Parquet export (participants.parquet).
+For the active T3 benchmark use
+``python -m benchmarks.matchup_interaction_baseline`` instead.
+
+Input: the pseudonymized Parquet export (participants.parquet).
 
 Usage:
     python analysis/matchup_structure.py --parquet <dir> [--out analysis/output]
@@ -26,6 +29,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from lola_dataset.cohort import eligible_matches, filter_to_eligible
+
 MIN_PAIR_GAMES = 300  # threshold for reporting individual pairs
 
 TIER_BUCKETS = {
@@ -37,20 +42,33 @@ TIER_BUCKETS = {
 
 def load_pairs(parquet_dir: str) -> pd.DataFrame:
     """Return one row per (match, blue champion, red champion) pair."""
+    cohort = eligible_matches(parquet_dir)
     p = pd.read_parquet(
         Path(parquet_dir) / "participants.parquet",
         columns=["match_id", "champion", "side", "participant_win",
                  "previous_season_tier", "version"],
     )
+    p = filter_to_eligible(p, cohort)
 
-    # Majority previous-season tier per match -> tier bucket
+    # Assign a match bucket only when at least six ranked participants are
+    # observed and one bucket has a unique plurality. Ambiguous/unranked-heavy
+    # matches remain unbucketed instead of being silently forced into a tier.
+    ranked = p.assign(tier_bucket=p["previous_season_tier"].map(TIER_BUCKETS))
+    ranked = ranked.dropna(subset=["tier_bucket"])
     tier_counts = (
-        p.groupby(["match_id", "previous_season_tier"]).size().reset_index(name="n")
-        .sort_values("n", ascending=False)
-        .drop_duplicates("match_id")
-        .rename(columns={"previous_season_tier": "majority_tier"})
+        ranked.groupby(["match_id", "tier_bucket"]).size().unstack(fill_value=0)
     )
-    tier_counts["tier_bucket"] = tier_counts["majority_tier"].map(TIER_BUCKETS)
+    for bucket in ["low", "mid", "high"]:
+        if bucket not in tier_counts:
+            tier_counts[bucket] = 0
+    tier_counts = tier_counts[["low", "mid", "high"]]
+    ranked_total = tier_counts.sum(axis=1)
+    largest = tier_counts.max(axis=1)
+    unique_plurality = tier_counts.eq(largest, axis=0).sum(axis=1).eq(1)
+    tier_counts["tier_bucket"] = tier_counts.idxmax(axis=1).where(
+        (ranked_total >= 6) & unique_plurality
+    )
+    tier_counts = tier_counts.reset_index()
 
     blue = p[p["side"] == "blue"]
     red = p[p["side"] == "red"]
@@ -114,7 +132,7 @@ def hodge_energies(W: np.ndarray) -> tuple[float, float]:
 
 
 def null_energies(pairs: pd.DataFrame, champions: list[str],
-                  n_perm: int = 3, seed: int = 7) -> tuple[float, float]:
+                  n_perm: int = 100, seed: int = 7) -> tuple[float, float]:
     """Mean (transitive, cyclic) energies under match-level outcome
     permutation - a pure-noise baseline with the same pairing structure,
     marginals and intra-match correlation (each match's 25 pair rows stay
@@ -133,7 +151,12 @@ def null_energies(pairs: pd.DataFrame, champions: list[str],
     return float(np.mean(et)), float(np.mean(ec))
 
 
-def summarize_slice(pairs: pd.DataFrame, champions: list[str], label: str) -> dict:
+def summarize_slice(
+    pairs: pd.DataFrame,
+    champions: list[str],
+    label: str,
+    n_perm: int,
+) -> dict:
     W = win_matrix(pairs, champions)
     h = hodge(W)
     order = np.argsort(-h["rating"])
@@ -144,7 +167,7 @@ def summarize_slice(pairs: pd.DataFrame, champions: list[str], label: str) -> di
     # games) - so we subtract the permutation-null energies before forming
     # the share.
     obs_t, obs_c = hodge_energies(W)
-    null_t, null_c = null_energies(pairs, champions)
+    null_t, null_c = null_energies(pairs, champions, n_perm=n_perm)
     sig_t = max(0.0, obs_t - null_t)
     sig_c = max(0.0, obs_c - null_c)
     corrected = sig_c / (sig_t + sig_c) if (sig_t + sig_c) > 0 else float("nan")
@@ -157,6 +180,7 @@ def summarize_slice(pairs: pd.DataFrame, champions: list[str], label: str) -> di
         "cyclic_share_raw": round(h["cyclic_share"], 4),
         "cyclic_share_corrected": round(corrected, 4),
         "signal_to_noise": round((sig_t + sig_c) / (null_t + null_c), 3),
+        "null_permutations": n_perm,
         "top10": [
             {"champion": champions[i], "rating": round(float(h["rating"][i]), 4)}
             for i in order[:10]
@@ -178,8 +202,8 @@ def top_cyclic_pairs(h: dict, champions: list[str], k: int = 12) -> list[dict]:
     out.sort(reverse=True)
     return [
         {
-            "pair": (f"{champions[i]} counters {champions[j]}" if c > 0
-                     else f"{champions[j]} counters {champions[i]}"),
+            "pair": (f"{champions[i]} residual over {champions[j]}" if c > 0
+                     else f"{champions[j]} residual over {champions[i]}"),
             "cyclic_logodds": round(abs(float(c)), 3),
             "games": n,
         }
@@ -191,22 +215,32 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--parquet", required=True)
     ap.add_argument("--out", default="analysis/output")
+    ap.add_argument("--null-reps", type=int, default=100)
     args = ap.parse_args()
+    if args.null_reps < 20:
+        raise SystemExit("--null-reps must be at least 20 for this diagnostic")
 
     pairs = load_pairs(args.parquet)
     champions = sorted(set(pairs["blue_champion"]) | set(pairs["red_champion"]))
     print(f"{pairs['match_id'].nunique():,} matches, "
           f"{len(pairs):,} pair observations, {len(champions)} champions")
 
-    slices: list[dict] = [summarize_slice(pairs, champions, "overall")]
+    slices: list[dict] = [
+        summarize_slice(pairs, champions, "overall", args.null_reps)
+    ]
     for patch in ["5.22", "5.23", "5.24"]:  # 5.21 (8) and 6.1 (1.3k) too thin
         slices.append(
-            summarize_slice(pairs[pairs["patch"] == patch], champions, f"patch {patch}")
+            summarize_slice(
+                pairs[pairs["patch"] == patch], champions, f"patch {patch}",
+                args.null_reps,
+            )
         )
     for bucket in ["low", "mid", "high"]:
         slices.append(
-            summarize_slice(pairs[pairs["tier_bucket"] == bucket], champions,
-                            f"tier {bucket}")
+            summarize_slice(
+                pairs[pairs["tier_bucket"] == bucket], champions,
+                f"tier {bucket}", args.null_reps,
+            )
         )
 
     overall = slices[0]
@@ -222,6 +256,11 @@ def main() -> None:
     for s in slices:
         s.pop("_hodge")
     result = {
+        "status": "legacy_exploratory_diagnostic",
+        "interpretation": (
+            "Descriptive lineup co-occurrence association only; correlated pair rows "
+            "do not identify causal counter-picks or lane matchups."
+        ),
         "champions": len(champions),
         "slices": slices,
         "top_cyclic_pairs_overall": cyclic_pairs,
@@ -235,11 +274,14 @@ def main() -> None:
     )
 
     md = [
-        "# Win-Based Matchup Structure by Patch and Tier",
+        "# Legacy Exploratory Lineup-Association Structure",
         "",
-        "Real match outcomes (25 blue-vs-red champion pairs per match), weighted",
-        "HodgeRank decomposition into transitive strength + cyclic counter residual.",
-        "Side advantage cancels by folding both orientations.",
+        "> **Not a counter-pick estimate and not a publication result.** Each match",
+        "> contributes 25 correlated pair rows. Use the active T3 lineup-interaction",
+        "> benchmark for held-out predictive evidence.",
+        "",
+        "Weighted HodgeRank decomposition of descriptive cross-team co-occurrence",
+        "outcomes into a transitive component and cyclic association residual.",
         "",
         "## Transitive vs cyclic structure by slice",
         "",
@@ -247,7 +289,7 @@ def main() -> None:
         "entirely non-transitive and contributes near-constant energy per pair,",
         "while signal energy grows with the number of games (a match-level",
         "permutation null shows ~92% 'cyclic' share on pure noise). The",
-        "corrected column subtracts the permutation-null energies (3 perms)",
+        f"corrected column subtracts permutation-null energies ({args.null_reps} reps)",
         "from both components before forming the share.",
         "",
         "| Slice | Matches | Cyclic (raw) | **Cyclic (corrected)** | Signal/noise | Rating Spearman vs overall |",
@@ -264,7 +306,7 @@ def main() -> None:
            "| # | Champion | Rating (log-odds) |", "|---|---|---|"]
     for k, row in enumerate(overall["top10"], 1):
         md.append(f"| {k} | {row['champion']} | {row['rating']:.4f} |")
-    md += ["", "## Strongest counter relationships (cyclic residual, overall)", "",
+    md += ["", "## Largest residual associations (exploratory, overall)", "",
            "| Relationship | Cyclic log-odds | Games |", "|---|---|---|"]
     for cp in cyclic_pairs:
         md.append(f"| {cp['pair']} | {cp['cyclic_logodds']} | {cp['games']:,} |")

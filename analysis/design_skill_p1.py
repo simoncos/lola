@@ -1,4 +1,4 @@
-"""P1 for the design paper: selection-confound-controlled skill expression.
+"""Legacy cross-player general-skill transfer analysis.
 
 P0 measured win-rate vs player TIER, which is confounded: the population
 piloting a hard champion at high tier is self-selected (dedicated mains). P1
@@ -8,10 +8,12 @@ the champions they are NOT currently being scored on (leave-one-out baseline).
 Skill amplification of champion C = weighted slope of
     (a player's performance ON champion C)  vs
     (that player's baseline performance on all their OTHER champions).
-A champion "rewards mastery" if players who are good in general (high baseline)
-overperform on C by MORE than their baseline predicts (slope > 1). This
-conditions on the actual player's revealed skill, not a tier bucket, so it is
-robust to the cross-tier selection confound.
+A champion has a high transfer slope if players who are good in general (high
+baseline) also overperform on C. This conditions on the actual player's
+revealed skill rather than a tier bucket, but it does not measure within-player
+learning or mastery.
+
+The active mastery analysis is ``python -m analysis.mastery_learning``.
 
 Two metrics:
   - win (participant_win, available for all rows) — matchmaking pulls this to
@@ -141,6 +143,8 @@ def main() -> None:
     top = amp.dropna(subset=["amp_slope_lane_diff"]).sort_values(
         "amp_slope_lane_diff", ascending=False)
     summary = {
+        "status": "legacy_exploratory_transfer_not_mastery",
+        "interpretation": "Cross-player general-skill transfer; not learning or mastery.",
         "config": {"min_player_games": MIN_PLAYER_GAMES,
                    "min_cell_games": MIN_CELL_GAMES,
                    "min_players_per_champ": MIN_PLAYERS_PER_CHAMP},
@@ -156,12 +160,15 @@ def main() -> None:
     (out_dir / "design_p1.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False))
 
     md = [
-        "# P1: Selection-Confound-Controlled Skill Expression (prototype)",
+        "# Legacy P1: Cross-Player General-Skill Transfer (prototype)",
         "",
-        "Skill amplification = weighted slope of a player's on-champion performance",
+        "> **Not a mastery or learning estimate.** Use mastery_learning.py for the",
+        "> active within-player, within-champion analysis.",
+        "",
+        "General-skill transfer = weighted slope of a player's on-champion performance",
         "vs their leave-one-out baseline on all other champions. Conditions on each",
-        "player's revealed skill instead of tier, so it is robust to the cross-tier",
-        "selection confound in P0.",
+        "player's revealed skill instead of tier, reducing one cross-tier selection",
+        "problem while remaining a cross-sectional association.",
         "",
         f"Config: players with >= {MIN_PLAYER_GAMES} games, cells with >= "
         f"{MIN_CELL_GAMES} games, champions with >= {MIN_PLAYERS_PER_CHAMP} players. "
@@ -172,13 +179,13 @@ def main() -> None:
     ]
     for k, v in corr.items():
         md.append(f"- {k}: {v}")
-    md += ["", "## Top 10 skill amplifiers (lane-dominance metric)", "",
+    md += ["", "## Top 10 transfer slopes (lane-dominance metric)", "",
            "| Champion | amp slope (lane) | amp slope (win) | players |",
            "|---|---|---|---|"]
     for r in summary["top10_lane_diff_amplifiers"]:
         md.append(f"| {r['champion']} | {r['amp_slope_lane_diff']:+.3f} "
                   f"| {r['amp_slope_win']:+.3f} | {r['n_players_lane_diff']} |")
-    md += ["", "## Bottom 10 (least skill-amplifying)", "",
+    md += ["", "## Bottom 10 transfer slopes", "",
            "| Champion | amp slope (lane) | amp slope (win) | players |",
            "|---|---|---|---|"]
     for r in summary["bottom10_lane_diff_amplifiers"]:

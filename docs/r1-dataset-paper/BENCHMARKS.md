@@ -1,51 +1,60 @@
-# LoLA-2016 基准任务定义（草案）
+# LoLA-2016 基准协议 v2（2026-07-20）
 
-数据集论文附带的三个基准任务。共同规则：
+> 当前状态：代码已整改，真实数据尚未按 v2 重跑。`benchmarks/output/` 中的旧数值
+> 全部撤回，不得引用。每次有效运行必须同时产出结果、split manifest 与 run manifest。
 
-- **划分**（依据真实 build 版本分布设计，2026-07 M1 体检确认）：
+## 共同 cohort 与报告规则
 
-  | 划分 | build 版本 | 比赛数 |
-  |---|---|---|
-  | train | 5.21.* + 5.22.*（3 builds）+ 5.23.*（2 builds）+ 5.24.0.251/254 | ~113,000 |
-  | val | 5.24.0.256 的前 20%（按 match_id 升序，ID 单调近似时间序） | ~16,000 |
-  | test | 5.24.0.256 其余 80% + 5.24.0.259 + 6.1.0.484 | ~93,700 |
+- 排除 `duration < 10` 分钟的比赛；T2 的 20 分钟档额外要求 `duration >= 20`。
+- 数据质量必须先通过 `python -m lola_dataset validate --strict`。
+- 每个设置均使用互斥 train/val/test；val 选择超参数，选择后在 train+val 上重拟合，
+  test 只评估一次。多数类概率只能从 train 估计。
+- 报告 Accuracy、AUC、log-loss、ECE；在投稿结论前补 cluster/bootstrap uncertainty。
+- Match 没有时间戳；build 顺序与 match_id 仅是时间代理，不得表述为真实时间戳。
 
-  train→test 跨越 build 与补丁边界，保留"补丁漂移"评估（呼应文献公认的
-  patch non-stationarity 缺口）；test 量大，置信区间窄。
-  另提供同补丁随机划分（80/10/10，按 match_id 哈希）作为对照设置。
-  注意：Match 表**没有时间戳列**（2016 schema 的局限），以 build 版本 +
-  match_id 升序作为时间代理，此点须写入数据卡。
-- **剔除**：duration < 10 分钟的极短比赛（duration 单位为**分钟**；该时期
-  尚无重开局机制，极短局为提前投降/挂机废局）；validate 标记的不完整比赛。
-- **报告指标**：Accuracy、AUC、log-loss，以及 **ECE（期望校准误差）**——文献几乎不报校准，这是本基准的差异点。
+### 三个评估设置
 
-## T1 — Draft 胜负预测（赛前）
+1. `temporal-holdout`：早期 build 训练；5.24.0.256 前 20%（match_id 代理顺序）
+   验证；其余 5.24.0.256 与 5.24.0.259/6.1.0.484 测试。
+2. `iid-mixed-patch`：所有已知 build 混合后按稳定 match_id hash 做 80/10/10。
+   这是 IID 控制，不是 same-patch，也不能单独识别 patch 的因果影响。
+3. `same-build-5.24.0.256`：只在一个 build 内按稳定 hash 做 80/10/10，提供
+   真正的同 build 控制。
 
-- **输入**：双方 10 个英雄（有序，蓝/红方向）+ 禁用列表 + 比赛平均 tier + patch 版本。
-- **输出**：蓝方胜负（二分类）。
-- **基线**：多数类 / 逻辑回归（one-hot）/ GBDT / Factorization Machine（Semenov 2016 设置）/
-  DraftRec 式 Transformer（不含玩家历史的简化版）。
-- **预期结果**：~52–56%（诚实呈现天花板；重点比较跨补丁 vs 同补丁设置的性能差与校准差）。
+所有 build 必须显式列入 `benchmarks/splits.py`；未知 build 直接报错，避免静默泄漏。
 
-## T2 — 早期局面胜率预测（局内）
+## T1 — Draft 胜负预测
 
-- **输入**：前 10 分钟（另设 20 分钟档）的 ParticipantTimeline delta 特征
-  （补刀/经济/经验/承伤 per-min 及对线差值）+ 截至该时刻的 FrameKillEvent 聚合
-  （击杀差、一血）+ 阵容。
-- **输出**：胜负二分类；参考文献预期 10 分钟 ~70–75%。
-- **基线**：逻辑回归 / LightGBM / 简单 RNN（Silva 2018 设置）。
+- 输入：双方已选英雄的 signed one-hot（蓝 +1，红 -1）。
+- 不包含：ban、tier、patch、player history。任何包含这些特征的增强模型必须另命名。
+- 基线：训练集 prevalence、正则化逻辑回归、梯度提升。
+- 活跃实现：`python -m benchmarks.draft_baseline --parquet <dir>`。
 
-## T3 — 英雄克制结构分解（分析型基准）
+## T2 — 早期局面胜率预测
 
-- **输入**：按 (patch, tier) 切片的英雄对位胜负矩阵与击杀矩阵。
-- **任务**：用 mElo₂ₖ / Nash averaging（Balduzzi et al. 2018）分解传递性强度与循环克制分量；
-  报告循环分量占比随 tier/patch 的变化曲线。
-- **产出**：不是排行榜式指标，而是可复现的分析管线 + 参考结论
-  （与 R2 论文共享代码；作为数据集"能做平衡性研究"的演示）。
+- 输入：10/20 分钟时的蓝减红团队平均 timeline delta、截至 horizon 的击杀差和一血。
+- 不包含：英雄阵容。以免将 T1 与 T2 的贡献混在一起。
+- 击杀必须来自规范化后的 `kill_events.parquet`，不能从一助攻一行的原始表重复计数。
+- 活跃实现：`python -m benchmarks.early_game_baseline --parquet <dir>`。
 
-## 未来可扩展任务（论文中列为 future work）
+## T3 — 阵容交互的增量预测价值
 
-- T4 击杀价值建模（Maymin 2021 式 smart kills）
-- T5 玩家段位预测（Aung 2018 复现）
-- T6 弱监督 AFK/送人头检测（R7）
-- T7 LLM 比赛摘要问答（LoL-MDC 式文本化后构建）
+- 主模型：双方英雄主效应的正则化 logistic regression。
+- 交互模型：主效应 + anti-symmetric 跨队英雄 pair interaction。
+- 任务：在同一 split 上比较 held-out log-loss/AUC，判断交互特征是否增加预测价值。
+- 限定解释：单场比赛只有一个团队结果；25 个跨队 pair 不是 25 场独立 head-to-head。
+  系数与增量性能都不是因果 counter-pick、lane matchup 或设计平衡证据。
+- 活跃实现：`python -m benchmarks.matchup_interaction_baseline --parquet <dir>`。
+
+`analysis/matchup_structure.py` 与 `analysis/matchup_extended.py` 只保留为 legacy
+探索性敏感度分析，不属于 v2 T3 的主结论。
+
+## 复现顺序
+
+```bash
+python -m lola_dataset validate --db lola.db --out reports/validate-v2.json --strict
+python -m lola_dataset export --db lola.db --out parquet-v2 --salt-file SALT_PRIVATE.txt
+python -m benchmarks.draft_baseline --parquet parquet-v2
+python -m benchmarks.early_game_baseline --parquet parquet-v2
+python -m benchmarks.matchup_interaction_baseline --parquet parquet-v2
+```

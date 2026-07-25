@@ -1,4 +1,10 @@
-# Session 交接文档（2026-07-14 ~ 07-16，最终版）
+# Session 交接文档（2026-07-14 ~ 07-16，历史版）
+
+> **2026-07-20 覆盖说明：** MoA 审稿发现击杀/助攻语义、split 命名、T3 因果
+> 解释、mastery 构念与 ban 指标解释等发布级问题。整改来源真相请先读
+> [`docs/REMEDIATION_STATUS.md`](REMEDIATION_STATUS.md)。本文以下旧数值、复现命令、
+> “分析全部完成且有效”与“最终版”等表述仅是审计前历史记录，全部撤回待 v2 重跑。
+> Raw Release 按项目所有者决定延期，本轮不执行远端发布动作。
 
 > 目的：让新的 session（或协作者）无需读完整个对话即可继续工作。
 > 分支：`claude/legacy-project-analysis-qgz7zd`（所有工作已提交于此，未开 PR）。

@@ -1,0 +1,228 @@
+{
+  "protocol_version": 1,
+  "interpretation": "Standardized ban-rate minus win-rate residual; descriptive salience, not anti-fun, unfairness, perceived power, or a causal effect.",
+  "minimum_picks_per_bucket": 200,
+  "bucketed_matches": 213940,
+  "salience_stability_spearman": {
+    "low_vs_mid": 0.855,
+    "mid_vs_high": 0.7399,
+    "low_vs_high": 0.5525
+  },
+  "highest_residual_by_tier": {
+    "low": [
+      {
+        "champion": "Jax",
+        "residual": 4.677
+      },
+      {
+        "champion": "Darius",
+        "residual": 4.633
+      },
+      {
+        "champion": "Illaoi",
+        "residual": 4.198
+      },
+      {
+        "champion": "Dr. Mundo",
+        "residual": 3.594
+      },
+      {
+        "champion": "Yasuo",
+        "residual": 3.419
+      },
+      {
+        "champion": "Ryze",
+        "residual": 2.7
+      },
+      {
+        "champion": "Nidalee",
+        "residual": 2.418
+      },
+      {
+        "champion": "Garen",
+        "residual": 2.235
+      }
+    ],
+    "mid": [
+      {
+        "champion": "Jax",
+        "residual": 4.75
+      },
+      {
+        "champion": "Tahm Kench",
+        "residual": 4.296
+      },
+      {
+        "champion": "Illaoi",
+        "residual": 4.059
+      },
+      {
+        "champion": "Soraka",
+        "residual": 4.031
+      },
+      {
+        "champion": "Dr. Mundo",
+        "residual": 3.447
+      },
+      {
+        "champion": "Yasuo",
+        "residual": 2.887
+      },
+      {
+        "champion": "Kha'Zix",
+        "residual": 2.074
+      },
+      {
+        "champion": "Gragas",
+        "residual": 1.812
+      }
+    ],
+    "high": [
+      {
+        "champion": "Tahm Kench",
+        "residual": 5.561
+      },
+      {
+        "champion": "Soraka",
+        "residual": 4.58
+      },
+      {
+        "champion": "Illaoi",
+        "residual": 4.278
+      },
+      {
+        "champion": "Jax",
+        "residual": 3.829
+      },
+      {
+        "champion": "Dr. Mundo",
+        "residual": 3.813
+      },
+      {
+        "champion": "Yasuo",
+        "residual": 2.86
+      },
+      {
+        "champion": "Kindred",
+        "residual": 2.529
+      },
+      {
+        "champion": "Rumble",
+        "residual": 1.757
+      }
+    ]
+  },
+  "lowest_residual_by_tier": {
+    "low": [
+      {
+        "champion": "Amumu",
+        "residual": -2.34
+      },
+      {
+        "champion": "Zyra",
+        "residual": -2.119
+      },
+      {
+        "champion": "Taric",
+        "residual": -1.887
+      },
+      {
+        "champion": "Malzahar",
+        "residual": -1.854
+      },
+      {
+        "champion": "Volibear",
+        "residual": -1.676
+      },
+      {
+        "champion": "Sona",
+        "residual": -1.661
+      },
+      {
+        "champion": "Miss Fortune",
+        "residual": -1.615
+      },
+      {
+        "champion": "Galio",
+        "residual": -1.524
+      }
+    ],
+    "mid": [
+      {
+        "champion": "Janna",
+        "residual": -2.238
+      },
+      {
+        "champion": "Sona",
+        "residual": -1.875
+      },
+      {
+        "champion": "Talon",
+        "residual": -1.853
+      },
+      {
+        "champion": "Rammus",
+        "residual": -1.812
+      },
+      {
+        "champion": "Nami",
+        "residual": -1.753
+      },
+      {
+        "champion": "Skarner",
+        "residual": -1.737
+      },
+      {
+        "champion": "Udyr",
+        "residual": -1.717
+      },
+      {
+        "champion": "Miss Fortune",
+        "residual": -1.69
+      }
+    ],
+    "high": [
+      {
+        "champion": "Janna",
+        "residual": -2.306
+      },
+      {
+        "champion": "Talon",
+        "residual": -2.075
+      },
+      {
+        "champion": "Malzahar",
+        "residual": -2.014
+      },
+      {
+        "champion": "Sion",
+        "residual": -1.887
+      },
+      {
+        "champion": "Volibear",
+        "residual": -1.645
+      },
+      {
+        "champion": "Draven",
+        "residual": -1.606
+      },
+      {
+        "champion": "Nunu",
+        "residual": -1.604
+      },
+      {
+        "champion": "Miss Fortune",
+        "residual": -1.597
+      }
+    ]
+  },
+  "learning_slope_vs_high_tier_salience": {
+    "spearman": 0.1448,
+    "ci95": [
+      -0.0281,
+      0.3152
+    ],
+    "champions": 123,
+    "bootstrap_reps": 2000
+  }
+}

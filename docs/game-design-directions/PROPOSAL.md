@@ -1,4 +1,8 @@
-# 研究方案：技能表达与感知失衡——业余玩家如何感知 vs 体验英雄设计
+# 研究方案：技能表达与感知失衡（历史版）
+
+> **2026-07-20：旧构念与结果已撤回。** 本文保留为假设生成与审计历史；活跃协议为
+> [`REVISION_PROTOCOL.md`](REVISION_PROTOCOL.md)。不得引用下文 anti-fun、mastery、
+> 英雄排名、相关系数或置信区间作为当前结果。
 
 > 工作标题：*Mastery and Mistrust: How Amateur Players Experience vs. Perceive
 > Champion Design in League of Legends*

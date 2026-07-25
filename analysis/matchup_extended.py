@@ -1,18 +1,21 @@
-"""R2 extended analysis: build-level meta evolution + bootstrap CIs.
+"""Legacy exploratory extension of the lineup co-occurrence diagnostic.
 
 Builds on matchup_structure.py (imported). Three additions:
 
 1. Build-level rating evolution: HodgeRank ratings per game build (>= 10k
    matches), Spearman stability between consecutive builds, and the biggest
    rating movers across each build boundary (meta-shift detection).
-2. Bootstrap confidence intervals for the noise-corrected cyclic share
+2. Exploratory bootstrap intervals for the noise-corrected cyclic share
    (match-level resampling; one permutation null per replicate).
-3. Consecutive-build counter-relationship stability: correlation of the
+3. Consecutive-build residual-association stability: correlation of the
    cyclic residual matrices between builds.
 
 Usage:
     python analysis/matchup_extended.py --parquet <dir> [--out analysis/output]
-                                        [--boot-reps 12]
+                                        [--boot-reps 200]
+
+This is not an active publication result and does not identify counter-picks.
+Use ``python -m benchmarks.matchup_interaction_baseline`` for active T3.
 """
 
 from __future__ import annotations
@@ -24,7 +27,16 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from matchup_structure import hodge, hodge_energies, load_pairs, null_energies, win_matrix
+try:
+    from analysis.matchup_structure import (
+        hodge,
+        hodge_energies,
+        load_pairs,
+        null_energies,
+        win_matrix,
+    )
+except ModuleNotFoundError:  # direct script execution from analysis/
+    from matchup_structure import hodge, hodge_energies, load_pairs, null_energies, win_matrix
 
 MIN_BUILD_MATCHES = 10_000
 
@@ -70,7 +82,7 @@ def build_evolution(pairs: pd.DataFrame, champions: list[str]) -> dict:
         "builds": [{"build": b, "matches": int(counts[b])} for b in builds],
         "rating_stability": stability,
         "top_movers": movers,
-        "counter_stability": residual_corr,
+        "residual_association_stability": residual_corr,
     }
 
 
@@ -88,7 +100,7 @@ def bootstrap_ci(pairs: pd.DataFrame, champions: list[str], reps: int,
     """Match-level bootstrap of the corrected cyclic share."""
     rng = np.random.default_rng(seed)
     match_ids = pairs["match_id"].unique()
-    point = corrected_cyclic_share(pairs, champions, n_perm=3, seed=seed)
+    point = corrected_cyclic_share(pairs, champions, n_perm=100, seed=seed)
 
     estimates = []
     for rep in range(reps):
@@ -112,8 +124,12 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--parquet", required=True)
     ap.add_argument("--out", default="analysis/output")
-    ap.add_argument("--boot-reps", type=int, default=12)
+    ap.add_argument("--boot-reps", type=int, default=200)
     args = ap.parse_args()
+    if args.boot_reps < 200:
+        raise SystemExit(
+            "--boot-reps must be at least 200; old 12-replicate intervals are invalid"
+        )
 
     pairs = load_pairs(args.parquet)
     champions = sorted(set(pairs["blue_champion"]) | set(pairs["red_champion"]))
@@ -123,7 +139,14 @@ def main() -> None:
     print("bootstrap CI (overall)...")
     ci = bootstrap_ci(pairs, champions, reps=args.boot_reps)
 
-    result = {"build_evolution": evo, "corrected_cyclic_share_overall_ci": ci}
+    result = {
+        "status": "legacy_exploratory_diagnostic",
+        "interpretation": (
+            "Lineup co-occurrence association only; not a causal counter-pick estimate."
+        ),
+        "build_evolution": evo,
+        "corrected_cyclic_share_overall_exploratory_interval": ci,
+    }
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "matchup_extended.json").write_text(
@@ -131,7 +154,10 @@ def main() -> None:
     )
 
     md = [
-        "# Meta Evolution Across Builds and Uncertainty of the Cyclic Share",
+        "# Legacy Exploratory Meta-Evolution Diagnostic",
+        "",
+        "> **Not a counter-pick estimate and not an active publication result.**",
+        "> The 25 pair rows from each match are correlated views of one outcome.",
         "",
         f"Builds with >= {MIN_BUILD_MATCHES:,} matches, Pre-Season 2016.",
         "",
@@ -147,7 +173,7 @@ def main() -> None:
         "|---|---|---|---|",
     ]
     cs = {(c["from"], c["to"]): c["cyclic_residual_pearson"]
-          for c in evo["counter_stability"]}
+          for c in evo["residual_association_stability"]}
     for s in evo["rating_stability"]:
         md.append(f"| {s['from']} | {s['to']} | {s['rating_spearman']} "
                   f"| {cs[(s['from'], s['to'])]} |")

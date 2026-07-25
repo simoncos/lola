@@ -1,0 +1,83 @@
+{
+  "protocol_version": 1,
+  "interpretation": "Predictive incremental value of regularized cross-team pair interactions; not causal counter effects.",
+  "champion_main_effects": 128,
+  "pair_interactions": 8128,
+  "results": [
+    {
+      "setting": "temporal-holdout",
+      "sizes": {
+        "train": 112921,
+        "val": 16235,
+        "test": 93460
+      },
+      "main_effects": {
+        "accuracy": 0.5507,
+        "auc": 0.5717,
+        "log_loss": 0.6854,
+        "ece": 0.0093,
+        "selected_C": 0.01,
+        "validation_log_loss": 0.6839
+      },
+      "main_plus_pair_interactions": {
+        "accuracy": 0.5482,
+        "auc": 0.566,
+        "log_loss": 0.6891,
+        "ece": 0.0277,
+        "selected_C": 0.01,
+        "validation_log_loss": 0.6862
+      },
+      "test_log_loss_delta": 0.0037
+    },
+    {
+      "setting": "iid-mixed-patch",
+      "sizes": {
+        "train": 177751,
+        "val": 22556,
+        "test": 22309
+      },
+      "main_effects": {
+        "accuracy": 0.5572,
+        "auc": 0.5784,
+        "log_loss": 0.6835,
+        "ece": 0.0037,
+        "selected_C": 0.1,
+        "validation_log_loss": 0.683
+      },
+      "main_plus_pair_interactions": {
+        "accuracy": 0.5505,
+        "auc": 0.5719,
+        "log_loss": 0.6865,
+        "ece": 0.0239,
+        "selected_C": 0.01,
+        "validation_log_loss": 0.6863
+      },
+      "test_log_loss_delta": 0.003
+    },
+    {
+      "setting": "same-build-5.24.0.256",
+      "sizes": {
+        "train": 64825,
+        "val": 8241,
+        "test": 8112
+      },
+      "main_effects": {
+        "accuracy": 0.5492,
+        "auc": 0.5782,
+        "log_loss": 0.6834,
+        "ece": 0.0144,
+        "selected_C": 0.1,
+        "validation_log_loss": 0.6828
+      },
+      "main_plus_pair_interactions": {
+        "accuracy": 0.5557,
+        "auc": 0.5775,
+        "log_loss": 0.6854,
+        "ece": 0.0172,
+        "selected_C": 0.01,
+        "validation_log_loss": 0.686
+      },
+      "test_log_loss_delta": 0.002
+    }
+  ]
+}

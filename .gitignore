@@ -2,3 +2,17 @@
 *.pyc
 *.png
 *.[oa]
+.DS_Store
+.pytest_cache/
+.venv/
+.local-data/
+*.egg-info/
+__pycache__/
+*.parquet
+*.zip
+SALT_PRIVATE.txt
+
+# Publication figures are generated artifacts that should be reviewed and
+# versioned explicitly; the global PNG rule above must not hide them.
+!analysis/output/figures/
+!analysis/output/figures/*.png

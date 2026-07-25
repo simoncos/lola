@@ -1,0 +1,1002 @@
+{
+  "protocol_version": 1,
+  "estimand": "Within-player, within-champion change in position/build-standardized early lane performance per log observed game.",
+  "limitations": [
+    "Match ID and build provide a temporal proxy; the source has no timestamp.",
+    "Observed games may omit play outside this archive.",
+    "Both 0-10 and 10-20 lane-difference segments must be observed.",
+    "Survivorship can correlate continued champion use with performance.",
+    "The estimates are descriptive, not causal learning effects."
+  ],
+  "minimum_cell_games": 5,
+  "minimum_player_champion_cells": 40,
+  "bootstrap_reps": 1000,
+  "eligible_games_used": 381053,
+  "champions_scored": 123,
+  "results": [
+    {
+      "champion": "Poppy",
+      "learning_slope": 0.024218836774160795,
+      "ci95_low": -0.02998071749141006,
+      "ci95_high": 0.07531274552777893,
+      "player_champion_cells": 292,
+      "games": 2680
+    },
+    {
+      "champion": "Zed",
+      "learning_slope": 0.020029337173260983,
+      "ci95_low": -0.014803201400963624,
+      "ci95_high": 0.05678103153982468,
+      "player_champion_cells": 723,
+      "games": 7318
+    },
+    {
+      "champion": "Ziggs",
+      "learning_slope": 0.019672481399441766,
+      "ci95_low": -0.12038404506331023,
+      "ci95_high": 0.13957144542049074,
+      "player_champion_cells": 40,
+      "games": 339
+    },
+    {
+      "champion": "Nidalee",
+      "learning_slope": 0.014419483086382794,
+      "ci95_low": -0.041297497144107735,
+      "ci95_high": 0.06839171353090676,
+      "player_champion_cells": 320,
+      "games": 3464
+    },
+    {
+      "champion": "Karthus",
+      "learning_slope": 0.012866796202085713,
+      "ci95_low": -0.0745937457499925,
+      "ci95_high": 0.08538993373016102,
+      "player_champion_cells": 52,
+      "games": 461
+    },
+    {
+      "champion": "Jayce",
+      "learning_slope": 0.0032096284726404896,
+      "ci95_low": -0.06833557770377906,
+      "ci95_high": 0.07076054528074739,
+      "player_champion_cells": 118,
+      "games": 1326
+    },
+    {
+      "champion": "Bard",
+      "learning_slope": -0.003211803207039015,
+      "ci95_low": -0.04608122050372067,
+      "ci95_high": 0.04181752049937078,
+      "player_champion_cells": 434,
+      "games": 4046
+    },
+    {
+      "champion": "Gangplank",
+      "learning_slope": -0.006044160975015039,
+      "ci95_low": -0.051895734731190656,
+      "ci95_high": 0.037997568062157455,
+      "player_champion_cells": 364,
+      "games": 3669
+    },
+    {
+      "champion": "Illaoi",
+      "learning_slope": -0.007110630910770763,
+      "ci95_low": -0.07317655799345665,
+      "ci95_high": 0.06257455535762146,
+      "player_champion_cells": 206,
+      "games": 1823
+    },
+    {
+      "champion": "Ryze",
+      "learning_slope": -0.007845727977818186,
+      "ci95_low": -0.07782894973945058,
+      "ci95_high": 0.06668930677955483,
+      "player_champion_cells": 211,
+      "games": 2203
+    },
+    {
+      "champion": "Kha'Zix",
+      "learning_slope": -0.022603855657905503,
+      "ci95_low": -0.1080055925517406,
+      "ci95_high": 0.048487390271186356,
+      "player_champion_cells": 108,
+      "games": 1012
+    },
+    {
+      "champion": "Singed",
+      "learning_slope": -0.02924952734977019,
+      "ci95_low": -0.10596694144123478,
+      "ci95_high": 0.037130962533828867,
+      "player_champion_cells": 130,
+      "games": 1361
+    },
+    {
+      "champion": "Kennen",
+      "learning_slope": -0.029485338400763655,
+      "ci95_low": -0.1110036291558636,
+      "ci95_high": 0.04153584773643654,
+      "player_champion_cells": 111,
+      "games": 1072
+    },
+    {
+      "champion": "Orianna",
+      "learning_slope": -0.03354940371841032,
+      "ci95_low": -0.10377549403059176,
+      "ci95_high": 0.037401381798861474,
+      "player_champion_cells": 164,
+      "games": 1579
+    },
+    {
+      "champion": "Riven",
+      "learning_slope": -0.03418281667814757,
+      "ci95_low": -0.07375468818299946,
+      "ci95_high": 0.006010230525693249,
+      "player_champion_cells": 591,
+      "games": 5861
+    },
+    {
+      "champion": "Akali",
+      "learning_slope": -0.035012014953967815,
+      "ci95_low": -0.10809648297397494,
+      "ci95_high": 0.04733003572152381,
+      "player_champion_cells": 109,
+      "games": 1173
+    },
+    {
+      "champion": "Elise",
+      "learning_slope": -0.0363805249776628,
+      "ci95_low": -0.09889060473943209,
+      "ci95_high": 0.02261618379750884,
+      "player_champion_cells": 190,
+      "games": 1968
+    },
+    {
+      "champion": "Kog'Maw",
+      "learning_slope": -0.03656247488566745,
+      "ci95_low": -0.16307210505926847,
+      "ci95_high": 0.0702844934941643,
+      "player_champion_cells": 61,
+      "games": 511
+    },
+    {
+      "champion": "Teemo",
+      "learning_slope": -0.04404487853642354,
+      "ci95_low": -0.09805527726789781,
+      "ci95_high": 0.004737093525164408,
+      "player_champion_cells": 207,
+      "games": 2477
+    },
+    {
+      "champion": "Fiora",
+      "learning_slope": -0.04488842808006601,
+      "ci95_low": -0.08553502100061798,
+      "ci95_high": 0.00186656405766402,
+      "player_champion_cells": 425,
+      "games": 4305
+    },
+    {
+      "champion": "Cassiopeia",
+      "learning_slope": -0.04518013389480665,
+      "ci95_low": -0.14638678656541507,
+      "ci95_high": 0.029699291816944903,
+      "player_champion_cells": 46,
+      "games": 462
+    },
+    {
+      "champion": "Varus",
+      "learning_slope": -0.048385722696058245,
+      "ci95_low": -0.16496624031428722,
+      "ci95_high": 0.07039652670785802,
+      "player_champion_cells": 74,
+      "games": 752
+    },
+    {
+      "champion": "Garen",
+      "learning_slope": -0.05255430301060006,
+      "ci95_low": -0.11128869973116394,
+      "ci95_high": 0.0007761164211164617,
+      "player_champion_cells": 188,
+      "games": 1902
+    },
+    {
+      "champion": "Master Yi",
+      "learning_slope": -0.05732959525663661,
+      "ci95_low": -0.09453886918329686,
+      "ci95_high": -0.01640056992578543,
+      "player_champion_cells": 507,
+      "games": 5180
+    },
+    {
+      "champion": "Nunu",
+      "learning_slope": -0.0573937659746205,
+      "ci95_low": -0.16161462152127193,
+      "ci95_high": 0.02353278267233505,
+      "player_champion_cells": 49,
+      "games": 580
+    },
+    {
+      "champion": "Evelynn",
+      "learning_slope": -0.05770400588757978,
+      "ci95_low": -0.11283667797659352,
+      "ci95_high": -0.0066342722258621815,
+      "player_champion_cells": 193,
+      "games": 2205
+    },
+    {
+      "champion": "Vi",
+      "learning_slope": -0.057829571281057514,
+      "ci95_low": -0.12046436788533497,
+      "ci95_high": -0.00036257713339994907,
+      "player_champion_cells": 194,
+      "games": 1697
+    },
+    {
+      "champion": "Tahm Kench",
+      "learning_slope": -0.05809653057782256,
+      "ci95_low": -0.13164417304506654,
+      "ci95_high": 0.003381292082448685,
+      "player_champion_cells": 296,
+      "games": 2351
+    },
+    {
+      "champion": "Nasus",
+      "learning_slope": -0.05817877504887818,
+      "ci95_low": -0.10989200309672564,
+      "ci95_high": -0.0102961609073173,
+      "player_champion_cells": 304,
+      "games": 2945
+    },
+    {
+      "champion": "Lee Sin",
+      "learning_slope": -0.058385567629654876,
+      "ci95_low": -0.083743115940441,
+      "ci95_high": -0.032068214288422735,
+      "player_champion_cells": 1581,
+      "games": 15898
+    },
+    {
+      "champion": "Janna",
+      "learning_slope": -0.059071661199876946,
+      "ci95_low": -0.08857839637354767,
+      "ci95_high": -0.030219493052193312,
+      "player_champion_cells": 770,
+      "games": 7873
+    },
+    {
+      "champion": "Caitlyn",
+      "learning_slope": -0.061704912680906936,
+      "ci95_low": -0.10462683051386273,
+      "ci95_high": -0.02075484656237017,
+      "player_champion_cells": 425,
+      "games": 3928
+    },
+    {
+      "champion": "Lulu",
+      "learning_slope": -0.06339021873996782,
+      "ci95_low": -0.10324478188859085,
+      "ci95_high": -0.026787089422320717,
+      "player_champion_cells": 394,
+      "games": 3468
+    },
+    {
+      "champion": "Talon",
+      "learning_slope": -0.06436180026907928,
+      "ci95_low": -0.11974464957213948,
+      "ci95_high": -0.00832306475834101,
+      "player_champion_cells": 228,
+      "games": 2591
+    },
+    {
+      "champion": "Warwick",
+      "learning_slope": -0.0665052463771365,
+      "ci95_low": -0.1440078105564036,
+      "ci95_high": 0.0011428941397922975,
+      "player_champion_cells": 119,
+      "games": 1067
+    },
+    {
+      "champion": "Quinn",
+      "learning_slope": -0.06691192132730775,
+      "ci95_low": -0.11234450929860026,
+      "ci95_high": -0.018113217632831316,
+      "player_champion_cells": 349,
+      "games": 3106
+    },
+    {
+      "champion": "Shyvana",
+      "learning_slope": -0.06719516792925583,
+      "ci95_low": -0.14197434423797586,
+      "ci95_high": -0.006263806830461323,
+      "player_champion_cells": 133,
+      "games": 1367
+    },
+    {
+      "champion": "Volibear",
+      "learning_slope": -0.06752648620314303,
+      "ci95_low": -0.12491923229227607,
+      "ci95_high": -0.010576290103615821,
+      "player_champion_cells": 252,
+      "games": 2191
+    },
+    {
+      "champion": "Diana",
+      "learning_slope": -0.06761752426356502,
+      "ci95_low": -0.1184012543842046,
+      "ci95_high": -0.01763180954272878,
+      "player_champion_cells": 251,
+      "games": 2419
+    },
+    {
+      "champion": "Vladimir",
+      "learning_slope": -0.06869292913491563,
+      "ci95_low": -0.1455393562432453,
+      "ci95_high": -0.001571092582008112,
+      "player_champion_cells": 239,
+      "games": 1998
+    },
+    {
+      "champion": "Olaf",
+      "learning_slope": -0.0688525338484856,
+      "ci95_low": -0.15339358945871576,
+      "ci95_high": 0.012634314600519106,
+      "player_champion_cells": 123,
+      "games": 1189
+    },
+    {
+      "champion": "Anivia",
+      "learning_slope": -0.06945240358933041,
+      "ci95_low": -0.11503629054753234,
+      "ci95_high": -0.021833433824113332,
+      "player_champion_cells": 293,
+      "games": 3065
+    },
+    {
+      "champion": "Lucian",
+      "learning_slope": -0.0701487423143542,
+      "ci95_low": -0.0901193874291046,
+      "ci95_high": -0.04714314657424831,
+      "player_champion_cells": 1699,
+      "games": 16278
+    },
+    {
+      "champion": "Gnar",
+      "learning_slope": -0.07017266537001651,
+      "ci95_low": -0.14206070582357855,
+      "ci95_high": 0.004437128697159868,
+      "player_champion_cells": 208,
+      "games": 1711
+    },
+    {
+      "champion": "Zac",
+      "learning_slope": -0.07128406891126547,
+      "ci95_low": -0.14324681424586952,
+      "ci95_high": -0.007073589930564262,
+      "player_champion_cells": 193,
+      "games": 1797
+    },
+    {
+      "champion": "Tryndamere",
+      "learning_slope": -0.07230759446089248,
+      "ci95_low": -0.12797885965535608,
+      "ci95_high": -0.026699419214388172,
+      "player_champion_cells": 279,
+      "games": 3084
+    },
+    {
+      "champion": "Malphite",
+      "learning_slope": -0.0728871457890754,
+      "ci95_low": -0.10569299680319913,
+      "ci95_high": -0.04039146049884816,
+      "player_champion_cells": 547,
+      "games": 4704
+    },
+    {
+      "champion": "Zilean",
+      "learning_slope": -0.07299004917032428,
+      "ci95_low": -0.1289996206625356,
+      "ci95_high": -0.009744471082492127,
+      "player_champion_cells": 176,
+      "games": 1859
+    },
+    {
+      "champion": "Wukong",
+      "learning_slope": -0.07564420538419789,
+      "ci95_low": -0.11461118793402882,
+      "ci95_high": -0.03232793443313217,
+      "player_champion_cells": 374,
+      "games": 4184
+    },
+    {
+      "champion": "Thresh",
+      "learning_slope": -0.07579666973618372,
+      "ci95_low": -0.1031963064844488,
+      "ci95_high": -0.05013317543489744,
+      "player_champion_cells": 1143,
+      "games": 10854
+    },
+    {
+      "champion": "Sejuani",
+      "learning_slope": -0.0764786520445407,
+      "ci95_low": -0.19420983704852873,
+      "ci95_high": 0.049119246041620025,
+      "player_champion_cells": 56,
+      "games": 410
+    },
+    {
+      "champion": "Rengar",
+      "learning_slope": -0.0772067580877971,
+      "ci95_low": -0.10991067495968564,
+      "ci95_high": -0.04278553472442863,
+      "player_champion_cells": 592,
+      "games": 6426
+    },
+    {
+      "champion": "Alistar",
+      "learning_slope": -0.0775326668739108,
+      "ci95_low": -0.1251380867661401,
+      "ci95_high": -0.029941039219119413,
+      "player_champion_cells": 334,
+      "games": 3125
+    },
+    {
+      "champion": "Vayne",
+      "learning_slope": -0.07761849990268688,
+      "ci95_low": -0.0989240819690513,
+      "ci95_high": -0.052188756620516016,
+      "player_champion_cells": 1382,
+      "games": 13392
+    },
+    {
+      "champion": "Gragas",
+      "learning_slope": -0.07802290720393984,
+      "ci95_low": -0.18792694344631275,
+      "ci95_high": 0.024139485236146518,
+      "player_champion_cells": 62,
+      "games": 508
+    },
+    {
+      "champion": "Leona",
+      "learning_slope": -0.07882305870846032,
+      "ci95_low": -0.1211125349821679,
+      "ci95_high": -0.03877256465790849,
+      "player_champion_cells": 311,
+      "games": 3217
+    },
+    {
+      "champion": "Blitzcrank",
+      "learning_slope": -0.07957323287128193,
+      "ci95_low": -0.11507912492892246,
+      "ci95_high": -0.04883187229081067,
+      "player_champion_cells": 797,
+      "games": 7673
+    },
+    {
+      "champion": "Fizz",
+      "learning_slope": -0.07964444279373344,
+      "ci95_low": -0.11728611403940387,
+      "ci95_high": -0.0425736392199236,
+      "player_champion_cells": 519,
+      "games": 5124
+    },
+    {
+      "champion": "Viktor",
+      "learning_slope": -0.07986518062000014,
+      "ci95_low": -0.13403099154111422,
+      "ci95_high": -0.022297549789890164,
+      "player_champion_cells": 183,
+      "games": 1867
+    },
+    {
+      "champion": "Zyra",
+      "learning_slope": -0.08056381189728992,
+      "ci95_low": -0.16024496183887235,
+      "ci95_high": -0.0017575841541080182,
+      "player_champion_cells": 154,
+      "games": 1752
+    },
+    {
+      "champion": "Miss Fortune",
+      "learning_slope": -0.08150681786850017,
+      "ci95_low": -0.1058997912011825,
+      "ci95_high": -0.05493731794421008,
+      "player_champion_cells": 1041,
+      "games": 10192
+    },
+    {
+      "champion": "Rumble",
+      "learning_slope": -0.08192144305293224,
+      "ci95_low": -0.16596951333150672,
+      "ci95_high": -0.009149919451161137,
+      "player_champion_cells": 67,
+      "games": 718
+    },
+    {
+      "champion": "Fiddlesticks",
+      "learning_slope": -0.08237792187032997,
+      "ci95_low": -0.20622881089542022,
+      "ci95_high": 0.03374284538014,
+      "player_champion_cells": 98,
+      "games": 792
+    },
+    {
+      "champion": "Nautilus",
+      "learning_slope": -0.08322550911352589,
+      "ci95_low": -0.13272976062342864,
+      "ci95_high": -0.0352515222476108,
+      "player_champion_cells": 322,
+      "games": 3152
+    },
+    {
+      "champion": "Jinx",
+      "learning_slope": -0.08392854848543045,
+      "ci95_low": -0.13071490343572031,
+      "ci95_high": -0.040538345011087495,
+      "player_champion_cells": 417,
+      "games": 3885
+    },
+    {
+      "champion": "Kindred",
+      "learning_slope": -0.08424067971742913,
+      "ci95_low": -0.13281175258201536,
+      "ci95_high": -0.036044590506218235,
+      "player_champion_cells": 372,
+      "games": 3568
+    },
+    {
+      "champion": "Ekko",
+      "learning_slope": -0.08467150544045571,
+      "ci95_low": -0.12384042058582115,
+      "ci95_high": -0.04319583191335616,
+      "player_champion_cells": 404,
+      "games": 4197
+    },
+    {
+      "champion": "Vel'Koz",
+      "learning_slope": -0.0850020204875906,
+      "ci95_low": -0.1394768851369565,
+      "ci95_high": -0.03293737600425592,
+      "player_champion_cells": 227,
+      "games": 2304
+    },
+    {
+      "champion": "Ezreal",
+      "learning_slope": -0.08614735375894905,
+      "ci95_low": -0.12278524010756951,
+      "ci95_high": -0.054017835108354895,
+      "player_champion_cells": 795,
+      "games": 7416
+    },
+    {
+      "champion": "Shaco",
+      "learning_slope": -0.0879375534896118,
+      "ci95_low": -0.1332150428420092,
+      "ci95_high": -0.03779015240568157,
+      "player_champion_cells": 361,
+      "games": 3598
+    },
+    {
+      "champion": "Ahri",
+      "learning_slope": -0.08868215227009198,
+      "ci95_low": -0.12036605832044127,
+      "ci95_high": -0.054631846004953154,
+      "player_champion_cells": 514,
+      "games": 4848
+    },
+    {
+      "champion": "Yasuo",
+      "learning_slope": -0.08928185691280174,
+      "ci95_low": -0.12545338783374374,
+      "ci95_high": -0.05372036859549587,
+      "player_champion_cells": 520,
+      "games": 5408
+    },
+    {
+      "champion": "Nami",
+      "learning_slope": -0.08961839193496067,
+      "ci95_low": -0.13735651985119965,
+      "ci95_high": -0.04234083798784053,
+      "player_champion_cells": 390,
+      "games": 3679
+    },
+    {
+      "champion": "Graves",
+      "learning_slope": -0.08986035455243689,
+      "ci95_low": -0.14165880051367344,
+      "ci95_high": -0.037295015023731885,
+      "player_champion_cells": 318,
+      "games": 3199
+    },
+    {
+      "champion": "Lux",
+      "learning_slope": -0.0909314378396428,
+      "ci95_low": -0.12423702584555849,
+      "ci95_high": -0.05703689435604693,
+      "player_champion_cells": 577,
+      "games": 5351
+    },
+    {
+      "champion": "Jax",
+      "learning_slope": -0.09206033861813931,
+      "ci95_low": -0.1456871061205798,
+      "ci95_high": -0.03829820324798042,
+      "player_champion_cells": 325,
+      "games": 3024
+    },
+    {
+      "champion": "Brand",
+      "learning_slope": -0.09265712175951497,
+      "ci95_low": -0.12384808409605355,
+      "ci95_high": -0.06311682447043768,
+      "player_champion_cells": 746,
+      "games": 6647
+    },
+    {
+      "champion": "Shen",
+      "learning_slope": -0.0931070303922178,
+      "ci95_low": -0.13262605853355897,
+      "ci95_high": -0.05590652557204393,
+      "player_champion_cells": 348,
+      "games": 3374
+    },
+    {
+      "champion": "Kalista",
+      "learning_slope": -0.09378779977708519,
+      "ci95_low": -0.1463911561779317,
+      "ci95_high": -0.04599727303489273,
+      "player_champion_cells": 331,
+      "games": 3061
+    },
+    {
+      "champion": "Heimerdinger",
+      "learning_slope": -0.0955632760908493,
+      "ci95_low": -0.1586763255304607,
+      "ci95_high": -0.03892951343284162,
+      "player_champion_cells": 132,
+      "games": 1468
+    },
+    {
+      "champion": "Draven",
+      "learning_slope": -0.09656345183478786,
+      "ci95_low": -0.158410847436217,
+      "ci95_high": -0.0391752695666099,
+      "player_champion_cells": 276,
+      "games": 3199
+    },
+    {
+      "champion": "Karma",
+      "learning_slope": -0.09785719384182838,
+      "ci95_low": -0.1518490690287275,
+      "ci95_high": -0.03840186886924737,
+      "player_champion_cells": 159,
+      "games": 1708
+    },
+    {
+      "champion": "Malzahar",
+      "learning_slope": -0.09813583671273571,
+      "ci95_low": -0.1528713089181021,
+      "ci95_high": -0.0424344885871526,
+      "player_champion_cells": 212,
+      "games": 1985
+    },
+    {
+      "champion": "Udyr",
+      "learning_slope": -0.09877298773406416,
+      "ci95_low": -0.1481193081842076,
+      "ci95_high": -0.049374267707224556,
+      "player_champion_cells": 290,
+      "games": 3242
+    },
+    {
+      "champion": "Sona",
+      "learning_slope": -0.1021971986213037,
+      "ci95_low": -0.15265684151070452,
+      "ci95_high": -0.052490492156424484,
+      "player_champion_cells": 376,
+      "games": 3681
+    },
+    {
+      "champion": "Pantheon",
+      "learning_slope": -0.1022470343398598,
+      "ci95_low": -0.14962156945349359,
+      "ci95_high": -0.04489699446307371,
+      "player_champion_cells": 235,
+      "games": 2588
+    },
+    {
+      "champion": "Katarina",
+      "learning_slope": -0.10273401684098012,
+      "ci95_low": -0.17395700426329053,
+      "ci95_high": -0.027075353904560527,
+      "player_champion_cells": 124,
+      "games": 1392
+    },
+    {
+      "champion": "LeBlanc",
+      "learning_slope": -0.10277140058850777,
+      "ci95_low": -0.15526325628868215,
+      "ci95_high": -0.05475835672074431,
+      "player_champion_cells": 339,
+      "games": 3092
+    },
+    {
+      "champion": "Renekton",
+      "learning_slope": -0.10341328148286083,
+      "ci95_low": -0.15349130193704744,
+      "ci95_high": -0.05807710616530696,
+      "player_champion_cells": 396,
+      "games": 3826
+    },
+    {
+      "champion": "Morgana",
+      "learning_slope": -0.10545419230839795,
+      "ci95_low": -0.14063612878454865,
+      "ci95_high": -0.07235745917207813,
+      "player_champion_cells": 543,
+      "games": 5332
+    },
+    {
+      "champion": "Darius",
+      "learning_slope": -0.10574896935577781,
+      "ci95_low": -0.16017341389072356,
+      "ci95_high": -0.05611442307740992,
+      "player_champion_cells": 337,
+      "games": 3163
+    },
+    {
+      "champion": "Corki",
+      "learning_slope": -0.1064068362673719,
+      "ci95_low": -0.1742145305984262,
+      "ci95_high": -0.03926052577132985,
+      "player_champion_cells": 167,
+      "games": 1494
+    },
+    {
+      "champion": "Azir",
+      "learning_slope": -0.10937161466802739,
+      "ci95_low": -0.16026805307774306,
+      "ci95_high": -0.04785332041458878,
+      "player_champion_cells": 150,
+      "games": 1874
+    },
+    {
+      "champion": "Rammus",
+      "learning_slope": -0.11139417122399879,
+      "ci95_low": -0.17369098318579734,
+      "ci95_high": -0.048371895166679925,
+      "player_champion_cells": 221,
+      "games": 2130
+    },
+    {
+      "champion": "Soraka",
+      "learning_slope": -0.11150601860541835,
+      "ci95_low": -0.1672698770007969,
+      "ci95_high": -0.055081752615218846,
+      "player_champion_cells": 270,
+      "games": 2320
+    },
+    {
+      "champion": "Xin Zhao",
+      "learning_slope": -0.11253374673981431,
+      "ci95_low": -0.17371921583659516,
+      "ci95_high": -0.06038239428471771,
+      "player_champion_cells": 256,
+      "games": 2513
+    },
+    {
+      "champion": "Swain",
+      "learning_slope": -0.11463334117004942,
+      "ci95_low": -0.21301567562494544,
+      "ci95_high": -0.021291539808120662,
+      "player_champion_cells": 87,
+      "games": 838
+    },
+    {
+      "champion": "Syndra",
+      "learning_slope": -0.1153809615086481,
+      "ci95_low": -0.19779849563690802,
+      "ci95_high": -0.04295895431174871,
+      "player_champion_cells": 123,
+      "games": 1159
+    },
+    {
+      "champion": "Tristana",
+      "learning_slope": -0.11571069910679602,
+      "ci95_low": -0.15017165774766675,
+      "ci95_high": -0.08545443292825522,
+      "player_champion_cells": 732,
+      "games": 6895
+    },
+    {
+      "champion": "Rek'Sai",
+      "learning_slope": -0.1160439216591838,
+      "ci95_low": -0.17490412868476504,
+      "ci95_high": -0.06382839362552416,
+      "player_champion_cells": 214,
+      "games": 2331
+    },
+    {
+      "champion": "Twitch",
+      "learning_slope": -0.11671574044289933,
+      "ci95_low": -0.19391528685619747,
+      "ci95_high": -0.04402550338225524,
+      "player_champion_cells": 159,
+      "games": 1526
+    },
+    {
+      "champion": "Sion",
+      "learning_slope": -0.11910451149145326,
+      "ci95_low": -0.2124649828642995,
+      "ci95_high": -0.035431591894362006,
+      "player_champion_cells": 79,
+      "games": 618
+    },
+    {
+      "champion": "Trundle",
+      "learning_slope": -0.1199098661362125,
+      "ci95_low": -0.16131331098885515,
+      "ci95_high": -0.08461285967711464,
+      "player_champion_cells": 392,
+      "games": 3839
+    },
+    {
+      "champion": "Xerath",
+      "learning_slope": -0.11995618465847878,
+      "ci95_low": -0.21372653509133413,
+      "ci95_high": -0.026709133314368232,
+      "player_champion_cells": 83,
+      "games": 885
+    },
+    {
+      "champion": "Amumu",
+      "learning_slope": -0.12120949662565807,
+      "ci95_low": -0.20074578941247695,
+      "ci95_high": -0.04526199819049124,
+      "player_champion_cells": 158,
+      "games": 1364
+    },
+    {
+      "champion": "Kassadin",
+      "learning_slope": -0.12278966553078294,
+      "ci95_low": -0.19586188417402275,
+      "ci95_high": -0.052825888350640456,
+      "player_champion_cells": 177,
+      "games": 1683
+    },
+    {
+      "champion": "Ashe",
+      "learning_slope": -0.12392447969368633,
+      "ci95_low": -0.20377020351371505,
+      "ci95_high": -0.04690687481831398,
+      "player_champion_cells": 127,
+      "games": 1157
+    },
+    {
+      "champion": "Irelia",
+      "learning_slope": -0.12528128939280947,
+      "ci95_low": -0.17345087992376512,
+      "ci95_high": -0.07965186671288109,
+      "player_champion_cells": 391,
+      "games": 3788
+    },
+    {
+      "champion": "Kayle",
+      "learning_slope": -0.12624312710643223,
+      "ci95_low": -0.1839909354516962,
+      "ci95_high": -0.07503694321930413,
+      "player_champion_cells": 179,
+      "games": 2126
+    },
+    {
+      "champion": "Twisted Fate",
+      "learning_slope": -0.1328375272736142,
+      "ci95_low": -0.1693590515072756,
+      "ci95_high": -0.09877218529717459,
+      "player_champion_cells": 515,
+      "games": 5472
+    },
+    {
+      "champion": "Annie",
+      "learning_slope": -0.1358161033416233,
+      "ci95_low": -0.18239771510329902,
+      "ci95_high": -0.09026657257861063,
+      "player_champion_cells": 320,
+      "games": 2873
+    },
+    {
+      "champion": "Braum",
+      "learning_slope": -0.13953443586194272,
+      "ci95_low": -0.19429414536955758,
+      "ci95_high": -0.08537101983277672,
+      "player_champion_cells": 295,
+      "games": 2556
+    },
+    {
+      "champion": "Dr. Mundo",
+      "learning_slope": -0.14191132733904666,
+      "ci95_low": -0.20221717332249048,
+      "ci95_high": -0.08482228367291236,
+      "player_champion_cells": 276,
+      "games": 2274
+    },
+    {
+      "champion": "Jarvan IV",
+      "learning_slope": -0.14389132099706295,
+      "ci95_low": -0.22190171199534295,
+      "ci95_high": -0.06967378284562468,
+      "player_champion_cells": 129,
+      "games": 1126
+    },
+    {
+      "champion": "Hecarim",
+      "learning_slope": -0.1452478886805894,
+      "ci95_low": -0.1946893008461471,
+      "ci95_high": -0.0910302432764231,
+      "player_champion_cells": 227,
+      "games": 2437
+    },
+    {
+      "champion": "Nocturne",
+      "learning_slope": -0.15375640710890573,
+      "ci95_low": -0.24142821291377775,
+      "ci95_high": -0.05490081191159122,
+      "player_champion_cells": 139,
+      "games": 1078
+    },
+    {
+      "champion": "Lissandra",
+      "learning_slope": -0.1582749918269382,
+      "ci95_low": -0.24096326379581012,
+      "ci95_high": -0.07657295802366797,
+      "player_champion_cells": 102,
+      "games": 882
+    },
+    {
+      "champion": "Cho'Gath",
+      "learning_slope": -0.1584715370492133,
+      "ci95_low": -0.23653928770377117,
+      "ci95_high": -0.07776041578060637,
+      "player_champion_cells": 162,
+      "games": 1406
+    },
+    {
+      "champion": "Sivir",
+      "learning_slope": -0.16279790877691705,
+      "ci95_low": -0.25200422040035647,
+      "ci95_high": -0.0844742762856667,
+      "player_champion_cells": 100,
+      "games": 827
+    },
+    {
+      "champion": "Veigar",
+      "learning_slope": -0.18356473493048045,
+      "ci95_low": -0.33708274684507084,
+      "ci95_high": -0.0730691256294986,
+      "player_champion_cells": 72,
+      "games": 695
+    },
+    {
+      "champion": "Aatrox",
+      "learning_slope": -0.18873281785014911,
+      "ci95_low": -0.3217989916866535,
+      "ci95_high": -0.06644523354825042,
+      "player_champion_cells": 73,
+      "games": 752
+    },
+    {
+      "champion": "Taric",
+      "learning_slope": -0.20329062914584414,
+      "ci95_low": -0.30135433912328485,
+      "ci95_high": -0.11682314426962047,
+      "player_champion_cells": 102,
+      "games": 869
+    },
+    {
+      "champion": "Skarner",
+      "learning_slope": -0.21738751448062338,
+      "ci95_low": -0.33813366798355027,
+      "ci95_high": -0.07642784257891429,
+      "player_champion_cells": 47,
+      "games": 404
+    }
+  ]
+}

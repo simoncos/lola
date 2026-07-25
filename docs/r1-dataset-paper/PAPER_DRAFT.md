@@ -1,30 +1,36 @@
 # LoLA-2016: A Preserved Ranked League of Legends Match Archive with Timelines and Kill Events
 
-*Working draft v0 — 2026-07-15. Numbers from `reports/validate.json`,
-`reports/stats.json`, and the `lola_dataset` toolkit. Prose is a first draft.*
+> **WITHDRAWN PENDING PROTOCOL-V2 RERUN (2026-07-20).** The MoA audit found
+> material problems in the old kill/assist interpretation, split labels, T3
+> estimand, and provenance. Numerical results and publication-readiness claims
+> below are retained only as revision history and must not be cited. The active
+> protocol is in `BENCHMARKS.md`; remediation status is in
+> `../REMEDIATION_STATUS.md`. Raw release is deferred.
+
+*Historical working draft v0 — 2026-07-15.*
 
 ---
 
 ## Abstract
 
-We release **LoLA-2016**, a curated and anonymized archive of **222,652** North
+We are preparing **LoLA-2016**, a curated and pseudonymized archive of **222,652** North
 American ranked solo-queue *League of Legends* matches from Pre-Season 2016
 (patches 5.21–6.1). Each match carries the full 10-player roster with 40+
 end-game statistics per player, four per-minute timeline segments of
-gold/experience/creep and lane-differential deltas, the raw stream of
-**13.1 million** (deduplicated) kill events with killer/victim/assist and
-timestamp, all champion bans, and — unusually — each player's previous-season
+gold/experience/creep and lane-differential deltas, and a raw kill stream whose
+one-row-per-assist representation is normalized into event and assist-relation
+tables with killer, victim, assist, and minute, all champion bans, and — unusually — each player's previous-season
 tier (Bronze through Challenger). The window is **no longer recollectable from
 Riot's API**: match-v4 was removed in 2021 and match-v5 retains only ~2 years,
 so 2016 timeline and kill-event data expired years before the current API
 existed. Comparable public archives preserve only end-game summaries for this
 era; to our knowledge LoLA-2016 is the only surviving ranked corpus retaining
 per-minute timelines and the kill-event stream at this scale with full tier
-labels. We document collection, a quality audit (including a 39.5% kill-event
-duplication in the raw crawl that we correct), anonymization, and licensing, and
-we ship an open extraction/validation toolkit, a Datasheet, and three benchmark
-tasks with baselines: draft win prediction, early-game win prediction, and a
-champion matchup-structure decomposition. LoLA-2016 supports longitudinal
+labels. We document collection, a quality audit (including the crawler's
+one-row-per-assist representation), pseudonymization, and licensing, and
+we provide an open extraction/validation toolkit, a Datasheet, and three benchmark
+tasks with baselines: draft win prediction, early-game win prediction, and
+lineup-interaction prediction. LoLA-2016 supports longitudinal
 meta-evolution studies and skill-conditioned design analysis that
 esports-only and current-patch datasets cannot.
 
@@ -48,12 +54,12 @@ ladder population, and a **frozen, known design window** (the Mastery/keystone
 overhaul, marksman-item and jungle reworks) that acts as a natural design shock.
 We contribute:
 
-1. **The dataset**: cleaned, anonymized, columnar (Parquet), with a Datasheet.
+1. **The proposed dataset**: cleaned, pseudonymized, columnar (Parquet), with a Datasheet.
 2. **A quality audit** on the real database, including provenance-level issues
-   (kill-event duplication, minute-unit durations, absent timestamps) and their
+   (kill/assist row representation, minute-unit durations, absent timestamps) and their
    corrections, so downstream users inherit documented data rather than folklore.
 3. **An open toolkit** (`lola_dataset`: validate / stats / export) reproducing
-   every number here, plus anonymization by salted hashing.
+   every number after rerun, plus pseudonymization by keyed hashing.
 4. **Three benchmark tasks with baselines** and fixed, leakage-controlled splits.
 5. **An honest treatment of licensing and recollectability**, since Riot-derived
    redistribution and the "irreplaceable" claim both require care.
@@ -84,7 +90,7 @@ recollected.
 | Match | 222,652 | patch version, duration (minutes) |
 | Participant | 2,226,520 | 40+ end-game stats per player-match |
 | ParticipantTimeline | 8,906,080 | 4 segments × per-minute deltas + lane diffs |
-| FrameKillEvent | 13,127,488 (deduped) | killer/victim/assist, minute |
+| FrameKillEvent | v2 strict rerun pending | normalized event rows + distinct assist relations |
 | Team / TeamBan | 445,304 / 1,330,757 | objectives, outcome / bans |
 
 128 champions; patches 5.21.0.297, 5.22.x, 5.23.x, 5.24.x, 6.1.0.484. Previous-
@@ -108,10 +114,11 @@ integrity is high — zero orphan records, and every match has exactly 10
 participants, 2 teams, and a single winner. Three provenance issues are
 documented and handled:
 
-- **Kill-event duplication.** The raw crawl wrote 21,692,852 kill-event rows, of
-  which **39.5%** are duplicates under the `(match_id, happen, victim)` key
-  (the original analysis deduplicated by database row order, an unsafe proxy);
-  we deduplicate to 13,127,488.
+- **Kill/assist representation.** The crawler can write one row per assist, so
+  repeated `(match_id, happen, victim)` keys are not automatically duplicate
+  kills. The v2 export emits one `kill_events` row per event key plus distinct
+  `kill_assists` relations, while strict validation separately reports exact
+  duplicates and conflicting payloads. Real-database v2 counts are pending rerun.
 - **Duration units.** `duration` is stored in **minutes** (range 7–87), and the
   era predates the remake system; we flag sub-10-minute games rather than treat
   them as remakes.
@@ -128,8 +135,8 @@ enough for player-sequence studies on that subset.
 
 ### 3.4 Pseudonymization and ethics
 
-Summoner names are dropped; summoner IDs are replaced by a salted SHA-256 hash
-(salt withheld). The raw API JSON blob (which contained names) is not
+Summoner names are dropped; summoner IDs are replaced by a 128-bit truncated
+HMAC-SHA-256 pseudonym (key withheld). The raw API JSON blob (which contained names) is not
 distributed. We describe the result as **pseudonymized and risk-minimized**
 rather than anonymous: under GDPR, hashed identifiers remain personal data
 while re-linking is theoretically possible. In practice linkability is
@@ -157,35 +164,26 @@ end-game archives do not preserve.
 
 ## 4. Benchmark tasks
 
-All tasks use a chronological, leakage-controlled split (train on builds up to
-5.24.0.254, validate on the first 20% of 5.24.0.256 by match_id, test on the
-remainder plus 5.24.0.259 and 6.1.0.484), with a same-patch random split as a
-control. Matches under 10 minutes are excluded.
+> Numerical benchmark results remain pending a protocol-v2 rerun.
 
-**T1 — Draft win prediction.** From the 10 champions and bans, predict the
-winner. Signed champion one-hot with logistic regression reaches 54.7%
-cross-patch / 55.5% same-patch accuracy (majority 50.6%), matching the
-literature's ~55% draft-only ceiling; we also report AUC, log-loss, and expected
-calibration error (rarely reported in this literature), and observe that
-cross-patch drift roughly triples calibration error.
+All tasks use a canonical duration cohort and three audited settings: a
+build-order temporal holdout, an IID mixed-patch hash split, and a genuine
+within-build control. Every run emits the exact match-level split manifest and
+a provenance manifest; validation selects hyperparameters and test is evaluated
+once.
 
-**T2 — Early-game win prediction.** From team-differential timeline features
-(gold/xp/cs/damage-taken deltas, lane differentials) plus kill difference and
-first blood within the horizon, predict the winner. Logistic regression reaches
-**70.9% / 71.3%** (cross-patch / same-patch) at 10 minutes and **80.3% / 80.3%**
-at 20 minutes (gradient boosting within 0.2pp), matching the literature's
-70–75% band for 10-minute prediction. Notably, and in contrast to T1, the
-cross-patch penalty nearly vanishes (≤0.5pp accuracy, no calibration
-degradation): balance patches change *which compositions* are strong, but
-"being ahead at minute 10" means the same thing across patches — execution-state
-features transfer where draft features do not.
+**T1 — Draft win prediction.** Signed one-hot features for the ten champion
+picks only. Bans, tier, patch and player history are not silently included.
 
-**T3 — Matchup-structure decomposition.** From per-(patch, tier) champion win
-matrices, decompose pairwise win log-odds into a transitive strength rating and
-a cyclic (counter-pick) residual via weighted HodgeRank. We provide this as an
-analysis benchmark: on LoLA-2016 the genuine cyclic share is ~5% after
-permutation-null correction, stable across tiers and patches — demonstrating the
-dataset supports balance-structure research, not only prediction.
+**T2 — Early-game win prediction.** Team-differential timeline state plus kill
+difference and first blood at 10/20 minutes. Champion composition is excluded,
+and kills come from the normalized one-row-per-event table.
+
+**T3 — Lineup-interaction prediction.** Compare held-out performance of
+regularized champion main effects against main effects plus anti-symmetric
+cross-team champion interactions. This measures incremental predictive value,
+not causal counter-picks or lane matchups: the 25 cross-team pairs in one match
+are correlated views of one team outcome.
 
 ## 5. Usage, limitations, maintenance
 
@@ -195,16 +193,17 @@ and weakly-supervised behavioral work. It is **not** suitable for inferences
 about the current game (champions and systems have changed substantially) or for
 player-level profiling. Limitations: single region (NA), single patch band, solo
 queue (not professional), pre-season (atypical motivation), 128-champion roster,
-and tier as a lagged previous-season label. The dataset is versioned on Zenodo
-(DOI) with a mirror on HuggingFace; issues and takedown requests are handled via
+and tier as a lagged previous-season label. If redistribution is authorized, a
+future public version may be archived on Zenodo and mirrored on HuggingFace; no
+current DOI or mirror is claimed. Issues and takedown requests are handled via
 the project repository.
 
 ## 6. Conclusion
 
 LoLA-2016 preserves a slice of ranked *League of Legends* that the game's own
 infrastructure can no longer produce, with the skill labels and timeline
-granularity that make design- and balance-oriented research possible. We release
-it with a documented quality audit, reproducible tooling, and benchmarks, in the
+granularity that make design- and balance-oriented research possible. We intend
+to release it, subject to permission and a completed v2 audit, with reproducible tooling, in the
 hope that "the data expired" becomes a less common obstacle to studying how these
 games — and their players — actually behaved.
 
@@ -226,8 +225,8 @@ games — and their players — actually behaved.
 pip install -r lola_dataset/requirements.txt
 python -m lola_dataset validate --db lola.db --out reports/validate.json
 python -m lola_dataset stats    --db lola.db --out reports/stats.json
-python -m lola_dataset export    --db lola.db --out parquet/ --salt <secret>
-python benchmarks/draft_baseline.py --parquet parquet/       # T1
-python benchmarks/early_game_baseline.py --parquet parquet/  # T2
-python analysis/matchup_structure.py --parquet parquet/      # T3
+python -m lola_dataset export    --db lola.db --out parquet/ --salt-file SALT_PRIVATE.txt
+python -m benchmarks.draft_baseline --parquet parquet/                  # T1
+python -m benchmarks.early_game_baseline --parquet parquet/             # T2
+python -m benchmarks.matchup_interaction_baseline --parquet parquet/    # T3
 ```

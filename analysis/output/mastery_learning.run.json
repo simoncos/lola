@@ -1,0 +1,69 @@
+{
+  "run_name": "mastery_learning",
+  "generated_at": "2026-07-21T03:10:02.149192+00:00",
+  "toolkit_version": "0.2.0",
+  "git_commit": "8791e41672248473f34143c4016c958226cc51d4",
+  "git_dirty": true,
+  "git_status_sha256": "ae26098ba68ea673b3b9b5947dc61127360d8e099b8dab6674ae698b90770ea3",
+  "source_tree": {
+    "algorithm": "SHA-256(path + file SHA-256)",
+    "patterns": [
+      "lola_dataset/**/*.py",
+      "benchmarks/**/*.py",
+      "analysis/**/*.py",
+      "pyproject.toml",
+      "uv.lock"
+    ],
+    "files": 23,
+    "sha256": "e407233674a5fed1968a6caa3e42f4bc75dc7d8152c5f510c9337fc2b572f48d"
+  },
+  "python": "3.12.13",
+  "dependencies": {
+    "pandas": "2.3.3",
+    "pyarrow": "21.0.0",
+    "numpy": "2.5.1",
+    "scipy": "1.18.0",
+    "scikit-learn": "1.9.0",
+    "matplotlib": "3.11.1"
+  },
+  "parameters": {
+    "protocol_version": 1,
+    "minimum_cell_games": 5,
+    "minimum_player_champion_cells": 40,
+    "bootstrap_reps": 1000
+  },
+  "inputs": [
+    {
+      "file": "matches.parquet",
+      "bytes": 1162248,
+      "sha256": "ad875fc8c99d40d81758e394800ba2d4ed9a444213a92f3a3b19c7a63998eca6"
+    },
+    {
+      "file": "participants.parquet",
+      "bytes": 136965567,
+      "sha256": "9694a5ab483a443173e77c29246d553d6815fdf281a1cab9a47f63f025648d23"
+    },
+    {
+      "file": "participant_timelines.parquet",
+      "bytes": 138649375,
+      "sha256": "9e142fdb2d161f510b653a1a2cccf5064dc803ba489a4b20de9b9dc802706aa6"
+    }
+  ],
+  "outputs": [
+    {
+      "file": "mastery_learning.csv",
+      "bytes": 9752,
+      "sha256": "ff62a841269f9011dbfb23c3bc1d1aa82a7602040c3bdf4999c47c7562878ac6"
+    },
+    {
+      "file": "mastery_learning.json",
+      "bytes": 28221,
+      "sha256": "239c81b301f4c73eb97f9fe74348c7030f48cfa169eaaec47dda370d014bc58e"
+    },
+    {
+      "file": "mastery_learning.md",
+      "bytes": 7320,
+      "sha256": "952dae583b5ff480ea6fd998f8762764b08d3f4490a9f2d765d0fcf4e235df6b"
+    }
+  ]
+}

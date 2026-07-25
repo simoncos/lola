@@ -1,21 +1,9 @@
-"""T2 benchmark baselines: early-game win prediction from timeline telemetry.
+"""T2 benchmark: early-game win prediction from observed game state.
 
-Predicts the winner from the state of the game at 10 minutes (and 20 minutes),
-using team-differential features derived from timeline deltas and kill events:
+Features are team-differential timeline telemetry, kill difference, and first
+blood within the horizon.  Champion composition is not part of this baseline.
 
-- per-team sums (blue minus red) of creeps/gold/xp/damage-taken per-min deltas
-  for the 0-10 segment (plus 10-20 for the 20-minute variant)
-- lane-differential sums (cs_diff, xp_diff per min)
-- kill difference and first blood within the horizon (from kill events)
-
-Splits, models and metrics mirror T1 (benchmarks/draft_baseline.py): cross-patch
-chronological split + same-patch random control; majority / logistic regression
-/ gradient boosting; accuracy, AUC, log-loss, ECE. The 20-minute variant is
-restricted to matches lasting >= 20 minutes (standard practice: prediction at
-time t conditions on the game reaching t).
-
-Usage:
-    python benchmarks/early_game_baseline.py --parquet <dir> [--out benchmarks/output]
+Run with ``python -m benchmarks.early_game_baseline --parquet <dir>``.
 """
 
 from __future__ import annotations
@@ -26,133 +14,181 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from sklearn.ensemble import HistGradientBoostingClassifier
-from sklearn.linear_model import LogisticRegression
 
-from draft_baseline import (MIN_DURATION_MIN, evaluate, split_cross_patch,
-                            split_same_patch)
+from benchmarks.draft_baseline import run_setting
+from benchmarks.splits import benchmark_splits, write_split_manifest
+from lola_dataset.cohort import eligible_matches, filter_to_eligible
+from lola_dataset.provenance import write_run_manifest
+
 
 SEGMENTS = {10: ["zero_to_ten"], 20: ["zero_to_ten", "ten_to_twenty"]}
-DELTA_COLS = ["creeps_per_min_delta", "gold_per_min_delta", "xp_per_min_delta",
-              "damage_taken_per_min_delta", "cs_diff_per_min_delta",
-              "xp_diff_per_min_delta"]
+DELTA_COLS = [
+    "creeps_per_min_delta",
+    "gold_per_min_delta",
+    "xp_per_min_delta",
+    "damage_taken_per_min_delta",
+    "cs_diff_per_min_delta",
+    "xp_diff_per_min_delta",
+]
 
 
-def team_timeline_features(d: Path, horizon: int) -> pd.DataFrame:
-    t = pd.read_parquet(
-        d / "participant_timelines.parquet",
-        columns=["match_id", "summoner_id", "delta", "side"] + DELTA_COLS)
-    t = t[t["delta"].isin(SEGMENTS[horizon])]
-    team = (t.groupby(["match_id", "side"])[DELTA_COLS].mean().reset_index())
+def team_timeline_features(
+    parquet_dir: Path, horizon: int, cohort: pd.DataFrame
+) -> pd.DataFrame:
+    timeline = pd.read_parquet(
+        parquet_dir / "participant_timelines.parquet",
+        columns=["match_id", "summoner_id", "delta", "side"] + DELTA_COLS,
+    )
+    timeline = filter_to_eligible(timeline, cohort)
+    timeline = timeline[timeline["delta"].isin(SEGMENTS[horizon])]
+    team = timeline.groupby(["match_id", "side"])[DELTA_COLS].mean().reset_index()
     blue = team[team["side"] == "blue"].set_index("match_id")[DELTA_COLS]
     red = team[team["side"] == "red"].set_index("match_id")[DELTA_COLS]
-    feats = (blue - red).add_prefix("d_")
-    return feats.reset_index()
+    return (blue - red).add_prefix("d_").reset_index()
 
 
-def kill_features(d: Path, sides: pd.DataFrame, horizon: int) -> pd.DataFrame:
-    k = pd.read_parquet(d / "kill_events.parquet",
-                        columns=["match_id", "happen", "killer", "minute"])
-    k = k[k["minute"] < horizon]
-    k = k.merge(sides, left_on=["match_id", "killer"],
-                right_on=["match_id", "champion"], how="inner")
+def kill_features(
+    parquet_dir: Path,
+    sides: pd.DataFrame,
+    horizon: int,
+    cohort: pd.DataFrame,
+) -> pd.DataFrame:
+    kills = pd.read_parquet(
+        parquet_dir / "kill_events.parquet",
+        columns=["match_id", "happen", "killer", "minute"],
+    )
+    kills = filter_to_eligible(kills, cohort)
+    kills = kills[kills["minute"] < horizon]
+    kills = kills.merge(
+        sides,
+        left_on=["match_id", "killer"],
+        right_on=["match_id", "champion"],
+        how="inner",
+        validate="many_to_one",
+    )
     kill_diff = (
-        k.assign(v=np.where(k["side"] == "blue", 1, -1))
-        .groupby("match_id")["v"].sum().rename("kill_diff"))
-    fb = (k.sort_values("happen").drop_duplicates("match_id")
-          .assign(first_blood_blue=lambda x: (x["side"] == "blue").astype(int))
-          .set_index("match_id")["first_blood_blue"])
-    return pd.concat([kill_diff, fb], axis=1).reset_index()
+        kills.assign(value=np.where(kills["side"] == "blue", 1, -1))
+        .groupby("match_id")["value"]
+        .sum()
+        .rename("kill_diff")
+    )
+    first_blood = (
+        kills.sort_values(["match_id", "minute", "happen"])
+        .drop_duplicates("match_id")
+        .assign(first_blood_blue=lambda frame: (frame["side"] == "blue").astype(int))
+        .set_index("match_id")["first_blood_blue"]
+    )
+    return pd.concat([kill_diff, first_blood], axis=1).reset_index()
 
 
-def build_frame(d: Path, horizon: int) -> tuple[pd.DataFrame, list[str]]:
-    parts = pd.read_parquet(
-        d / "participants.parquet",
-        columns=["match_id", "champion", "side", "participant_win", "version"])
-    m = pd.read_parquet(d / "matches.parquet")
-    m["match_id"] = m["match_id"].astype(str)
-    min_dur = max(MIN_DURATION_MIN, horizon)
-    ok = m[m["duration"] >= min_dur][["match_id"]]
+def build_frame(parquet_dir: Path, horizon: int) -> tuple[pd.DataFrame, list[str]]:
+    cohort = eligible_matches(parquet_dir, min_duration=horizon)
+    participants = pd.read_parquet(
+        parquet_dir / "participants.parquet",
+        columns=["match_id", "champion", "side", "participant_win"],
+    )
+    participants = filter_to_eligible(participants, cohort)
+    blue = participants[participants["side"] == "blue"].drop_duplicates("match_id")
+    frame = cohort.merge(
+        blue[["match_id", "participant_win"]].rename(
+            columns={"participant_win": "blue_win"}
+        ),
+        on="match_id",
+        validate="one_to_one",
+    )
 
-    blue = parts[parts["side"] == "blue"].drop_duplicates("match_id")
-    frame = ok.merge(
-        blue[["match_id", "participant_win", "version"]].rename(
-            columns={"participant_win": "blue_win"}),
-        on="match_id")
-
-    tl = team_timeline_features(d, horizon)
-    kf = kill_features(d, parts[["match_id", "champion", "side"]], horizon)
-    frame = frame.merge(tl, on="match_id", how="left").merge(
-        kf, on="match_id", how="left")
-    feat_cols = [c for c in frame.columns if c.startswith("d_")] + \
-        ["kill_diff", "first_blood_blue"]
-    frame[feat_cols] = frame[feat_cols].fillna(0)
-    return frame.assign(row=np.arange(len(frame))), feat_cols
-
-
-def run_setting(name: str, X: np.ndarray, y: np.ndarray, splits: dict) -> dict:
-    tr, te = splits["train"], splits["test"]
-    out = {"setting": name, "sizes": {k: int(len(v)) for k, v in splits.items()}}
-    maj = max(y[tr].mean(), 1 - y[tr].mean())
-    out["majority"] = {"accuracy": round(float(max(y[te].mean(), 1 - y[te].mean())), 4),
-                       "auc": 0.5, "log_loss": None, "ece": None}
-    lr = LogisticRegression(C=1.0, max_iter=2000)
-    lr.fit(X[tr], y[tr])
-    out["logistic_regression"] = evaluate(y[te], lr.predict_proba(X[te])[:, 1])
-    gbt = HistGradientBoostingClassifier(max_iter=300, learning_rate=0.08,
-                                         early_stopping=True, random_state=0)
-    gbt.fit(X[tr], y[tr])
-    out["gradient_boosting"] = evaluate(y[te], gbt.predict_proba(X[te])[:, 1])
-    return out
+    sides = participants[["match_id", "champion", "side"]].drop_duplicates()
+    timeline = team_timeline_features(parquet_dir, horizon, cohort)
+    kills = kill_features(parquet_dir, sides, horizon, cohort)
+    frame = frame.merge(timeline, on="match_id", how="left", validate="one_to_one")
+    frame = frame.merge(kills, on="match_id", how="left", validate="one_to_one")
+    feature_columns = [column for column in frame.columns if column.startswith("d_")] + [
+        "kill_diff",
+        "first_blood_blue",
+    ]
+    frame[feature_columns] = frame[feature_columns].fillna(0)
+    return frame.assign(row=np.arange(len(frame))), feature_columns
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--parquet", required=True)
-    ap.add_argument("--out", default="benchmarks/output")
-    args = ap.parse_args()
-    d = Path(args.parquet)
-
-    results = []
-    for horizon in (10, 20):
-        frame, feat_cols = build_frame(d, horizon)
-        X = frame[feat_cols].to_numpy(np.float32)
-        y = frame["blue_win"].to_numpy(int)
-        print(f"horizon {horizon} min: {len(frame):,} matches, "
-              f"{len(feat_cols)} features")
-        for name, split in [("cross-patch", split_cross_patch(frame)),
-                            ("same-patch", split_same_patch(frame))]:
-            r = run_setting(name, X, y, split)
-            r["horizon_min"] = horizon
-            results.append(r)
-
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--parquet", required=True)
+    parser.add_argument("--out", default="benchmarks/output")
+    args = parser.parse_args()
+    parquet_dir = Path(args.parquet)
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
-    (out_dir / "early_game_baseline.json").write_text(
-        json.dumps(results, indent=2, ensure_ascii=False))
 
-    md = ["# T2 Early-Game Win-Prediction Baselines", "",
-          "Team-differential timeline features (blue minus red) + kill diff and",
-          "first blood within the horizon. 20-min variant restricted to matches",
-          "lasting >= 20 minutes.", ""]
-    for r in results:
-        md += [f"## {r['horizon_min']} min — {r['setting']} split "
-               f"(train {r['sizes']['train']:,} / test {r['sizes']['test']:,})", "",
-               "| Model | Accuracy | AUC | Log-loss | ECE |", "|---|---|---|---|---|"]
-        for model in ["majority", "logistic_regression", "gradient_boosting"]:
-            v = r[model]
-            ll = "—" if v["log_loss"] is None else f"{v['log_loss']:.4f}"
-            e = "—" if v["ece"] is None else f"{v['ece']:.4f}"
-            md.append(f"| {model} | {v['accuracy']:.4f} | {v['auc']:.4f} | {ll} | {e} |")
-        md.append("")
-    md += ["Reference: literature places 10-minute prediction at ~70-75% "
-           "(Silva 2018: 63.9% at 5 min; Hodge 2021: 85% pro).", ""]
-    (out_dir / "early_game_baseline.md").write_text("\n".join(md))
-    print(f"reports -> {out_dir}/early_game_baseline.{{md,json}}")
-    for r in results:
-        print(f"  {r['horizon_min']}min {r['setting']}: "
-              f"LR {r['logistic_regression']['accuracy']}, "
-              f"GBT {r['gradient_boosting']['accuracy']}")
+    results = []
+    split_paths = []
+    for horizon in (10, 20):
+        frame, feature_columns = build_frame(parquet_dir, horizon)
+        features = frame[feature_columns].to_numpy(np.float32)
+        labels = frame["blue_win"].to_numpy(int)
+        settings = benchmark_splits(frame)
+        split_paths.append(
+            write_split_manifest(
+                frame, settings, out_dir / f"early_game_split_{horizon}min.csv"
+            )
+        )
+        for name, split in settings.items():
+            result = run_setting(name, features, labels, split)
+            result["horizon_min"] = horizon
+            result["feature_columns"] = feature_columns
+            results.append(result)
+
+    json_path = out_dir / "early_game_baseline.json"
+    md_path = out_dir / "early_game_baseline.md"
+    payload = {
+        "protocol_version": 2,
+        "feature_contract": "team-differential state plus kill difference and first blood",
+        "results": results,
+    }
+    json_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n")
+
+    markdown = [
+        "# T2 Early-Game Win-Prediction Baselines",
+        "",
+        "Canonical cohort; no champion-composition features. Validation data selects",
+        "hyperparameters and is merged into the final training fit.",
+        "",
+    ]
+    for result in results:
+        sizes = result["sizes"]
+        markdown += [
+            f"## {result['horizon_min']} min — {result['setting']} "
+            f"(train {sizes['train']:,} / val {sizes['val']:,} / test {sizes['test']:,})",
+            "",
+            "| Model | Accuracy | AUC | Log-loss | ECE | Selected |",
+            "|---|---:|---:|---:|---:|---|",
+        ]
+        for model_name in ["majority", "logistic_regression", "gradient_boosting"]:
+            metric = result[model_name]
+            markdown.append(
+                f"| {model_name} | {metric['accuracy']:.4f} | {metric['auc']:.4f} "
+                f"| {metric['log_loss']:.4f} | {metric['ece']:.4f} "
+                f"| {metric.get('selected', 'training prevalence')} |"
+            )
+        markdown.append("")
+    markdown += [
+        "Do not attribute differences between settings to patch drift without a",
+        "matched target cohort, uncertainty intervals, and an explicit hypothesis test.",
+        "",
+    ]
+    md_path.write_text("\n".join(markdown))
+    write_run_manifest(
+        out_dir,
+        "early_game_baseline",
+        parameters={"protocol_version": 2, "horizons": [10, 20]},
+        inputs=[
+            parquet_dir / "matches.parquet",
+            parquet_dir / "participants.parquet",
+            parquet_dir / "participant_timelines.parquet",
+            parquet_dir / "kill_events.parquet",
+        ],
+        outputs=[json_path, md_path, *split_paths],
+    )
+    print(f"reports written to {out_dir}")
 
 
 if __name__ == "__main__":

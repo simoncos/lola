@@ -1,0 +1,82 @@
+{
+  "run_name": "figures",
+  "generated_at": "2026-07-21T03:10:07.943115+00:00",
+  "toolkit_version": "0.2.0",
+  "git_commit": "8791e41672248473f34143c4016c958226cc51d4",
+  "git_dirty": true,
+  "git_status_sha256": "ae26098ba68ea673b3b9b5947dc61127360d8e099b8dab6674ae698b90770ea3",
+  "source_tree": {
+    "algorithm": "SHA-256(path + file SHA-256)",
+    "patterns": [
+      "lola_dataset/**/*.py",
+      "benchmarks/**/*.py",
+      "analysis/**/*.py",
+      "pyproject.toml",
+      "uv.lock"
+    ],
+    "files": 23,
+    "sha256": "e407233674a5fed1968a6caa3e42f4bc75dc7d8152c5f510c9337fc2b572f48d"
+  },
+  "python": "3.12.13",
+  "dependencies": {
+    "pandas": "2.3.3",
+    "pyarrow": "21.0.0",
+    "numpy": "2.5.1",
+    "scipy": "1.18.0",
+    "scikit-learn": "1.9.0",
+    "matplotlib": "3.11.1"
+  },
+  "parameters": {
+    "protocol_version": 1,
+    "figure_count": 4
+  },
+  "inputs": [
+    {
+      "file": "mastery_learning.csv",
+      "bytes": 9752,
+      "sha256": "ff62a841269f9011dbfb23c3bc1d1aa82a7602040c3bdf4999c47c7562878ac6"
+    },
+    {
+      "file": "mastery_learning.run.json",
+      "bytes": 1942,
+      "sha256": "7f9159cc036920f0d291117f1f8f5f776ef2fca182725a0afc3f6fd84d2d515d"
+    },
+    {
+      "file": "ban_salience_by_tier.csv",
+      "bytes": 29197,
+      "sha256": "a273a81c2c306e093e5b84fdf42d258d8e8d7c1303d3a7d916227ecaaa31fa17"
+    },
+    {
+      "file": "design_ban_salience.run.json",
+      "bytes": 2212,
+      "sha256": "c2911e7717b97df84f1ca5e6c5da4bf1c1186df2733b9c9239174e08b146f461"
+    },
+    {
+      "file": "riot_difficulty_ddragon.csv",
+      "bytes": 1330,
+      "sha256": "a66f6e5cdb7066f71fc8e5b46bd339cf694583cb554482a3e38e76e417f130e3"
+    }
+  ],
+  "outputs": [
+    {
+      "file": "fig1_learning_curves.png",
+      "bytes": 101021,
+      "sha256": "efb5c24b55a804662496d83a6b387b9dd85aaa0da5553417471b0ce6c56e2370"
+    },
+    {
+      "file": "fig2_learning_vs_difficulty.png",
+      "bytes": 149738,
+      "sha256": "ee98ec765fd2d10024100db085a6b3b5497ec517e11e6657c2b608dbea11f798"
+    },
+    {
+      "file": "fig3_salience_stability.png",
+      "bytes": 141706,
+      "sha256": "de79fb8789cd5de965710fe124a015e9353fa09451edaec1b2d5c3820047432e"
+    },
+    {
+      "file": "fig4_learning_vs_salience.png",
+      "bytes": 138787,
+      "sha256": "09909f40f1666e50380f63a283ad3b08d49c73ba83db3edff3df504f9e85861a"
+    }
+  ]
+}

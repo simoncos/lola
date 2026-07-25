@@ -1,4 +1,8 @@
-"""P0 prototype for the design paper (docs/game-design-directions/PROPOSAL.md).
+"""Legacy P0 prototype retained for audit history.
+
+The tier slope is not mastery, and ban-minus-win is not evidence of anti-fun,
+fairness, perceived power, or player motives. Active analyses are
+``analysis.mastery_learning`` and ``analysis.design_p2``.
 
 Two design-facing measurements on real data, both riding the per-player tier label:
 
@@ -133,6 +137,11 @@ def main() -> None:
 
     quad_counts = bp["quadrant"].value_counts().to_dict()
     summary = {
+        "status": "legacy_exploratory_not_citable",
+        "interpretation": (
+            "Tier slope is not mastery; ban-minus-win does not identify anti-fun, "
+            "fairness, perception, or motive."
+        ),
         "champions_scored_skill": int(len(skill)),
         "skill_reward_top10": skill.head(10)[
             ["champion", "skill_reward_slope", "wr_low", "wr_high"]
@@ -151,7 +160,9 @@ def main() -> None:
     (out_dir / "design_p0.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False))
 
     md = [
-        "# P0: Skill Expression & Bans-as-Perceived-Power (prototype)",
+        "# Legacy P0 Prototype (not citable)",
+        "",
+        "> Tier slope is not mastery; ban-minus-win is descriptive salience only.",
         "",
         f"Real data, {n_matches:,} matches. Win-based single metric; no confound "
         "correction yet (see PROPOSAL caveats).",

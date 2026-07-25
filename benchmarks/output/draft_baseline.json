@@ -1,54 +1,226 @@
-[
-  {
-    "setting": "cross-patch",
-    "sizes": {
-      "train": 112921,
-      "val": 16235,
-      "test": 93460
+{
+  "protocol_version": 2,
+  "feature_contract": "signed champion picks only",
+  "champions": [
+    "Aatrox",
+    "Ahri",
+    "Akali",
+    "Alistar",
+    "Amumu",
+    "Anivia",
+    "Annie",
+    "Ashe",
+    "Azir",
+    "Bard",
+    "Blitzcrank",
+    "Brand",
+    "Braum",
+    "Caitlyn",
+    "Cassiopeia",
+    "Cho'Gath",
+    "Corki",
+    "Darius",
+    "Diana",
+    "Dr. Mundo",
+    "Draven",
+    "Ekko",
+    "Elise",
+    "Evelynn",
+    "Ezreal",
+    "Fiddlesticks",
+    "Fiora",
+    "Fizz",
+    "Galio",
+    "Gangplank",
+    "Garen",
+    "Gnar",
+    "Gragas",
+    "Graves",
+    "Hecarim",
+    "Heimerdinger",
+    "Illaoi",
+    "Irelia",
+    "Janna",
+    "Jarvan IV",
+    "Jax",
+    "Jayce",
+    "Jinx",
+    "Kalista",
+    "Karma",
+    "Karthus",
+    "Kassadin",
+    "Katarina",
+    "Kayle",
+    "Kennen",
+    "Kha'Zix",
+    "Kindred",
+    "Kog'Maw",
+    "LeBlanc",
+    "Lee Sin",
+    "Leona",
+    "Lissandra",
+    "Lucian",
+    "Lulu",
+    "Lux",
+    "Malphite",
+    "Malzahar",
+    "Maokai",
+    "Master Yi",
+    "Miss Fortune",
+    "Mordekaiser",
+    "Morgana",
+    "Nami",
+    "Nasus",
+    "Nautilus",
+    "Nidalee",
+    "Nocturne",
+    "Nunu",
+    "Olaf",
+    "Orianna",
+    "Pantheon",
+    "Poppy",
+    "Quinn",
+    "Rammus",
+    "Rek'Sai",
+    "Renekton",
+    "Rengar",
+    "Riven",
+    "Rumble",
+    "Ryze",
+    "Sejuani",
+    "Shaco",
+    "Shen",
+    "Shyvana",
+    "Singed",
+    "Sion",
+    "Sivir",
+    "Skarner",
+    "Sona",
+    "Soraka",
+    "Swain",
+    "Syndra",
+    "Tahm Kench",
+    "Talon",
+    "Taric",
+    "Teemo",
+    "Thresh",
+    "Tristana",
+    "Trundle",
+    "Tryndamere",
+    "Twisted Fate",
+    "Twitch",
+    "Udyr",
+    "Urgot",
+    "Varus",
+    "Vayne",
+    "Veigar",
+    "Vel'Koz",
+    "Vi",
+    "Viktor",
+    "Vladimir",
+    "Volibear",
+    "Warwick",
+    "Wukong",
+    "Xerath",
+    "Xin Zhao",
+    "Yasuo",
+    "Yorick",
+    "Zac",
+    "Zed",
+    "Ziggs",
+    "Zilean",
+    "Zyra"
+  ],
+  "results": [
+    {
+      "setting": "temporal-holdout",
+      "sizes": {
+        "train": 112921,
+        "val": 16235,
+        "test": 93460
+      },
+      "majority": {
+        "accuracy": 0.5064,
+        "auc": 0.5,
+        "log_loss": 0.6931,
+        "ece": 0.0016
+      },
+      "logistic_regression": {
+        "accuracy": 0.5504,
+        "auc": 0.5715,
+        "log_loss": 0.6856,
+        "ece": 0.0126,
+        "selected": "C=0.1",
+        "validation_log_loss": 0.6841
+      },
+      "gradient_boosting": {
+        "accuracy": 0.5474,
+        "auc": 0.5643,
+        "log_loss": 0.6868,
+        "ece": 0.003,
+        "selected": "max_leaf_nodes=15",
+        "validation_log_loss": 0.6853
+      }
     },
-    "majority": {
-      "accuracy": 0.5064,
-      "auc": 0.5,
-      "log_loss": 0.6931,
-      "ece": null
+    {
+      "setting": "iid-mixed-patch",
+      "sizes": {
+        "train": 177751,
+        "val": 22556,
+        "test": 22309
+      },
+      "majority": {
+        "accuracy": 0.5036,
+        "auc": 0.5,
+        "log_loss": 0.6931,
+        "ece": 0.0028
+      },
+      "logistic_regression": {
+        "accuracy": 0.5562,
+        "auc": 0.5785,
+        "log_loss": 0.6834,
+        "ece": 0.0047,
+        "selected": "C=0.1",
+        "validation_log_loss": 0.683
+      },
+      "gradient_boosting": {
+        "accuracy": 0.5496,
+        "auc": 0.5717,
+        "log_loss": 0.6849,
+        "ece": 0.0051,
+        "selected": "max_leaf_nodes=15",
+        "validation_log_loss": 0.6849
+      }
     },
-    "logistic_regression": {
-      "accuracy": 0.5474,
-      "auc": 0.5683,
-      "log_loss": 0.6867,
-      "ece": 0.0171
-    },
-    "gradient_boosting": {
-      "accuracy": 0.543,
-      "auc": 0.5604,
-      "log_loss": 0.6876,
-      "ece": 0.0044
+    {
+      "setting": "same-build-5.24.0.256",
+      "sizes": {
+        "train": 64825,
+        "val": 8241,
+        "test": 8112
+      },
+      "majority": {
+        "accuracy": 0.5025,
+        "auc": 0.5,
+        "log_loss": 0.6932,
+        "ece": 0.0062
+      },
+      "logistic_regression": {
+        "accuracy": 0.5496,
+        "auc": 0.5783,
+        "log_loss": 0.6834,
+        "ece": 0.0141,
+        "selected": "C=0.1",
+        "validation_log_loss": 0.6828
+      },
+      "gradient_boosting": {
+        "accuracy": 0.5454,
+        "auc": 0.565,
+        "log_loss": 0.6869,
+        "ece": 0.0075,
+        "selected": "max_leaf_nodes=15",
+        "validation_log_loss": 0.6861
+      }
     }
-  },
-  {
-    "setting": "same-patch",
-    "sizes": {
-      "train": 177751,
-      "val": 22556,
-      "test": 22309
-    },
-    "majority": {
-      "accuracy": 0.5036,
-      "auc": 0.5,
-      "log_loss": 0.6931,
-      "ece": null
-    },
-    "logistic_regression": {
-      "accuracy": 0.5552,
-      "auc": 0.5787,
-      "log_loss": 0.6834,
-      "ece": 0.0061
-    },
-    "gradient_boosting": {
-      "accuracy": 0.5485,
-      "auc": 0.5684,
-      "log_loss": 0.6857,
-      "ece": 0.006
-    }
-  }
-]
+  ]
+}

@@ -1,0 +1,24 @@
+name: research-toolkit-ci
+
+on:
+  push:
+    branches: [master, "claude/**"]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - name: Sync locked environment
+        run: uv sync --locked --extra dev --python 3.12
+      - name: Compile
+        run: uv run python -m compileall -q lola_dataset analysis benchmarks tests
+      - name: Test
+        run: uv run python -m pytest

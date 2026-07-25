@@ -1,4 +1,7 @@
-"""R2 prototype: game-theoretic decomposition of the champion kill matrix.
+"""Legacy exploratory decomposition of the champion kill matrix.
+
+Kill exchanges are not lane matchups or causal counter-picks. This prototype is
+retained for audit history and is not an active publication result.
 
 Runs on the in-repo derived matrix (results/kill_matrix_22k.csv), so it works
 before the full lola.db is available. Method:
@@ -122,6 +125,10 @@ def decompose(k: pd.DataFrame) -> dict:
     ]
 
     return {
+        "status": "legacy_exploratory_not_citable",
+        "interpretation": (
+            "Kill-exchange association only; not a causal counter-pick or lane matchup."
+        ),
         "champions": len(names),
         "total_kill_events": int(K.sum()),
         "energy_shares": shares,
@@ -140,7 +147,9 @@ def write_report(result: dict, out_dir: Path, source: str) -> None:
     )
 
     md = [
-        "# Counter-Structure Decomposition of the Champion Kill Matrix (prototype)",
+        "# Legacy Kill-Exchange Decomposition (not citable)",
+        "",
+        "> Kill-exchange association only; not a causal counter-pick or lane matchup.",
         "",
         f"Source: `{source}` — {result['champions']} champions, "
         f"{result['total_kill_events']:,} kill events (full-crawl derived matrix).",
@@ -154,7 +163,7 @@ def write_report(result: dict, out_dir: Path, source: str) -> None:
         "",
         f"- **Transitive share of pairwise structure: "
         f"{result['energy_shares']['transitive_share']:.1%}**",
-        f"- **Cyclic (counter-pick) share: "
+        f"- **Cyclic kill-association share: "
         f"{result['energy_shares']['cyclic_share']:.1%}**",
         f"- Spearman correlation of the modern rating vs the 2016 "
         f"eigenvector-centrality ranking: "

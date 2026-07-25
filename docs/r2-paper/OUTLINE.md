@@ -1,4 +1,7 @@
-# R2 论文骨架（草案 v0.2，2026-07-15）
+# R2 论文骨架（历史草案 v0.2，2026-07-15）
+
+> **2026-07-20：旧 T3 解释与数值已撤回。** 25 个跨队英雄 pair 是同一比赛结果的
+> 相关视图，不能识别 counter-pick。活跃 T3 见 `docs/r1-dataset-paper/BENCHMARKS.md`。
 
 > ⚠️ **重大更新（新颖性对抗审查后）**：见
 > [docs/literature/04-novelty-check-2026.md](../literature/04-novelty-check-2026.md)。

@@ -1,7 +1,14 @@
 # Mastery and Mistrust: Skill Reward, Mechanical Difficulty, and Perceived Imbalance in League of Legends
 
-*Working draft v0 — 2026-07-15. All numbers from `analysis/design_*.py` on the
-LoLA-2016 corpus. Prose is a first draft for iteration, not final copy.*
+> **SUPERSEDED / ALL RESULTS WITHDRAWN (2026-07-20).** The original draft
+> mislabeled a cross-player transfer slope as mastery/learning and interpreted a
+> ban-minus-win residual as anti-fun/fairness without player-reported evidence.
+> Every numeric claim, champion ranking, confidence interval, figure, abstract
+> claim, and conclusion below is retained only as audit history. Do not cite or
+> submit it. The active design is `REVISION_PROTOCOL.md`; a new results paper can
+> be written only after the v2 pipeline is rerun on the real data.
+
+*Historical working draft v0 — 2026-07-15.*
 
 ---
 

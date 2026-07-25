@@ -1,0 +1,80 @@
+{
+  "run_name": "early_game_baseline",
+  "generated_at": "2026-07-21T03:10:00.263596+00:00",
+  "toolkit_version": "0.2.0",
+  "git_commit": "8791e41672248473f34143c4016c958226cc51d4",
+  "git_dirty": true,
+  "git_status_sha256": "ae26098ba68ea673b3b9b5947dc61127360d8e099b8dab6674ae698b90770ea3",
+  "source_tree": {
+    "algorithm": "SHA-256(path + file SHA-256)",
+    "patterns": [
+      "lola_dataset/**/*.py",
+      "benchmarks/**/*.py",
+      "analysis/**/*.py",
+      "pyproject.toml",
+      "uv.lock"
+    ],
+    "files": 23,
+    "sha256": "e407233674a5fed1968a6caa3e42f4bc75dc7d8152c5f510c9337fc2b572f48d"
+  },
+  "python": "3.12.13",
+  "dependencies": {
+    "pandas": "2.3.3",
+    "pyarrow": "21.0.0",
+    "numpy": "2.5.1",
+    "scipy": "1.18.0",
+    "scikit-learn": "1.9.0",
+    "matplotlib": "3.11.1"
+  },
+  "parameters": {
+    "protocol_version": 2,
+    "horizons": [
+      10,
+      20
+    ]
+  },
+  "inputs": [
+    {
+      "file": "matches.parquet",
+      "bytes": 1162248,
+      "sha256": "ad875fc8c99d40d81758e394800ba2d4ed9a444213a92f3a3b19c7a63998eca6"
+    },
+    {
+      "file": "participants.parquet",
+      "bytes": 136965567,
+      "sha256": "9694a5ab483a443173e77c29246d553d6815fdf281a1cab9a47f63f025648d23"
+    },
+    {
+      "file": "participant_timelines.parquet",
+      "bytes": 138649375,
+      "sha256": "9e142fdb2d161f510b653a1a2cccf5064dc803ba489a4b20de9b9dc802706aa6"
+    },
+    {
+      "file": "kill_events.parquet",
+      "bytes": 51029032,
+      "sha256": "809fc2ab4d02873fb3dc09762f1b673f811f65ddce61401ffccd0115ccb9a737"
+    }
+  ],
+  "outputs": [
+    {
+      "file": "early_game_baseline.json",
+      "bytes": 6213,
+      "sha256": "949fef882c2714fc5e98da095df91343469c83bf331099140c97980b36979663"
+    },
+    {
+      "file": "early_game_baseline.md",
+      "bytes": 2598,
+      "sha256": "8dc7b203567e09d3adace44d7e2b0a795010d4dad88fab2aeed0f6b8ff8588b8"
+    },
+    {
+      "file": "early_game_split_10min.csv",
+      "bytes": 23651218,
+      "sha256": "ca41e2650ba81f9952ce46addd5595d06347c5206f9cf5c5d6c0352a1895ae3b"
+    },
+    {
+      "file": "early_game_split_20min.csv",
+      "bytes": 23207896,
+      "sha256": "417c21042ac4da1e36cddb3d2c4be1faf38656145d6a34d857f210c66d479e16"
+    }
+  ]
+}
