@@ -1,30 +1,70 @@
 # LoLA
 
-LoLA is a LoL (League of Legends) game data analysis / analytics project. See [report](/report).
+LoLA is a historical League of Legends data-analysis project. The committed
+[project reports](report/) describe the 2016 course project and its results;
+they are not evidence that the current checkout can reproduce those results.
+
+## Repository status
+
+The default branch is an archival legacy baseline. It has no locked dependency
+environment or CI workflow, and it has not been validated against current Riot
+APIs or current Cassiopeia releases.
+
+| Area | Current default-branch status |
+| --- | --- |
+| Crawling | Legacy single-seed crawler; not an implementation of the reports' three-seed 100k/60k/60k stopping protocol |
+| Matrix/preprocessing | Implemented; synthetic SQLite tests cover event identity, idempotent preprocessing, and pick normalization |
+| Clustering | Legacy prototype; requires the historical scientific-Python stack and a compatible database |
+| Match prediction | Historical/report prototype; `match_predict.py` does not reproduce the reports' 220k/31-feature or six-cluster experiments |
+| Cheating detection | Listed as a historical objective, but not implemented in this tree |
+
+The files under `results/` and `report/` are historical artifacts without a
+committed source-data fingerprint, run manifest, or environment lock. Do not
+treat them as a fresh reproduction or current academic validation.
 
 ## Crawling
 
-The data crawling part is based on [Riot API](https://developer.riotgames.com/api-methods/) and a Python wrapper [Cassiopeia](https://github.com/meraki-analytics/cassiopeia) (There is a In-Memory cache problem in Cass, refer to [here](https://github.com/meraki-analytics/cassiopeia/issues/40)). A SQLite database is designed and used in this project, which remodels and stores game objects for our analysis objectives. The database I/O part involves [sqlite3](https://docs.python.org/3.5/library/sqlite3.html) and [pandas](http://pandas.pydata.org/). 
+The crawler was built around the Riot API and the historical
+[Cassiopeia](https://github.com/meraki-analytics/cassiopeia) wrapper. Before a
+legacy run, initialize an empty database explicitly:
 
-This part has been well tested with `Python 3.5`, though in some environments (e.g. `Windows cmd`) a `decode`/`encode` error may occur in `print` functions due to multi-language issue; you can just comment out all `print` codes without any influcence on crawling itself. `Python 2.X` may also run well with a few edits.
+```sh
+sqlite3 lola.db < sqlite_schema.sql
+```
 
-## Dataset
+Provide the API key outside the repository:
 
-We have obtained data of over 220,000 `Ranked-SOLO-5x5` matches with details in the North American region, Pre-Season 2016.
+```sh
+export LOLA_RIOT_API_KEY=your-key
+python3 data_crawl.py
+```
 
-- [Google Drive](https://drive.google.com/file/d/1X9B60eUSWarMEG9RS3JHbWDaeNuB48LF/view?usp=sharing)
+`LOLA_REGION`, `LOLA_SEED_SUMMONER_ID`, `LOLA_SEASON`, and
+`LOLA_RANKED_QUEUE` can override the historical defaults. This entry point runs
+one seed. Multi-seed orchestration, stopping thresholds, database merging, API
+compatibility, and retry recovery still require separate operator validation.
 
-## Analysis
+## Dataset and distribution boundary
 
-We are doing analyses such as:
+The project reports state that the original team collected more than 220,000
+North American `Ranked-SOLO-5x5` matches from Pre-Season 2016. A historical
+copy was linked on [Google Drive](https://drive.google.com/file/d/1X9B60eUSWarMEG9RS3JHbWDaeNuB48LF/view?usp=sharing).
 
-- Champion Rank
-- Champion Clustering
-- Champion Recommendation
-- Match Prediction
-- Cheating Detection
+The current default branch does not include a data card, checksum/manifest,
+license, permission record, or privacy review. The schema includes summoner IDs
+and names. Verify provenance, Riot terms, redistribution permission, and
+identity handling before downloading, using, or republishing that dataset.
 
-Our results will be uploaded continuously. As we are doing many experiments, code in this part is quite messy now and will be refined later.
+## Analysis and tests
 
-If you are interested in this project or have any problem, feel free to participate in.
+The legacy tree contains champion ranking, relationship matrices, clustering,
+recommendation experiments, and a match-prediction prototype. The narrow test
+suite uses only generated SQLite fixtures:
 
+```sh
+python3 -m unittest discover -s tests -v
+```
+
+Passing these tests validates the covered code contracts only. It does not
+validate the historical dataset, report figures, model quality, licensing, or
+real-data reproducibility.

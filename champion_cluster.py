@@ -43,21 +43,21 @@ names = []
 
 for champion in df.index:
     names.append(champion)
-    kills = df.ix[champion]['kills']/df.ix[champion]['picks']
-    deaths = df.ix[champion]['deaths']/df.ix[champion]['picks']
-    assists = df.ix[champion]['assists']/df.ix[champion]['picks']
-    gold_earned = df.ix[champion]['gold_earned']/df.ix[champion]['picks']
-    magic_damage = df.ix[champion]['magic_damage']/df.ix[champion]['picks']
-    physical_damage = df.ix[champion]['physical_damage']/df.ix[champion]['picks']
-    true_damage = df.ix[champion]['true_damage']/df.ix[champion]['picks']
-    damage_taken = df.ix[champion]['damage_taken']/df.ix[champion]['picks']
-    crowd_control_dealt = df.ix[champion]['crowd_control_dealt']/df.ix[champion]['picks']
-    ward_kills = df.ix[champion]['ward_kills']/df.ix[champion]['picks']
-    wards_placed = df.ix[champion]['wards_placed']/df.ix[champion]['picks']
+    kills = df.loc[champion]['kills']/df.loc[champion]['picks']
+    deaths = df.loc[champion]['deaths']/df.loc[champion]['picks']
+    assists = df.loc[champion]['assists']/df.loc[champion]['picks']
+    gold_earned = df.loc[champion]['gold_earned']/df.loc[champion]['picks']
+    magic_damage = df.loc[champion]['magic_damage']/df.loc[champion]['picks']
+    physical_damage = df.loc[champion]['physical_damage']/df.loc[champion]['picks']
+    true_damage = df.loc[champion]['true_damage']/df.loc[champion]['picks']
+    damage_taken = df.loc[champion]['damage_taken']/df.loc[champion]['picks']
+    crowd_control_dealt = df.loc[champion]['crowd_control_dealt']/df.loc[champion]['picks']
+    ward_kills = df.loc[champion]['ward_kills']/df.loc[champion]['picks']
+    wards_placed = df.loc[champion]['wards_placed']/df.loc[champion]['picks']
     tmp_dict = {'kills': kills, 'assists': assists, 'deaths': deaths, 'gold_earned': gold_earned, 'magic_damage': magic_damage,
         'physical_damage': physical_damage, 'true_damage': true_damage,'damage_taken': damage_taken, 'crowd_control_dealt': crowd_control_dealt,
         'ward_kills': ward_kills,'wards_placed': wards_placed}
-    tmp_arr = [kills, assists, deaths, gold_earned, magic_damage, physical_damage, true_damage, damage_taken, crowd_control_dealt, ward_kills,
+    tmp_arr = [kills, deaths, assists, gold_earned, magic_damage, physical_damage, true_damage, damage_taken, crowd_control_dealt, ward_kills,
         wards_placed]
     all_stats[champion] = tmp_dict
     all_stats_arr.append(tmp_arr)
@@ -139,7 +139,7 @@ sum_dist = 0
 for i in range(0, num_clusters):
     for name in new_label_dict[i]:
         sum_dist += spatial.distance.euclidean(all_stats_arr[names.index(name)], centroids[i])
-print(num, sum_dist/128)
+print(num_clusters, sum_dist/128)
 #meandistortions.append(sum_dist/128)
 
 #Calculate distance between clusters

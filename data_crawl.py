@@ -3,12 +3,14 @@
 LoLa data crawling based on Cassiopeia.
 """
 
+from contextlib import closing
 from cassiopeia import riotapi
 from cassiopeia import type
 from cassiopeia.type.api.exception import APIError
 import sqlite3
 import pandas as pd
 import math
+import os
 import time 
 import random
 
@@ -56,27 +58,32 @@ def main():
 
     print('\nCrawling process starts...')
 
-    # set your api_key, region, seed_summoner_id, seasons, ranked_queues
-    # inadequate settings of may lead to 404
-    riotapi_setting(api_key, region='NA')
-    begin_crawling(seed_summoner_id='22005573', seasons='PRESEASON2016',ranked_queues='RANKED_SOLO_5x5')
+    api_key = os.environ.get('LOLA_RIOT_API_KEY')
+    if not api_key:
+        raise SystemExit('Set LOLA_RIOT_API_KEY before starting the crawler.')
+
+    region = os.environ.get('LOLA_REGION', 'NA')
+    seed_summoner_id = os.environ.get('LOLA_SEED_SUMMONER_ID', '22005573')
+    seasons = os.environ.get('LOLA_SEASON', 'PRESEASON2016')
+    ranked_queues = os.environ.get('LOLA_RANKED_QUEUE', 'RANKED_SOLO_5x5')
+    riotapi_setting(api_key, region=region)
+    begin_crawling(seed_summoner_id, seasons, ranked_queues)
 
 def begin_crawling(seed_summoner_id, seasons, ranked_queues):
     '''
     Breadth first crawling interations, Summoner -> Match -> Summoner...
     '''
     #seed intialization
-    try:
-        print('Seed initializing...')
-        seed_summoner = riotapi.get_summoner_by_id(seed_summoner_id)    
-        conn = sqlite3.connect('lola.db')
-        conn.execute("INSERT INTO Summoner VALUES('{}','{}',{})".format(seed_summoner.id, seed_summoner.name, 0)) #watch out "" / ''
-        conn.commit()
-        conn.close()
-        print('\nInitialization completed.')
-    except Exception as e:
-        print('\nInitialization failed: ', e) # possibly because the seed is already in database
-        pass
+    print('Seed initializing...')
+    seed_summoner = riotapi.get_summoner_by_id(seed_summoner_id)
+    if seed_summoner is None:
+        raise RuntimeError('Seed summoner lookup returned no result.')
+    with closing(sqlite3.connect('lola.db')) as conn, conn:
+        conn.execute(
+            'INSERT OR IGNORE INTO Summoner VALUES(?,?,?)',
+            (seed_summoner.id, seed_summoner.name, 0),
+        )
+    print('\nInitialization completed.')
  
     # summoner queue interations
     total_summoner_processed = 0           

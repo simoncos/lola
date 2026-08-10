@@ -33,12 +33,15 @@ def champion_average_kda_rank():
     pass
 
 def champion_distribution(champion_matrix_df, champion): #TODO
-    vector = champion_matrix_df.ix[champion]
+    vector = champion_matrix_df.loc[champion]
     values, base = np.histogram(vector, bins=40)
     plt.plot(values)
 
 def champion_cosine_similarity(champion_matrix_df, champion_1, champion_2): #TODO
-    return 1 - spatial.distance.cosine(champion_matrix_df.ix[champion_1], champion_matrix_df.ix[champion_2])
+    return 1 - spatial.distance.cosine(
+        champion_matrix_df.loc[champion_1],
+        champion_matrix_df.loc[champion_2],
+    )
 
 def champion_matrix_rank(champion_matrix_df, criteron, norm=None, row_sum_norm=False):
     '''

@@ -19,7 +19,7 @@ CREATE TABLE `Match` (
                 -- PRIMARY KEY(id)
 );
 CREATE TABLE `MatchChampion` (
-                `match_id`      integer NOT NULL, /*key*/
+                `match_id`      text NOT NULL UNIQUE, /*key*/
                 `participant1`  text,
                 `participant2`  text,
                 `participant3`  text,
@@ -204,4 +204,3 @@ CREATE UNIQUE INDEX killer_victim on ChampionKillMatrix(killer, victim);
 CREATE UNIQUE INDEX killer_assist on ChampionAssistMatrix(killer, assist);
 
 -- INSERT INTO new.Participant SELECT * FROM old.Participant ORDER bY match_id ASC, CAST(participant_id AS INTEGER) ASC
-
